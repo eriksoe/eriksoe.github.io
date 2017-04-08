@@ -50,7 +50,6 @@ function generate_pattern(w,h) {
         for (var y=0; y<h; y++) m[x][y] = null;
     }
 
-    var delta = 0.2;
 
     var q = make_heap();
     for (var i=0; i<w; i++) {
@@ -60,9 +59,7 @@ function generate_pattern(w,h) {
         add_candidate_cell(q,m, w-1,i, 0);
     }
 
-    var discount = 0;
     while (q.count() > 0) {
-        discount -= delta;
         var item = q.removeFirst();
         var x = item.value.x;
         var y = item.value.y;
@@ -80,7 +77,7 @@ function generate_pattern(w,h) {
             for (var dx=-1; dx<=1; dx++) {
                 for (var dy=-1; dy<=1; dy++) {
                     if (Math.abs(dx) + Math.abs(dy) == 1)
-                        add_candidate_cell(q,m, x+dx, y+dy, discount);
+                        add_candidate_cell(q,m, x+dx, y+dy, 0);
                 }
             }
         }
