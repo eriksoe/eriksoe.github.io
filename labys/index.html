@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Labyrinth Exercise Generator</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="laby.js"></script>
+
+  </head>
+<body>
+<h1>Labyrinth Exercise Generator</h1>
+
+<div>
+  <form id="inputs" class="form-inline">
+    <div>
+      <label for="type">Type: </label>
+      <select id="type" onChange="on_type_change()">
+        <option value="plus">Plus</option>
+        <option value="minus">Minus</option>
+        <option value="same-letter">Ens bogstaver</option>
+        <option value="same-or-diff-letter">Ens/forskellige bogstaver</option>
+      </select>
+    </div>
+
+
+    <div id="optional_inputs">
+      <label for="maxNum">Max tal: </label><input id="maxNum" type="number" value="10" min="2"/>
+      <label for="maxSub">Max subtrahend: </label><input id="maxSub" type="number" value="10" min="1"/>
+    </div>
+
+    <label for="count">Antal opgaver: </label>
+    <input id="count" type="number" value="1" min="1" size="4"/>
+    <button id="generate" onclick="generate_laby()">Generér</button>
+  </form>
+</div>
+
+
+</body>
+</html>
