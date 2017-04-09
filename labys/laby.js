@@ -23,14 +23,15 @@ function on_type_change() {
 
 function generate_laby() {
     // TEST:
-    var w=15, h=15;
-    var m = generate_pattern(w,h);
+    var w=15, h=10;
+    var m = generate_pattern3(w,h);
     console.log("m = " + m);
 
     for (var y=0; y<h; y++) {
         var line = "";
         for (var x=0; x<w; x++) {
-            line += (m[x][y] === 4 ? "*" : m[x][y] === 1 ? "-" : "+");
+            var onpath = (m[x][y] === 4 || m[x][y] === true);
+            line += (onpath ? "*" : (m[x][y] === 1 || m[x][y] === false) ? "-" : "+");
         }
         console.log(line);
     }
@@ -90,6 +91,111 @@ function add_candidate_cell(q,m, x,y, base) {
     if (m[x][y] != null) return; // Already added.
     m[x][y] = 0;
     q.add(base + Math.random(), {x:x, y:y})
+}
+
+// Some constants:
+var UP = 1, LEFT = 2, DOWN = 4, RIGHT = 8;
+var DIRX = [0, -1, 0, 1];
+var DIRY = [-1, 0, 1, 0];
+
+function generate_pattern3(w,h) {
+    var parts = make_2d_array(w, h, null);
+
+    var u = make_union_find();
+
+    // Make a list of all cell neighbourships, in random order:
+    var q = [];
+    for (var x=0; x<w; x++) {
+        for (var y=0; y<h; y++) {
+            if (x>0) q.push({x1:x-1, y1:y, x2:x, y2:y, horizontal:true});
+            if (y>0) q.push({x1:x, y1:y-1, x2:x, y2:y, horizontal:false});
+        }
+    }
+    shuffle(q);
+
+    // Populate m:
+    for (var x=0; x<w; x++) {
+        for (var y=0; y<h; y++) {
+            parts[x][y] = u.singleton();
+        }
+    }
+
+    // Process the neighbourships in random order:
+    var nonwalls = make_2d_array(w, h, 0);
+    for (var i=0; i<q.length; i++) {
+        var item = q[i];
+        var a = parts[item.x1][item.y1];
+        var b = parts[item.x2][item.y2];
+
+        if (u.connected(a,b))
+            continue;
+
+        // Remove a wall:
+        nonwalls[item.x1][item.y1] |= (item.horizontal ? RIGHT : DOWN);
+        nonwalls[item.x2][item.y2] |= (item.horizontal ? LEFT  : UP);
+        u.connect(a,b);
+    }
+
+    // Translate into distance-from-origin:
+    var dists1 = calculate_distances_from_point(nonwalls, 0,0);
+    var dists2 = calculate_distances_from_point(nonwalls, w-1,h-1);
+    //console.log("Dists1: "+dists1);
+    //console.log("Dists2: "+dists2);
+
+    // Translate into on-path/off-path info:
+    var m = make_2d_array(w, h, false);
+    var posx = w-1, posy = h-1;
+    m[posx][posy] = true;
+    var sum_on_path = dists1[0][0] + dists2[0][0];
+    while (dists1[posx][posy] > 0) {
+        //console.log("Finding path: "+posx+","+posy+"; dist="+dists[posx][posy]);
+        var nextx=null, nexty=null;
+        var bestdist = 1e9;
+        for (var dir=0; dir<4; dir++) {
+            var xx = posx + DIRX[dir];
+            var yy = posy + DIRY[dir];
+            // Check bounds:
+            if (xx<0 || xx>=w) continue;
+            if (yy<0 || yy>=h) continue;
+            // Check on-path-ness:
+            if (dists1[xx][yy] + dists2[xx][yy] != sum_on_path) continue;
+            // Don't take walls into account here - shortcutting is OK.
+            if (dists1[xx][yy] < bestdist) {
+                bestdist = dists1[xx][yy];
+                nextx = xx; nexty = yy;
+            }
+        }
+        posx = nextx;
+        posy = nexty;
+        m[posx][posy] = true;
+    }
+    return m;
+}
+
+function calculate_distances_from_point(nonwalls, destx, desty) {
+    var w = nonwalls.length;
+    var h = nonwalls[0].length;
+    var dists = make_2d_array(w, h, 1e9);
+    {
+        dists[destx][desty] = 0;
+        var q = [{x:destx, y:desty, dist:0}];
+
+        for (var i=0; i<q.length; i++) {
+            var srcx = q[i].x, srcy = q[i].y;
+            var nonw = nonwalls[srcx][srcy];
+            var dist = dists[srcx][srcy];
+            for (var dir=0; dir<4; dir++) {
+                if ((nonw & (1<<dir)) == 0) continue; // Wall check.
+                var tox = srcx + DIRX[dir];
+                var toy = srcy + DIRY[dir];
+                if (dists[tox][toy] > dist) {
+                    dists[tox][toy] = dist+1;
+                    q.push({x: tox, y: toy});
+                }
+            }
+        }
+    }
+    return dists;
 }
 
 //==================== Array utilities ==============================
