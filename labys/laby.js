@@ -24,17 +24,27 @@ function on_type_change() {
 function generate_laby() {
     // TEST:
     var w=15, h=10;
-    var m = generate_pattern3(w,h);
-    console.log("m = " + m);
+
+    // Best (longest) of 7:
+    var path_length = 0;
+    var grid;
+    for (var i=0; i<7; i++) {
+        var path = generate_pattern3(w,h);
+        if (path.path_length > path_length) {
+            path_length = path.path_length;
+            grid = path.path_grid;
+        }
+    }
 
     for (var y=0; y<h; y++) {
         var line = "";
         for (var x=0; x<w; x++) {
-            var onpath = (m[x][y] === 4 || m[x][y] === true);
-            line += (onpath ? "*" : (m[x][y] === 1 || m[x][y] === false) ? "-" : "+");
+            var onpath = grid[x][y];
+            line += (onpath ? "*" : "-");
         }
         console.log(line);
     }
+    console.log("Path length: "+path_length);
 }
 
 function value_for_cell(m,x,y) {
@@ -147,6 +157,7 @@ function generate_pattern3(w,h) {
     var posx = w-1, posy = h-1;
     m[posx][posy] = true;
     var sum_on_path = dists1[0][0] + dists2[0][0];
+    var path_length = 0;
     while (dists1[posx][posy] > 0) {
         //console.log("Finding path: "+posx+","+posy+"; dist="+dists[posx][posy]);
         var nextx=null, nexty=null;
@@ -168,8 +179,9 @@ function generate_pattern3(w,h) {
         posx = nextx;
         posy = nexty;
         m[posx][posy] = true;
+        path_length++;
     }
-    return m;
+    return {path_grid:m, path_length:path_length};
 }
 
 function calculate_distances_from_point(nonwalls, destx, desty) {
