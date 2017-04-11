@@ -2,7 +2,60 @@
 //========== Input configuration: ====================
 TYPE_INPUT_DEPS = {
     "plus": ["maxNum"],
-    "minus": ["maxNum", "maxSub"],
+    "minus": ["maxNum", "maxLeast"],
+}
+
+LABY_TYPES = {
+    plus: {
+        descr: "Plus",
+        tags: ["Matematik", "Regning", "Plus"],
+        deps: ["maxNum", "maxLeast"],
+        cell_gen: function(options) {
+            var x = rand_bool();
+            return {text:x?"+":"-", value:x}
+        }
+    },
+    minus: {
+        descr: "Minus",
+        tags: ["Matematik", "Regning", "Minus"],
+        deps: ["maxNum", "maxLeast"],
+        cell_gen: function(options) {
+            var x = rand_bool();
+            return {text:x?"*":" ", value:x}
+        }
+    },
+    same_letter: {
+        descr: "Ens bogstaver",
+        tags: ["Bogstaver", "Ens/forskellige"],
+        cell_gen: function(options) {
+            var x = rand_bool();
+            return {text:x?"*":" ", value:x}
+        }
+    },
+    same_or_different_letters: {
+        descr: "Ens/forskellige bogstaver",
+        tags: ["Bogstaver", "Ens/forskellige"],
+        cell_gen: function(options) {
+            var x = rand_bool();
+            return {text:x?"*":" ", value:x}
+        }
+    },
+    two_kinds_letters: {
+        descr: "To slags bogstaver",
+        tags: ["Bogstaver", "Ens/forskellige"],
+        cell_gen: function(options) {
+            var x = rand_bool();
+            return {text:x?"*":" ", value:x}
+        }
+    }
+}
+
+function rand_bool() {
+  return Math.random() < 0.5;
+}
+
+function rand_int(min,max) {
+  return min + int(Math.random() * (max-min+1));
 }
 
 function on_type_change() {
@@ -21,10 +74,74 @@ function on_type_change() {
 
 //========== Labyrinth generation: ====================
 
-function generate_laby() {
-    // TEST:
-    var w=15, h=10;
+function generate_labys() {
+    clear_results();
 
+    var type = $("#type")[0].value;
+    console.log("type = "+type);
+    descriptor = LABY_TYPES[type];
+    console.log("descriptor = "+descriptor);
+
+    options = {
+        maxNum: $("#maxNum")[0].value,
+        maxLeast: $("#maxLeast").value,
+    };
+
+    var count = 3;
+    var w=15, h=10;
+    for (var i=0; i<count; i++) {
+        var laby = generate_laby(w, h);
+        show_laby(laby, descriptor, options);
+    }
+}
+
+function clear_results() {
+    console.log("In clear_results");
+    var parent = $("#results")[0];
+    remove_all_children(parent);
+}
+
+function remove_all_children(node) {
+  while (node.firstChild)
+      node.removeChild(node.firstChild);
+}
+
+function show_laby(laby, descriptor, options) {
+    var parent = $("#results");
+    var table = $(document.createElement("table"))[0];
+
+    //var row_template = document.createElement("tr");
+    //var cell_template = document.createElement("td");
+
+    var trues = []; var falses = [];
+    var w = laby.length, h=laby[0].length;
+    for (var y=0; y<h; y++) {
+        var row = document.createElement("tr");
+        for (var x=0; x<w; x++) {
+            var onpath = laby[x][y];
+            var cell = document.createElement("td");
+            //var text = onpath ? "*" : " ";
+            var text = gen_cell_content(onpath, descriptor, options, trues, falses);
+            cell.appendChild(document.createTextNode(text));
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+    }
+    parent.append(table);
+}
+
+function gen_cell_content(onpath, descriptor, options, trues, falses) {
+    var src = onpath ? trues : falses;
+    while (src.length === 0) {
+        var item = descriptor.cell_gen(options);
+        if (item === null) continue;
+        var dest = (item.value ? trues : falses);
+        dest.push(item.text);
+    }
+    return src.pop();
+}
+
+function generate_laby(w, h) {
     // Best (longest) of 7:
     var path_length = 0;
     var grid;
@@ -45,7 +162,10 @@ function generate_laby() {
         console.log(line);
     }
     console.log("Path length: "+path_length);
+
+    return grid;
 }
+
 
 function value_for_cell(m,x,y) {
     if (y<0 || x>=m.length) return 1;
