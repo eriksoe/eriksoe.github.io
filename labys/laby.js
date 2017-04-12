@@ -1,9 +1,5 @@
 
 //========== Input configuration: ====================
-TYPE_INPUT_DEPS = {
-    "plus": ["maxNum"],
-    "minus": ["maxNum", "maxLeast"],
-}
 
 LABY_TYPES = {
     plus: {
@@ -58,10 +54,35 @@ function rand_int(min,max) {
   return min + int(Math.random() * (max-min+1));
 }
 
+function rand_letter() {
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ";
+    return letters.substring(rand_int(0,letter.length-1), 1);
+}
+
+//==================== Initialization
+function init_page() {
+    gen_type_menu();
+}
+
+function gen_type_menu() {
+    var type_selector = $("#type")[0];
+    remove_all_children(type_selector);
+    for (var type in LABY_TYPES) {
+        var descr = LABY_TYPES[type];
+        console.log("descr #"+type+": "+descr);
+        var option = document.createElement("option");
+        option.value = type;
+        option.appendChild(document.createTextNode(descr.descr));
+        type_selector.appendChild(option);
+    }
+}
+//====================
+
+
 function on_type_change() {
     var type = $("#type")[0].value;
-    console.log("type: "+type);
-    var deps = TYPE_INPUT_DEPS[type] || [];
+    descriptor = LABY_TYPES[type];
+    var deps = descriptor.deps || [];
     console.log("input deps: "+deps);
     var opt_inputs = $("#optional_inputs");
     opt_inputs.find("input,label,textarea,select").hide();

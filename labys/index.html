@@ -11,7 +11,7 @@
     <script src="laby.js"></script>
 
   </head>
-<body>
+<body onload="init_page()">
 <h1>Labyrint-opgave-generator</h1>
 
 <div>
@@ -19,10 +19,12 @@
     <div>
       <label for="type">Type: </label>
       <select id="type" onChange="on_type_change()">
+<!--
         <option value="plus">Plus</option>
         <option value="minus">Minus</option>
         <option value="same-letter">Ens bogstaver</option>
         <option value="same-or-diff-letter">Ens/forskellige bogstaver</option>
+  -->
       </select>
     </div>
 
