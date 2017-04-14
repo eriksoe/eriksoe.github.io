@@ -6,6 +6,7 @@ LABY_TYPES = {
         descr: "Plus",
         tags: ["Matematik", "Regning", "Plus"],
         deps: ["maxNum", "maxLeast"],
+        dims: [10,10],
         cell_gen: function(options) {
             var x = rand_bool();
             return {text:x?"+":"-", value:x}
@@ -15,6 +16,7 @@ LABY_TYPES = {
         descr: "Minus",
         tags: ["Matematik", "Regning", "Minus"],
         deps: ["maxNum", "maxLeast"],
+        dims: [10,10],
         cell_gen: function(options) {
             var x = rand_bool();
             return {text:x?"*":" ", value:x}
@@ -23,22 +25,31 @@ LABY_TYPES = {
     same_letter: {
         descr: "Ens bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
+        dims: [15,20],
         cell_gen: function(options) {
-            var x = rand_bool();
-            return {text:x?"*":" ", value:x}
+            var a = rand_letter();
+            var b = rand_letter();
+            return {text: a+"&nbsp;"+b, value:a===b}
         }
     },
     same_or_different_letters: {
         descr: "Ens/forskellige bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
+        dims: [9,10],
         cell_gen: function(options) {
-            var x = rand_bool();
-            return {text:x?"*":" ", value:x}
+            var same_txt = rand_bool();
+            var a = rand_letter();
+            var b = rand_bool() ? a : rand_letter();
+            return {
+                text: a+" og "+b+"<br>er<br>"+(same_txt?"ens":"forskellige"),
+                value: same_txt == (a==b)
+            }
         }
     },
     two_kinds_letters: {
         descr: "To slags bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
+        dims: [10,15],
         cell_gen: function(options) {
             var x = rand_bool();
             return {text:x?"*":" ", value:x}
@@ -51,12 +62,13 @@ function rand_bool() {
 }
 
 function rand_int(min,max) {
-  return min + int(Math.random() * (max-min+1));
+  return min + Math.floor(Math.random() * (max-min+1));
 }
 
 function rand_letter() {
     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ";
-    return letters.substring(rand_int(0,letter.length-1), 1);
+    var pos = rand_int(0,letters.length-1);
+    return letters.substring(pos, pos+1);
 }
 
 //==================== Initialization
@@ -109,7 +121,7 @@ function generate_labys() {
     };
 
     var count = 3;
-    var w=15, h=10;
+    var w=descriptor.dims[0], h=descriptor.dims[1];
     for (var i=0; i<count; i++) {
         var laby = generate_laby(w, h);
         show_laby(laby, descriptor, options);
@@ -129,7 +141,9 @@ function remove_all_children(node) {
 
 function show_laby(laby, descriptor, options) {
     var parent = $("#results");
-    var table = $(document.createElement("table"))[0];
+    var table = $(document.createElement("table"));
+    table.addClass("laby-grid");
+    table = table[0];
 
     //var row_template = document.createElement("tr");
     //var cell_template = document.createElement("td");
@@ -143,7 +157,8 @@ function show_laby(laby, descriptor, options) {
             var cell = document.createElement("td");
             //var text = onpath ? "*" : " ";
             var text = gen_cell_content(onpath, descriptor, options, trues, falses);
-            cell.appendChild(document.createTextNode(text));
+            //cell.appendChild(document.createTextNode(text));
+            cell.innerHTML = text;
             row.appendChild(cell);
         }
         table.appendChild(row);

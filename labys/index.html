@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Labyrint-opgave-generator</title>
@@ -10,12 +11,30 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="laby.js"></script>
 
+
+    <style>
+      .bg-primary select, .bg-primary option, .bg-primary input, .bg-primary button {
+        color: black;
+      }
+
+      table.laby-grid {border: thin solid black;}
+      table.laby-grid td {
+        border: thin solid black;
+        padding: 0.5em 0.25em;
+        text-align: center;
+      }
+      @media print {
+        header {display:none;}
+      }
+    </style>
+
   </head>
 <body onload="init_page()">
+<header><div class="bg-primary">
 <h1>Labyrint-opgave-generator</h1>
 
 <div>
-  <form id="inputs" class="form-inline">
+  <div id="inputs" class="form-inline">
     <div>
       <label for="type">Type: </label>
       <select id="type" onChange="on_type_change()">
@@ -38,6 +57,7 @@
     <input id="count" type="number" value="1" min="1" size="4"/>
     <button id="generate" accesskey="g" onclick="generate_labys(); return false;"><u>G</u>enerér</button>
   </form>
+  </div></header>
 
   <div id="results"></div>
 </div>
