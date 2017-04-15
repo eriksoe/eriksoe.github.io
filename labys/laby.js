@@ -6,20 +6,40 @@ LABY_TYPES = {
         descr: "Plus",
         tags: ["Matematik", "Regning", "Plus"],
         deps: ["maxNum", "maxLeast"],
-        dims: [10,10],
-        cell_gen: function(options) {
-            var x = rand_bool();
-            return {text:x?"+":"-", value:x}
+        dims: [15,15],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var c = rand_bool() ? a+b : rand_int(min,max);
+            if (! config_is_num(c, config))
+                return null;
+            if (! (config_is_small(a, config) || config_is_small(b, config)))
+                return null;
+            return {
+                text: a+"&nbsp;+&nbsp;"+b+"<br>=&nbsp;"+c,
+                value: a+b===c
+            }
         }
     },
     minus: {
         descr: "Minus",
         tags: ["Matematik", "Regning", "Minus"],
         deps: ["maxNum", "maxLeast"],
-        dims: [10,10],
-        cell_gen: function(options) {
-            var x = rand_bool();
-            return {text:x?"*":" ", value:x}
+        dims: [15,15],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var c = rand_int(min,max);
+            if (! (config_is_small(b, config))) return;
+            if (! (config_is_num(c, config))) return;
+            return {
+                text: a+"&nbsp;&ndash;&nbsp;"+b+"<br>=&nbsp;"+c,
+                value: a-b===c
+            }
         }
     },
     same_letter: {
@@ -42,17 +62,24 @@ LABY_TYPES = {
             var b = rand_bool() ? a : rand_letter();
             return {
                 text: a+" og "+b+"<br>er<br>"+(same_txt?"ens":"forskellige"),
-                value: same_txt == (a==b)
+                value: same_txt === (a===b)
             }
         }
     },
     two_kinds_letters: {
         descr: "To slags bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
-        dims: [10,15],
+        dims: [12,20],
         cell_gen: function(options) {
-            var x = rand_bool();
-            return {text:x?"*":" ", value:x}
+            var a = rand_letter();
+            var b = rand_letter();
+            var c = rand_letter();
+            if (rand_int(1,5) == 1) b=c=a;
+            var eqs = (a===b ?1:0) + (a===c ?1:0) + (b===c ?1:0);
+            return {
+                text: a+"&nbsp;"+b+"&nbsp;"+c,
+                value: eqs === 1
+            }
         }
     }
 }
@@ -70,6 +97,27 @@ function rand_letter() {
     var pos = rand_int(0,letters.length-1);
     return letters.substring(pos, pos+1);
 }
+
+function config_range_min(config) {
+    // TODO: Handle zero/negative & divisor
+    return 1;
+}
+
+function config_range_max(config) {
+    // TODO: Handle zero/negative & divisor
+    return rand_int(1, config.maxNum);
+}
+
+function config_is_small(x, config) {
+    // TODO: Handle zero/negative & divisor
+    return x>0 && x<= config.maxLeast;
+}
+
+function config_is_num(x, config) {
+    // TODO: Handle zero/negative & divisor
+    return x>0 && x<= config.maxNum;
+}
+
 
 //==================== Initialization
 function init_page() {
@@ -117,7 +165,7 @@ function generate_labys() {
 
     options = {
         maxNum: $("#maxNum")[0].value,
-        maxLeast: $("#maxLeast").value,
+        maxLeast: $("#maxLeast")[0].value,
     };
 
     var count = 3;
@@ -170,7 +218,7 @@ function gen_cell_content(onpath, descriptor, options, trues, falses) {
     var src = onpath ? trues : falses;
     while (src.length === 0) {
         var item = descriptor.cell_gen(options);
-        if (item === null) continue;
+        if (item === null || item === undefined) continue;
         var dest = (item.value ? trues : falses);
         dest.push(item.text);
     }
