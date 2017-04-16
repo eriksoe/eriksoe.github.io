@@ -42,6 +42,58 @@ LABY_TYPES = {
             }
         }
     },
+
+    greater_or_less: {
+        descr: "Større/mindre (tal)",
+        tags: ["Tal", "Større/mindre"],
+        deps: ["maxNum"],
+        dims: [8,14],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            if (a===b) return;
+            var gt_txt = rand_bool();
+            return {
+                text: a+" er "+(gt_txt?"st&oslash;rre" : "mindre")+" end "+b,
+                value: gt_txt === (a>b)
+            }
+        }
+    },
+
+    all_some_none: {
+        descr: "Alle/nogle/ingen (figurer)",
+        tags: ["Tal", "Større/mindre"],
+        dims: [7,8],
+        cell_gen: function(config) {
+            var figs = [];
+            var expected = rand_int(0,2);
+            var ref_color = rand_color();
+            var eq_count = 0;
+            var total_cnt = rand_int(3,4);
+            for (var i=0; i<total_cnt; i++) {
+                var c = rand_color();
+                figs.push(c);
+                if (c.nr == ref_color.nr) eq_count++;
+            }
+            var actual = eq_count===0 ? 0 : eq_count===total_cnt ? 2 : 1;
+            var actual_txt = rand_int(0,2);
+            if (actual !== expected) return;
+            var s = '<div style="line-height: 120%;">';
+            for (var i in figs) {
+                if (i==figs.length-2) s += "<br>"; else if (i>0) s+= ' ';
+                s += '<span style="font-size: 150%; color: '+figs[i].code+'">&oast;</span>';
+            }
+            s += "</div>";
+            var d = ["ingen", "nogle", "alle"];
+            return {
+                text: s+d[actual_txt]+" er "+ref_color.plur,
+                value: actual_txt === actual
+            }
+        }
+    },
+
     same_letter: {
         descr: "Ens bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
@@ -81,7 +133,7 @@ LABY_TYPES = {
                 value: eqs === 1
             }
         }
-    }
+    },
 }
 
 function rand_bool() {
@@ -97,6 +149,20 @@ function rand_letter() {
     var pos = rand_int(0,letters.length-1);
     return letters.substring(pos, pos+1);
 }
+
+color_codes = ["#ff3333", "#4444ff", "#44ff22", "black", "orange"];
+color_names_sing = ["r&oslash;d", "bl&aring;", "gr&oslash;n", "sort", "orange"];
+color_names_plur = ["r&oslash;de", "bl&aring;", "gr&oslash;nne", "sorte", "orange"];
+function rand_color() {
+    var i = rand_int(0,color_codes.length-1);
+    return {
+        nr: i,
+        code: color_codes[i],
+        sing: color_names_sing[i],
+        plur: color_names_plur[i]
+    };
+}
+
 
 function config_range_min(config) {
     // TODO: Handle zero/negative & divisor
