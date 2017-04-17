@@ -1,3 +1,55 @@
+//========== Random/config stuff:
+
+function rand_bool() {
+  return Math.random() < 0.5;
+}
+
+function rand_int(min,max) {
+  return min + Math.floor(Math.random() * (max-min+1));
+}
+
+function rand_letter() {
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ";
+    var pos = rand_int(0,letters.length-1);
+    return letters.substring(pos, pos+1);
+}
+
+color_codes = ["#ff3333", "#4444ff", "#44ff22", "black", "orange"];
+color_names_sing = ["r&oslash;d", "bl&aring;", "gr&oslash;n", "sort", "orange"];
+color_names_plur = ["r&oslash;de", "bl&aring;", "gr&oslash;nne", "sorte", "orange"];
+function rand_color() {
+    var i = rand_int(0,color_codes.length-1);
+    return {
+        nr: i,
+        code: color_codes[i],
+        sing: color_names_sing[i],
+        plur: color_names_plur[i]
+    };
+}
+
+
+function config_range_min(config) {
+    // TODO: Handle zero/negative & divisor
+    return 1;
+}
+
+function config_range_max(config) {
+    // TODO: Handle zero/negative & divisor
+    return rand_int(1, config.maxNum);
+}
+
+function config_is_small(x, config) {
+    // TODO: Handle zero/negative & divisor
+    return x>0 && x<= config.maxLeast;
+}
+
+function config_is_num(x, config) {
+    // TODO: Handle zero/negative & divisor
+    return x>0 && x<= config.maxNum;
+}
+
+
+
 
 //========== Input configuration: ====================
 
@@ -64,6 +116,21 @@ LABY_TYPES = {
 
     all_some_none: {
         descr: "Alle/nogle/ingen (figurer)",
+        explanation: (function () {
+            var s = "";
+            for (var n=0; n<=4; n++) {
+                s += "<td>";
+                for (var i=0; i<4; i++) {
+                    if (i==2) s += "<br>"; else if (i>0) s+= ' ';
+                    var color = i<n ? color_codes[0] : color_codes[1];
+                    s += '<span style="font-size: 150%; color: '+color+' !important;">&oast;</span>';
+                }
+                var d = n==0 ? "ingen" : n==4 ? "alle" : "nogle"
+                s += "<br>"+d+" er "+color_names_plur[0];
+                s += "</td>";
+            }
+            return '<table class="explanation"><tr>'+s+'</tr></table>';
+        })(),
         tags: ["Tal", "Større/mindre"],
         dims: [7,8],
         cell_gen: function(config) {
@@ -83,7 +150,7 @@ LABY_TYPES = {
             var s = '<div style="line-height: 120%;">';
             for (var i in figs) {
                 if (i==figs.length-2) s += "<br>"; else if (i>0) s+= ' ';
-                s += '<span style="font-size: 150%; color: '+figs[i].code+'">&oast;</span>';
+                s += '<span style="font-size: 150%; color: '+figs[i].code+' !important;">&oast;</span>';
             }
             s += "</div>";
             var d = ["ingen", "nogle", "alle"];
@@ -136,55 +203,6 @@ LABY_TYPES = {
     },
 }
 
-function rand_bool() {
-  return Math.random() < 0.5;
-}
-
-function rand_int(min,max) {
-  return min + Math.floor(Math.random() * (max-min+1));
-}
-
-function rand_letter() {
-    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ";
-    var pos = rand_int(0,letters.length-1);
-    return letters.substring(pos, pos+1);
-}
-
-color_codes = ["#ff3333", "#4444ff", "#44ff22", "black", "orange"];
-color_names_sing = ["r&oslash;d", "bl&aring;", "gr&oslash;n", "sort", "orange"];
-color_names_plur = ["r&oslash;de", "bl&aring;", "gr&oslash;nne", "sorte", "orange"];
-function rand_color() {
-    var i = rand_int(0,color_codes.length-1);
-    return {
-        nr: i,
-        code: color_codes[i],
-        sing: color_names_sing[i],
-        plur: color_names_plur[i]
-    };
-}
-
-
-function config_range_min(config) {
-    // TODO: Handle zero/negative & divisor
-    return 1;
-}
-
-function config_range_max(config) {
-    // TODO: Handle zero/negative & divisor
-    return rand_int(1, config.maxNum);
-}
-
-function config_is_small(x, config) {
-    // TODO: Handle zero/negative & divisor
-    return x>0 && x<= config.maxLeast;
-}
-
-function config_is_num(x, config) {
-    // TODO: Handle zero/negative & divisor
-    return x>0 && x<= config.maxNum;
-}
-
-
 //==================== Initialization
 function init_page() {
     gen_type_menu();
@@ -232,9 +250,10 @@ function generate_labys() {
     options = {
         maxNum: $("#maxNum")[0].value,
         maxLeast: $("#maxLeast")[0].value,
+        count: $("#count")[0].value,
     };
 
-    var count = 3;
+    var count = options.count;
     var w=descriptor.dims[0], h=descriptor.dims[1];
     for (var i=0; i<count; i++) {
         var laby = generate_laby(w, h);
@@ -255,6 +274,7 @@ function remove_all_children(node) {
 
 function show_laby(laby, descriptor, options) {
     var parent = $("#results");
+    var div = $(document.createElement("div"));
     var table = $(document.createElement("table"));
     table.addClass("laby-grid");
     table = table[0];
@@ -277,7 +297,16 @@ function show_laby(laby, descriptor, options) {
         }
         table.appendChild(row);
     }
-    parent.append(table);
+
+    var expl = descriptor.explanation || "";
+    if (expl !== "") {
+        var explNode = document.createElement("div");
+        explNode.innerHTML = expl;
+        div.append(explNode);
+    }
+
+    div.append(table);
+    parent.append(div);
 }
 
 function gen_cell_content(onpath, descriptor, options, trues, falses) {

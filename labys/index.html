@@ -17,15 +17,31 @@
         color: black;
       }
 
-      table.laby-grid {border: thin solid black;}
+      table.laby-grid {
+        border: thin solid black;
+        margin: 1em 0em;
+      }
       table.laby-grid td {
         border: thin solid black;
         padding: 0.5em 0.25em;
         text-align: center;
       }
+
+      table.explanation {border: thin solid black;}
+      table.explanation td {
+        border: thin solid black;
+        padding: 0.5em 0.25em;
+        text-align: center;
+      }
+
       @media print {
         header {display:none;}
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
       }
+
     </style>
 
   </head>
