@@ -114,6 +114,57 @@ LABY_TYPES = {
         }
     },
 
+    count_colors: {
+        descr: "Tælle farver",
+        deps: ["useNone", "useAll"],
+        explanation: function (config) {
+            var s = "";
+            for (var n=0; n<=4; n++) {
+                s += "<td>";
+                for (var i=0; i<4; i++) {
+                    if (i==2) s += "<br>"; else if (i>0) s+= ' ';
+                    var color = i<n ? color_codes[0] : color_codes[1];
+                    s += '<span style="font-size: 150%; color: '+color+' !important;">&oast;</span>';
+                }
+                var nr = (n===0 && config.useNone) ? "ingen" :
+                    (n===4 && config.useAll) ? "alle" : ""+n;
+                s += "<br>"+nr+" er "+(n===1 ? color_names_sing[0] : color_names_plur[0]);
+                s += "</td>";
+            }
+            return '<table class="explanation"><tr>'+s+'</tr></table>';
+        },
+        tags: ["Tal", "Større/mindre"],
+        dims: [7,8],
+        cell_gen: function(config) {
+            var ref_color = rand_color();
+            var total_cnt = rand_int(3,4);
+            var expected_cnt = rand_int(0,total_cnt);
+            var figs, eq_count;
+            for (var k=0; k<100; k++) { // Retries.
+                figs = []; eq_count = 0;
+                for (var i=0; i<total_cnt; i++) {
+                    var c = rand_color();
+                    figs.push(c);
+                    if (c.nr == ref_color.nr) eq_count++;
+                }
+                if (eq_count === expected_cnt) break;
+            }
+            if (eq_count !== expected_cnt) return;
+            var txt_cnt = rand_int(0,4);
+            var s = '<div style="line-height: 120%;">';
+            for (var i in figs) {
+                if (i==figs.length-2) s += "<br>"; else if (i>0) s+= ' ';
+                s += '<span style="font-size: 150%; color: '+figs[i].code+' !important;">&oast;</span>';
+            }
+            s += "</div>";
+            var txt_cnt_str = (txt_cnt===0 && config.useNone) ? "ingen" :
+                (txt_cnt===total_cnt && config.useAll) ? "alle" : ""+txt_cnt;
+            return {
+                text: s+txt_cnt_str+" er "+(txt_cnt===1 ? ref_color.sing : ref_color.plur),
+                value: eq_count === txt_cnt
+            }
+        }
+    },
     all_some_none: {
         descr: "Alle/nogle/ingen (figurer)",
         explanation: (function () {
@@ -250,8 +301,11 @@ function generate_labys() {
     options = {
         maxNum: $("#maxNum")[0].value,
         maxLeast: $("#maxLeast")[0].value,
+        useNone: $("#useNone")[0].checked,
+        useAll: $("#useAll")[0].checked,
         count: $("#count")[0].value,
     };
+    console.log("options.useNone: "+options.useNone);
 
     var count = options.count;
     var w=descriptor.dims[0], h=descriptor.dims[1];
@@ -298,7 +352,7 @@ function show_laby(laby, descriptor, options) {
         table.appendChild(row);
     }
 
-    var expl = descriptor.explanation || "";
+    var expl = descriptor.explanation(options) || "";
     if (expl !== "") {
         var explNode = document.createElement("div");
         explNode.innerHTML = expl;
