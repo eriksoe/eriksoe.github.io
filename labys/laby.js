@@ -328,6 +328,7 @@ LABY_TYPES = {
 //==================== Initialization
 function init_page() {
     gen_type_menu();
+    set_options_from_URL();
     on_type_change();
 }
 
@@ -345,6 +346,50 @@ function gen_type_menu() {
 }
 //====================
 
+function set_options_from_URL() {
+    var url = document.URL;
+    var key_RE = /^[A-Za-z0-9_]+$/;
+
+    var opt_inputs = $("#optional_inputs");
+    var inputs = opt_inputs.find("input,label,textarea,select");
+    var inputs_by_name = {};
+    for (var i in inputs) {
+        var input = inputs[i];
+        if (!input.id) continue;
+        console.log("Input id: "+input.id);
+        inputs_by_name[input.id] = input;
+    }
+    inputs_by_name["type"] = $("#type")[0];
+
+    var qpos = url.indexOf("?");
+    if (qpos < 0) return;
+
+    var s = url.substring(qpos+1);
+    var kvs = s.split("&");
+    for (var i in kvs) {
+        var kv = kvs[i];
+        var eqpos = kv.indexOf("=");
+        var k,v;
+        if (eqpos < 0) {
+            k=kv; v="true";
+        } else {
+            k=kv.substring(0,eqpos);
+            v = kv.substring(eqpos+1);
+        }
+        console.log("- KV "+k+" / "+v);
+        if (! key_RE.test(k)) {
+            console.log("Bad option name: "+k);
+            continue;
+        }
+        if (k in inputs_by_name) {
+            var input = inputs_by_name[k];
+            input.value = v;
+        } else {
+            console.log("Unknown option: "+k);
+        }
+        //var node = opt_inputs.find("input,label,textarea,select").hide();
+    }
+}
 
 function on_type_change() {
     var type = $("#type")[0].value;
