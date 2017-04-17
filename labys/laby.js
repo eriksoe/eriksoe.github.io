@@ -353,8 +353,9 @@ function show_laby(laby, descriptor, options) {
         table.appendChild(row);
     }
 
+    // Explanation:
     var expl_fun = descriptor.explanation;
-    var expl = expl_fun ? expl_fun() : "";
+    var expl = expl_fun ? expl_fun(options) : "";
     if (expl !== "") {
         var explNode = document.createElement("div");
         explNode.innerHTML = expl;
