@@ -17,6 +17,11 @@ function rand_letter() {
 color_codes = ["#ff3333", "#4444ff", "#44ff22", "black", "orange"];
 color_names_sing = ["r&oslash;d", "bl&aring;", "gr&oslash;n", "sort", "orange"];
 color_names_plur = ["r&oslash;de", "bl&aring;", "gr&oslash;nne", "sorte", "orange"];
+
+pcolor_codes = ["#ff3333", "#4444ff", "#44ff22", "#dddd00"];
+pcolor_names_sing = ["r&oslash;d", "bl&aring;", "gr&oslash;n", "gul"];
+pcolor_names_plur = ["r&oslash;de", "bl&aring;", "gr&oslash;nne", "gule"];
+
 function rand_color() {
     var i = rand_int(0,color_codes.length-1);
     return {
@@ -24,6 +29,16 @@ function rand_color() {
         code: color_codes[i],
         sing: color_names_sing[i],
         plur: color_names_plur[i]
+    };
+}
+
+function rand_primary_color() {
+    var i = rand_int(0,pcolor_codes.length-1);
+    return {
+        nr: i,
+        code: pcolor_codes[i],
+        sing: pcolor_names_sing[i],
+        plur: pcolor_names_plur[i]
     };
 }
 
@@ -167,6 +182,53 @@ LABY_TYPES = {
             return {
                 text: s+txt_cnt_str+" er "+(txt_cnt===1 ? ref_color.sing : ref_color.plur),
                 value: eq_count === txt_cnt
+            }
+        }
+    },
+
+    missing_color: {
+        descr: "Hvilken mangler? (farve)",
+        title: "Hvilken farve mangler?",
+        explanation: function (config) {
+            var s = '<p>Der skal være en blå, en rød, en grøn og en gul. Hvad for en farve mangler?</p>\n';
+                s += '<table class="explanation"><tr>';
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
+            for (var r=-1; r<4; r++) {
+                var l = [0,1,2,3];
+                if (r>=0) l.splice(r,1);
+                shuffle(l);
+                var which_txt = r<0 ? "Ingen" : "Den "+pcolor_names_plur[r];
+
+                s += '<td>';
+                for (var i in l) {
+                    var c = l[i];
+                    s += '<span style="font-size: 170%; color: '+pcolor_codes[c]+' !important;">&oast;</span>';
+                }
+                s += "<br>"+which_txt+" mangler";
+            }
+            s += '</td>';
+
+            s += "</tr></table>";
+            return s;
+        },
+        tags: ["Tal", "Større/mindre"],
+        dims: [7,8],
+        cell_gen: function(config) {
+            var l = [0,1,2,3];
+            var r = rand_int(0,4);
+            var r_txt = rand_int(0,4);
+            if (r!==4) l.splice(r,1);
+            var which_txt = r_txt===4 ? "Ingen" : "Den "+pcolor_names_plur[r_txt];
+            shuffle(l);
+
+            var s = "";
+            for (var i in l) {
+                var c = l[i];
+                s += '<span style="font-size: 170%; color: '+pcolor_codes[c]+' !important;">&oast;</span>';
+            }
+            return {
+                text: s+"<br>"+which_txt+" mangler",
+                value: r_txt === r
             }
         }
     },
