@@ -135,6 +135,7 @@ LABY_TYPES = {
     count_colors: {
         descr: "Tælle farver",
         title: "Tælle farver",
+        tags: ["Tal", "Tælle"],
         deps: ["useNone", "useAll"],
         explanation: function (config) {
             var s = "";
@@ -153,7 +154,6 @@ LABY_TYPES = {
             }
             return '<table class="explanation"><tr>'+s+'</tr></table>';
         },
-        tags: ["Tal", "Større/mindre"],
         dims: [7,8],
         cell_gen: function(config) {
             var ref_color = rand_color();
@@ -189,6 +189,7 @@ LABY_TYPES = {
     missing_color: {
         descr: "Hvilken mangler? (farve)",
         title: "Hvilken farve mangler?",
+        tags: ["Begreber", "Farver", "Mangler"],
         explanation: function (config) {
             var s = '<p>Der skal være en blå, en rød, en grøn og en gul. Hvad for en farve mangler?</p>\n';
                 s += '<table class="explanation"><tr>';
@@ -211,7 +212,6 @@ LABY_TYPES = {
             s += "</tr></table>";
             return s;
         },
-        tags: ["Tal", "Større/mindre"],
         dims: [7,8],
         cell_gen: function(config) {
             var l = [0,1,2,3];
@@ -235,6 +235,7 @@ LABY_TYPES = {
     all_some_none: {
         descr: "Alle/nogle/ingen (figurer)",
         title: "Alle, nogle og ingen",
+        tags: ["Begreber", "Alle, ingen, nogle"],
         explanation: function (config) {
             var s = "";
             for (var n=0; n<=4; n++) {
@@ -250,7 +251,6 @@ LABY_TYPES = {
             }
             return '<table class="explanation"><tr>'+s+'</tr></table>';
         },
-        tags: ["Tal", "Større/mindre"],
         dims: [7,8],
         cell_gen: function(config) {
             var figs = [];
