@@ -363,6 +363,7 @@ function show_laby(laby, descriptor, options) {
     }
 
     div.append(table);
+    div.addClass("on-same-page");
     parent.append(div);
 }
 

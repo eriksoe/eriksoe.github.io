@@ -39,8 +39,12 @@
         body {
           -webkit-print-color-adjust: exact;
           color-adjust: exact;
-          margin: 1.5cm 1cm;
+          margin: 0pt;
         }
+        @page { size: auto; margin: 1.5cm 1cm; }
+        .on-same-page {page-break-inside: avoid;}
+        div.results {margin: 0pt; padding: 0pt;}
+        .on-same-page > h1:first-child {margin-top:0pt; padding-top:0pt;}
       }
 
     </style>
@@ -77,7 +81,6 @@
     <button id="generate" accesskey="g" onclick="generate_labys(); return false;"><u>G</u>enerér</button>
   </form>
   </div></header>
-
   <div id="results"></div>
 </div>
 
