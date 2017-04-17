@@ -257,6 +257,7 @@ LABY_TYPES = {
 //==================== Initialization
 function init_page() {
     gen_type_menu();
+    on_type_change();
 }
 
 function gen_type_menu() {
@@ -352,7 +353,8 @@ function show_laby(laby, descriptor, options) {
         table.appendChild(row);
     }
 
-    var expl = descriptor.explanation(options) || "";
+    var expl_fun = descriptor.explanation;
+    var expl = expl_fun ? expl_fun() : "";
     if (expl !== "") {
         var explNode = document.createElement("div");
         explNode.innerHTML = expl;
