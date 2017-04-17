@@ -56,9 +56,10 @@ function config_is_num(x, config) {
 LABY_TYPES = {
     plus: {
         descr: "Plus",
+        title: "Plus-opgaver",
         tags: ["Matematik", "Regning", "Plus"],
         deps: ["maxNum", "maxLeast"],
-        dims: [15,15],
+        dims: [15,14],
         cell_gen: function(config) {
             var min = config_range_min(config);
             var max = config_range_max(config);
@@ -77,6 +78,7 @@ LABY_TYPES = {
     },
     minus: {
         descr: "Minus",
+        title: "Minus-opgaver",
         tags: ["Matematik", "Regning", "Minus"],
         deps: ["maxNum", "maxLeast"],
         dims: [15,15],
@@ -97,6 +99,7 @@ LABY_TYPES = {
 
     greater_or_less: {
         descr: "Større/mindre (tal)",
+        title: "Større og mindre",
         tags: ["Tal", "Større/mindre"],
         deps: ["maxNum"],
         dims: [8,14],
@@ -116,9 +119,11 @@ LABY_TYPES = {
 
     count_colors: {
         descr: "Tælle farver",
+        title: "Tælle farver",
         deps: ["useNone", "useAll"],
         explanation: function (config) {
             var s = "";
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
             for (var n=0; n<=4; n++) {
                 s += "<td>";
                 for (var i=0; i<4; i++) {
@@ -167,7 +172,8 @@ LABY_TYPES = {
     },
     all_some_none: {
         descr: "Alle/nogle/ingen (figurer)",
-        explanation: (function () {
+        title: "Alle, nogle og ingen",
+        explanation: function (config) {
             var s = "";
             for (var n=0; n<=4; n++) {
                 s += "<td>";
@@ -181,7 +187,7 @@ LABY_TYPES = {
                 s += "</td>";
             }
             return '<table class="explanation"><tr>'+s+'</tr></table>';
-        })(),
+        },
         tags: ["Tal", "Større/mindre"],
         dims: [7,8],
         cell_gen: function(config) {
@@ -214,6 +220,7 @@ LABY_TYPES = {
 
     same_letter: {
         descr: "Ens bogstaver",
+        title: "Ens bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
         dims: [15,20],
         cell_gen: function(options) {
@@ -224,6 +231,7 @@ LABY_TYPES = {
     },
     same_or_different_letters: {
         descr: "Ens/forskellige bogstaver",
+        title: "Ens og forskellig",
         tags: ["Bogstaver", "Ens/forskellige"],
         dims: [9,10],
         cell_gen: function(options) {
@@ -238,6 +246,7 @@ LABY_TYPES = {
     },
     two_kinds_letters: {
         descr: "To slags bogstaver",
+        title: "To forskellige bogstaver",
         tags: ["Bogstaver", "Ens/forskellige"],
         dims: [12,20],
         cell_gen: function(options) {
@@ -351,6 +360,14 @@ function show_laby(laby, descriptor, options) {
             row.appendChild(cell);
         }
         table.appendChild(row);
+    }
+
+    // Title:
+    var title = descriptor.title || "";
+    if (title !== "") {
+        var node = document.createElement("h1");
+        node.innerHTML = title;
+        div.append(node);
     }
 
     // Explanation:
