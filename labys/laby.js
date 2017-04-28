@@ -508,23 +508,36 @@ LABY_TYPES = {
             }
         }
     },
-    minus: {
-        descr: "Minus",
-        title: "Minus-opgaver",
-        tags: ["Matematik", "Regning", "Minus"],
-        deps: ["maxNum", "maxLeast"],
-        dims: [15,15],
+
+    clock_hours: {
+        descr: "Klokken - timer",
+        title: "Hvad er klokken?",
+        tags: ["Ur", "Klokken"],
+        dims: [10,9],
         cell_gen: function(config) {
-            var min = config_range_min(config);
-            var max = config_range_max(config);
-            var a = rand_int(min,max);
-            var b = rand_int(min,max);
-            var c = rand_int(min,max);
-            if (! (config_is_small(b, config))) return;
-            if (! (config_is_num(c, config))) return;
+            var hour = rand_int(1,12);
+            var text_hour = rand_int(1,12);
+            var v = (Math.PI / 6) * hour;
+            var mx1 = 50 + 18 * Math.sin(v);
+            var mx2 = 50 + 20 * Math.sin(v);
+            var my1 = 50 - 18 * Math.cos(v);
+            var my2 = 50 - 20 * Math.cos(v);
+            var svg = '<svg width="100" height="100">' +
+'      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="2" fill="none"/>' +
+'      <path d="M50,10 L50,15" stroke="black" stroke-width="2"/>' +
+'      <path d="M50,90 L50,85" stroke="black" stroke-width="2"/>' +
+'      <path d="M10,50 L15,50" stroke="black" stroke-width="2"/>' +
+'      <path d="M90,50 L85,50" stroke="black" stroke-width="2"/>' +
+'' +
+'      <path d="M50,50 L50,16" stroke="black" stroke-width="3.5"/>' +
+'      <path d="M50,50 L50,18" stroke="white" stroke-width="1.5"/>' +
+'      <path d="M50,50 L'+mx2+','+my2+'" stroke="black" stroke-width="3.5"/>' +
+'      <path d="M50,50 L'+mx1+','+my1+'" stroke="white" stroke-width="1.5"/>' +
+'      <circle cx="50" cy="50" r="3" stroke="none" fill="black"/>' +
+'    </svg>';
             return {
-                text: a+"&nbsp;&ndash;&nbsp;"+b+"<br>=&nbsp;"+c,
-                value: a-b===c
+                text: svg+'<br/>Klokken er '+text_hour,
+                value: text_hour == hour
             }
         }
     },
