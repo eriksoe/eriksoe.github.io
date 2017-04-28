@@ -54,7 +54,7 @@ function config_range_min(config) {
 
 function config_range_max(config) {
     // TODO: Handle zero/negative & divisor
-    return rand_int(1, config.maxNum);
+    return config.maxNum;
 }
 
 function config_is_small(x, config) {
