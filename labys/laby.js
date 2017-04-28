@@ -8,6 +8,10 @@ function rand_int(min,max) {
   return min + Math.floor(Math.random() * (max-min+1));
 }
 
+function rand_float(min,max) {
+  return min + Math.random() * (max-min);
+}
+
 function rand_letter() {
     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ";
     var pos = rand_int(0,letters.length-1);
@@ -63,6 +67,105 @@ function config_is_num(x, config) {
     return x>0 && x<= config.maxNum;
 }
 
+function in_range(min,v,max) {return min<=v && v<=max;}
+
+
+//========== Point set generation: ====================
+
+function generate_point_set(w,h,maxdist, n) {
+    var points = [];
+    var nr = 0;
+    var gen_label = function() {
+        nr++;
+        return String.fromCharCode(64+nr);
+    };
+
+    // First two points:
+    var x1 = rand_float(0,w);
+    var y1 = rand_float(0,h);
+    points.push({x:x1, y:y1, label:gen_label()});
+    while (points.length < 2) {
+        var d = rand_int(Math.floor(maxdist/2), maxdist);
+        var angle = rand_float(0, 2*Math.PI);
+        var x2 = x1 + d * Math.sin(angle);
+        var y2 = y1 + d * Math.cos(angle);
+        if (in_range(0,x2,w) && in_range(0,y2,h)) {
+            points.push({x:x2, y:y2, label:gen_label()});
+        }
+    }
+
+    // Add more points:
+    console.log("E1 "+points[0].x+","+points[0].y);
+    console.log("E2 "+points[1].x+","+points[1].y);
+    var attempts = 0;
+    invent_point: while (points.length < n && attempts<1000*n) {
+        attempts++;
+        // Choose two points:
+        var i=rand_int(0, points.length-1);
+        var j=rand_int(0, points.length-1);
+        if (i===j) continue;
+        var p1 = points[i];
+        var p2 = points[j];
+
+        // Choose distances:
+        var d1 = rand_int(1, maxdist);
+        var d2 = rand_int(1, maxdist);
+
+        // Calculate new point:
+        var dx = p2.x-p1.x, dy=p2.y-p1.y;
+        var R = Math.sqrt(dx*dx + dy*dy);
+        var dd = (d1*d1 - d2*d2)/(R*R);
+        var disc = 2*((d1*d1 + d2*d2)/(R*R)) - (dd*dd) - 1;
+        console.log("F1 d1="+d1+" d2="+d2);
+        console.log("F2 d=("+dx+","+dy+")");
+        console.log("F3 R="+R+" dd="+dd);
+        console.log("F "+disc);
+        if (disc < 0) continue;
+
+        var midway = {x: 0.5*(p1.x+p2.x),
+                      y: 0.5*(p1.y+p2.y)};
+        var w2 = dd/2;
+        var sign = rand_bool() ? 1 : -1;
+        var w3 = sign * Math.sqrt(disc)/2;
+
+        var x = midway.x + w2*dx + w3*dy;
+        var y = midway.y + w2*dy - w3*dx;
+        console.log("G mw="+midway.x+","+midway.y+"  w2="+w2+" w3="+w3);
+        if (!(in_range(0,x,w) && in_range(0,y,h))) {
+            x = midway.x + w2*dx - w3*dy;
+            y = midway.y + w2*dy + w3*dx;
+            if (!(in_range(0,x,w) && in_range(0,y,h)))
+                continue;
+        }
+
+        // Check for too close points:
+        for (var j in points) {
+            var p = points[j];
+            if (Math.abs(x-p.x) <= 0.25 &&
+                Math.abs(y-p.y) <= 0.75)
+                continue invent_point;
+        }
+
+        console.log("New point: "+x+","+y);
+        points.push({x:x, y:y, label:gen_label()});
+        console.log("Points: "+points);
+    }
+    return points;
+}
+
+function add_point_set_to_SVG(svgNode, points) {
+    var s = "";
+    for (var i in points) {
+        var p = points[i];
+
+        s += '<circle cx="'+p.x+'" cy="'+p.y+'" r="0.1" stroke-width="0" fill="black"></circle>';
+        s += '<text x="'+p.x+'" y="'+(p.y-0.2)+'" text-anchor="middle" stroke-width="0" fill="black" font-size="0.75">'+p.label+'</text>';
+    }
+
+    var groupNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    groupNode.innerHTML = s;
+    svgNode.appendChild(groupNode);
+}
 
 
 
@@ -323,6 +426,81 @@ LABY_TYPES = {
             }
         }
     },
+
+    measure: {
+        descr: "Måle afstande",
+        title: "Måle afstande",
+        tags: ["Matematik", "Måle", "Lineal"],
+        dims: [8,9],
+        prepare_state: function(config) {
+            return generate_point_set(15, 4, 14, 10);
+        },
+        above_matter: function(config) {
+            var points = config.state;
+            var points = config.state;
+            var svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            $(svgNode).attr("width", "16cm");
+            $(svgNode).attr("height", "5cm");
+            svgNode.setAttribute("style", 'padding: 0px; margin: 0px');
+            svgNode.setAttribute("viewBox", "-0.5 -0.8 16 5");
+            svgNode.setAttribute("preserveAspectRatio", "meet");
+            //svgNode.innerHTML += '<circle cx="-1" cy="0" r="0.1" stroke-width="0" fill="red"></circle>';
+            //svgNode.innerHTML += '<circle cx="-0.5" cy="0.25" r="0.1" stroke-width="0" fill="red"></circle>';
+            //svgNode.innerHTML += '<circle cx="0" cy="0" r="0.1" stroke-width="0" fill="red"></circle>';
+            //svgNode.innerHTML += '<circle cx="15" cy="0" r="0.1" stroke-width="0" fill="red"></circle>';
+            add_point_set_to_SVG(svgNode, points);
+            return '<div style="border:thin solid black; width: 15cm; height: 0cm; margin: 0.5cm 0cm;"></div>' + svgNode.outerHTML + '<div style="border:thin solid black; width: 15cm; height: 0cm; margin: 0.5cm 0cm;"></div>';
+        },
+        cell_gen: function(config) {
+            var points = config.state;
+            var cnt = points.length;
+
+            // Choose two different points:
+            var i = rand_int(0, cnt-1);
+            var j = rand_int(0, cnt-1);
+            if (i == j) return;
+            var p = points[i], q = points[j];
+
+            var dx = p.x-q.x, dy = p.y-q.y;
+            var actual_dist = Math.sqrt(dx*dx + dy*dy);
+
+            var txt_dist = rand_bool() ? Math.round(actual_dist) : rand_int(1,15);
+
+            var diff = Math.abs(txt_dist - actual_dist);
+            var answer;
+            if (diff < 0.1)
+                answer = true;
+            else if (diff > 0.9)
+                answer = false;
+            else
+                return;
+
+            return {
+                text: "Der er "+txt_dist+"cm fra "+p.label+" til "+q.label,
+                value: answer
+            }
+        }
+    },
+    minus: {
+        descr: "Minus",
+        title: "Minus-opgaver",
+        tags: ["Matematik", "Regning", "Minus"],
+        deps: ["maxNum", "maxLeast"],
+        dims: [15,15],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var c = rand_int(min,max);
+            if (! (config_is_small(b, config))) return;
+            if (! (config_is_num(c, config))) return;
+            return {
+                text: a+"&nbsp;&ndash;&nbsp;"+b+"<br>=&nbsp;"+c,
+                value: a-b===c
+            }
+        }
+    },
 }
 
 //==================== Initialization
@@ -453,6 +631,8 @@ function show_laby(laby, descriptor, options) {
     //var row_template = document.createElement("tr");
     //var cell_template = document.createElement("td");
 
+    options.state = (descriptor.prepare_state !== undefined) ? descriptor.prepare_state() : null;
+
     var trues = []; var falses = [];
     var w = laby.length, h=laby[0].length;
     for (var y=0; y<h; y++) {
@@ -484,6 +664,15 @@ function show_laby(laby, descriptor, options) {
         var explNode = document.createElement("div");
         explNode.innerHTML = expl;
         div.append(explNode);
+    }
+
+    // Above-matter:
+    var am_fun = descriptor.above_matter;
+    var above_matter = am_fun ? am_fun(options) : "";
+    if (above_matter !== "") {
+        var amNode = document.createElement("div");
+        amNode.innerHTML = above_matter;
+        div.append(amNode);
     }
 
     div.append(table);
