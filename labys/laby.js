@@ -57,6 +57,11 @@ function config_range_max(config) {
     return config.maxNum;
 }
 
+function config_range_least_max(config) {
+    // TODO: Handle zero/negative & divisor
+    return rand_int(1, config.maxLeast);
+}
+
 function config_is_small(x, config) {
     // TODO: Handle zero/negative & divisor
     return x>0 && x<= config.maxLeast;
@@ -211,6 +216,28 @@ LABY_TYPES = {
             return {
                 text: a+"&nbsp;&ndash;&nbsp;"+b+"<br>=&nbsp;"+c,
                 value: a-b===c
+            }
+        }
+    },
+
+    times: {
+        descr: "Gange",
+        title: "Gange-opgaver",
+        tags: ["Matematik", "Regning", "Gange"],
+        deps: ["maxNum", "maxLeast"],
+        dims: [15,15],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var leastMax = config_range_least_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var c = rand_bool() ? a*b : rand_int(1,max*leastMax); //TODO: handle zero and negatives
+            if (! (config_is_small(a, config) || config_is_small(b, config)))
+                return null;
+            return {
+                text: a+"&nbsp;&middot;&nbsp;"+b+"<br>=&nbsp;"+c,
+                value: a*b===c
             }
         }
     },
