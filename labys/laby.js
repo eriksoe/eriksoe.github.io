@@ -204,7 +204,7 @@ LABY_TYPES = {
         title: "Minus-opgaver",
         tags: ["Matematik", "Regning", "Minus"],
         deps: ["maxNum", "maxLeast"],
-        dims: [15,15],
+        dims: [11,15],
         cell_gen: function(config) {
             var min = config_range_min(config);
             var max = config_range_max(config);
