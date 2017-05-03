@@ -70,15 +70,24 @@
 
 
     <div id="optional_inputs">
-      <label for="maxNum">Max tal: </label><input id="maxNum" type="number" value="10" min="2"/>
-      <label for="maxLeast">Max mindste tal: </label><input id="maxLeast" type="number" value="10" min="1"/>
-      <label for="useNone">Brug "ingen": </label><input id="useNone" type="checkbox" value="false"/>
-      <label for="useAll">Brug "alle": </label><input id="useAll" type="checkbox" value="false"/>
+      <div>
+        <label for="maxNum">Max tal: </label><input id="maxNum" type="number" value="10" min="2"/>
+        <label for="maxLeast">Max mindste tal: </label><input id="maxLeast" type="number" value="10" min="1"/>
+      </div>
+      <div>
+        <input id="useNone" type="checkbox" checked="false"/><label for="useNone">Brug "ingen"</label>
+        <input id="useAll" type="checkbox" checked="false"/><label for="useAll">Brug "alle"</label>
+      </div>
+      <div>
+        <input id="timeHalfHour" type="checkbox" checked="true"/><label for="timeHalfHour">Halve timer</label>
+        <input id="timeQuartHour" type="checkbox" checked="true"/><label for="timeQuartHour">Kvarte timer</label>
+      </div>
     </div>
-
-    <label for="count">Antal opgaver: </label>
-    <input id="count" type="number" value="1" min="1" size="4"/>
-    <button id="generate" accesskey="g" onclick="generate_labys(); return false;"><u>G</u>enerér</button>
+    <div>
+      <label for="count">Antal opgaver: </label>
+      <input id="count" type="number" value="1" min="1" size="4"/>
+      <button id="generate" accesskey="g" onclick="generate_labys(); return false;"><u>G</u>enerér</button>
+    </div>
   </form>
   </div></header>
   <div id="results"></div>

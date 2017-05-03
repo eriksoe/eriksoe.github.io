@@ -182,7 +182,7 @@ LABY_TYPES = {
         title: "Plus-opgaver",
         tags: ["Matematik", "Regning", "Plus"],
         deps: ["maxNum", "maxLeast"],
-        dims: [15,14],
+        dims: [12,14],
         cell_gen: function(config) {
             var min = config_range_min(config);
             var max = config_range_max(config);
@@ -541,6 +541,73 @@ LABY_TYPES = {
             }
         }
     },
+
+    clock_quarters: {
+        descr: "Klokken - halve og kvarte timer",
+        title: "Hvad er klokken?",
+        tags: ["Ur", "Klokken"],
+        deps: ["timeHalfHour", "timeQuartHour"],
+        dims: [9,8],
+        //TODO: Add explanation - examples of correct answers.
+        cell_gen: function(config) {
+            var hour = rand_int(1,12);
+            var text_hour = rand_int(1,12);
+
+            var quarters = rand_int(-2,1);
+            var text_quarters = rand_int(-2,1);
+            var text_quarters_str = ["halv ", "kvart i ", "", "kvart over "][text_quarters+2];
+
+            if (!config.timeQuartHour && (quarters%2!=0 || text_quarters%2!=0))
+                return;
+            if (!config.timeHalfHour && (quarters%4==-2 || text_quarters%4==-2))
+                return;
+
+            var v_h = 30 * (hour + quarters/4.0);
+            // var v_h = (Math.PI / 6) * (hour + quarters/4.0);
+            // var hx1 = 50 + 18 * Math.sin(v_h);
+            // var hx2 = 50 + 20 * Math.sin(v_h);
+            // var hy1 = 50 - 18 * Math.cos(v_h);
+            // var hy2 = 50 - 20 * Math.cos(v_h);
+
+            var v_m = 90 * quarters;
+            // var v_m = (Math.PI / 2) * (quarters);
+            // var mx1 = 50 + 32 * Math.sin(v_m);
+            // var mx2 = 50 + 34 * Math.sin(v_m);
+            // var my1 = 50 - 32 * Math.cos(v_m);
+            // var my2 = 50 - 34 * Math.cos(v_m);
+
+            var svg = '<svg width="100" height="100" viewbox="-50 -50 100 100">'+
+'      <circle cx="0" cy="0" r="40" stroke="black" stroke-width="2" fill="none"/>'+
+''+
+'      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(0 0 0)"/>'+
+'      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(90 0 0)"/>'+
+'      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(180 0 0)"/>'+
+'      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(270 0 0)"/>'+
+''+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(30 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(60 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(120 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(150 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(210 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(240 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(300 0 0)"/>'+
+'      <path d="M0,40 L0,37" stroke="black" stroke-width="1.5" transform="rotate(330 0 0)"/>'+
+'      <g transform="rotate('+v_m+' 0 0)">'+
+'        <path d="M0,0 L0,-34" stroke="black" stroke-width="3.5"/>'+
+'        <path d="M0,0 L0,-32" stroke="white" stroke-width="1.5"/>'+
+'      </g>'+
+'      <g transform="rotate('+v_h+' 0 0)">'+
+'        <path d="M0,0 L0,-20" stroke="black" stroke-width="3.5"/>'+
+'        <path d="M0,0 L0,-18" stroke="white" stroke-width="1.5"/>'+
+'      </g>'+
+'      <circle cx="0" cy="0" r="3" stroke="none" fill="black"/>'+
+'    </svg>';
+            return {
+                text: svg+'<br/>Klokken er<br/>'+text_quarters_str+text_hour,
+                value: (text_hour == hour && text_quarters == quarters)
+            }
+        }
+    },
 }
 
 //==================== Initialization
@@ -638,6 +705,8 @@ function generate_labys() {
         maxLeast: $("#maxLeast")[0].value,
         useNone: $("#useNone")[0].checked,
         useAll: $("#useAll")[0].checked,
+        timeHalfHour: $("#timeHalfHour")[0].checked,
+        timeQuartHour: $("#timeQuartHour")[0].checked,
         count: $("#count")[0].value,
     };
     console.log("options.useNone: "+options.useNone);
