@@ -547,7 +547,7 @@ LABY_TYPES = {
         title: "Hvad er klokken?",
         tags: ["Ur", "Klokken"],
         deps: ["timeHalfHour", "timeQuartHour"],
-        dims: [9,8],
+        dims: [9,7],
         //TODO: Add explanation - examples of correct answers.
         cell_gen: function(config) {
             var hour = rand_int(1,12);
