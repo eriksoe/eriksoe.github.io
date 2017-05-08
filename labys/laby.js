@@ -562,21 +562,35 @@ LABY_TYPES = {
             if (!config.timeHalfHour && (quarters%4==-2 || text_quarters%4==-2))
                 return;
 
-            var v_h = 30 * (hour + quarters/4.0);
-            // var v_h = (Math.PI / 6) * (hour + quarters/4.0);
-            // var hx1 = 50 + 18 * Math.sin(v_h);
-            // var hx2 = 50 + 20 * Math.sin(v_h);
-            // var hy1 = 50 - 18 * Math.cos(v_h);
-            // var hy2 = 50 - 20 * Math.cos(v_h);
+            var svg = clockface_svg(hour, quarters*15);
+            return {
+                text: svg+'<br/>Klokken er<br/>'+text_quarters_str+text_hour,
+                value: (text_hour == hour && text_quarters == quarters)
+            }
+        },
+        explanation: function (config) {
+            var s = "";
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
+            var add_row = function(h,m,text) {
+                s += "<td>";
+                s += clockface_svg(h,m);
+                s += '<br/>'+text;
+                s += '</td>';
+            }
+            if (config.timeHalfHour) add_row(2,-30, "Klokken er halv 2");
+            if (config.timeQuartHour) add_row(2,-15, "Klokken er kvart i 2");
+            add_row(2,0, "Klokken er 2");
+            if (config.timeQuartHour) add_row(2,15, "Klokken er kvart over 2");
+            if (config.timeHalfHour) add_row(2,30, "Klokken er halv 3");
+            return '<table class="explanation"><tr>'+s+'</tr></table>';
+        }
+    },
+}
 
-            var v_m = 90 * quarters;
-            // var v_m = (Math.PI / 2) * (quarters);
-            // var mx1 = 50 + 32 * Math.sin(v_m);
-            // var mx2 = 50 + 34 * Math.sin(v_m);
-            // var my1 = 50 - 32 * Math.cos(v_m);
-            // var my2 = 50 - 34 * Math.cos(v_m);
-
-            var svg = '<svg width="100" height="100" viewbox="-50 -50 100 100">'+
+function clockface_svg(hours, minutes) {
+    var v_h = 30 * (hours + minutes/60.0);
+    var v_m = 6 * minutes;
+    var svg = '<svg width="100" height="100" viewbox="-50 -50 100 100">'+
 '      <circle cx="0" cy="0" r="40" stroke="black" stroke-width="2" fill="none"/>'+
 ''+
 '      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(0 0 0)"/>'+
@@ -602,12 +616,7 @@ LABY_TYPES = {
 '      </g>'+
 '      <circle cx="0" cy="0" r="3" stroke="none" fill="black"/>'+
 '    </svg>';
-            return {
-                text: svg+'<br/>Klokken er<br/>'+text_quarters_str+text_hour,
-                value: (text_hour == hour && text_quarters == quarters)
-            }
-        }
-    },
+    return svg;
 }
 
 //==================== Initialization
