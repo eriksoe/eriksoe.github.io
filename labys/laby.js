@@ -262,6 +262,23 @@ LABY_TYPES = {
         }
     },
 
+    multiplication_table: {
+        descr: "Tabeller",
+        title: function(config) {return config.number+"-tabellen";},
+        explanation: function(config) {return "Følg de felter, hvor tallet er med i "+config.number+"-tabellen.";},
+        tags: ["Tal", "Multiplikation", "Tabeller"],
+        deps: ["number"],
+        dims: [20,15],
+        cell_gen: function(config) {
+            var n = config.number;
+            var x = rand_bool() ? n*rand_int(1,10) : rand_int(1, 10*n);
+            return {
+                text: ""+x,
+                value: x % n == 0
+            }
+        }
+    },
+
     count_colors: {
         descr: "Tælle farver",
         title: "Tælle farver",
@@ -712,6 +729,7 @@ function generate_labys() {
     options = {
         maxNum: $("#maxNum")[0].value,
         maxLeast: $("#maxLeast")[0].value,
+        number: $("#number")[0].value,
         useNone: $("#useNone")[0].checked,
         useAll: $("#useAll")[0].checked,
         timeHalfHour: $("#timeHalfHour")[0].checked,
@@ -769,6 +787,7 @@ function show_laby(laby, descriptor, options) {
 
     // Title:
     var title = descriptor.title || "";
+    if (typeof(title) == "function") title = title(options);
     if (title !== "") {
         var node = document.createElement("h1");
         node.innerHTML = title;
