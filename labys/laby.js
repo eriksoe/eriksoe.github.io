@@ -229,7 +229,7 @@ LABY_TYPES = {
         cell_gen: function(config) {
             var min = config_range_min(config);
             var max = config_range_max(config);
-            var leastMax = config_range_least_max(config);
+            var leastMax = config.leastMax;
             var a = rand_int(min,max);
             var b = rand_int(min,max);
             var c = rand_bool() ? a*b : rand_int(1,max*leastMax); //TODO: handle zero and negatives
@@ -275,6 +275,37 @@ LABY_TYPES = {
             return {
                 text: ""+x,
                 value: x % n == 0
+            }
+        }
+    },
+
+    multiplication_light: {
+        descr: "Multiplikation light",
+        title: "Plus plus plus...",
+        tags: ["Tal", "Multiplikation"],
+        deps: ["maxNum", "maxLeast"],
+        dims: [8,12],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var leastMax = config.maxLeast;
+            var a = rand_int(min,max);
+            var b = rand_int(1,leastMax);
+            var expected_eq = rand_bool();
+            console.log("AB: "+a+"/"+b);
+            if (b<2 && rand_float() < 0.8)
+                return;
+            var text_res = rand_bool() ? a*b : rand_int(min*leastMax, max*leastMax);
+            var actual_eq = text_res == a*b;
+            console.log("EQ: "+expected_eq+"/"+actual_eq);
+            if (actual_eq != expected_eq)
+                return;
+
+            var s = a+"";
+            for (var i=1; i<b; i++) s += " + "+a;
+            return {
+                text: s+"<br>= "+text_res,
+                value: actual_eq
             }
         }
     },
