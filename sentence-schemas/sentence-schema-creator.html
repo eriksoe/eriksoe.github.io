@@ -33,16 +33,23 @@
 
   </head>
 <body onload="init_page()">
-<header><div class="bg-primary">
+<header>
+<div class="bg-primary">
 <h1>Sentence schema creator</h1>
 
 <div id="inputs" class="form-inline">
-  <label for="spec">Sentence structure: </label>
-  <textarea id="spec" oninput="on_spec_changed(false)" onchange="on_spec_changed(true)">Hi (you/there)!</textarea>
+  <label style="vertical-align:top" for="spec">Sentence structure: </label>
+  <textarea style="vertical-align:top; margin-bottom: 1em;" id="spec"
+            cols="100" rows="5"
+            oninput="on_spec_changed(false)" onchange="on_spec_changed(true)"
+            >Hi (you/there)!</textarea>
+</div>
+<div>
+  Symbols: &#x1F464;
 </div>
 </header>
   <div id="results"></div>
-</div>
+  </div>
 
 </body>
 </html>

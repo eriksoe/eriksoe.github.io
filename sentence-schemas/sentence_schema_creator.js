@@ -1,5 +1,11 @@
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
+var LINE_COLOR = "rgb(192,192,192)";
+var LINE_WIDTH = 0.75;
+
+var BOX_LINE_COLOR = "black";
+var BOX_LINE_WIDTH = 0.1;
+
 function init_page() {
     reparse();
 }
@@ -28,10 +34,10 @@ function show_diagram(tree) {
     remove_all_children(parent);
 
     var svgNode = document.createElementNS(SVG_NS, 'svg');
-    $(svgNode).attr("width", "10cm");
-    $(svgNode).attr("height", "5cm");
+    $(svgNode).attr("width", "17cm");
+    $(svgNode).attr("height", "12cm");
     svgNode.setAttribute("style", 'padding: 0px; margin: 0px');
-    svgNode.setAttribute("viewBox", "0 0 5 10");
+    svgNode.setAttribute("viewBox", "0 0 17 12");
     parent.appendChild(svgNode);
     //svgNode.setAttribute("preserveAspectRatio", "meet");
     //var groupNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -42,7 +48,7 @@ function show_diagram(tree) {
     var y1 = -(tree.upheight+MARGIN);
     var w = tree.width + 2*MARGIN;
     var h = (tree.upheight+tree.downheight) + 2*MARGIN;
-    svgNode.setAttribute("viewBox", x1+" "+y1+" "+w+" "+h);
+    svgNode.setAttribute("viewBox", x1+" "+y1+" "+Math.max(170,w)+" "+Math.max(120,h));
     tree.render(svgNode, 0,0);
 
     console.log("tree size: "+tree.width+" x "+tree.upheight+"+"+tree.downheight);
@@ -86,7 +92,7 @@ function parse(spec) {
     var m;
     //TODO: Error handling - unbalanced grouping.
     while ((m = regex.exec(spec))) {
-        console.log("Match: "+m);
+        //console.log("Match: "+m);
         var top = stack[stack.length-1];
         if (m[1] !== undefined) {
             // Whitespace
@@ -205,21 +211,23 @@ Choice.prototype = {
     TURN_SIZE: 5,
 
     calculateSize: function(ctx) {
+        this.neutral = Math.floor((this.items.length-1)/2);
+
         var w=0, h_up=0, h_dn=0;
-        var base = Math.floor(this.items.length/2);
         for (var i in this.items) {
             var item = this.items[i];
             item.calculateSize(ctx);
             w = Math.max(w, item.width);
-            if (i<=base)
+            if (i<=this.neutral)
                 h_up += item.upheight;
             else
                 h_dn += item.upheight;
-            if (i>=base)
+            if (i>=this.neutral)
                 h_dn += item.downheight;
             else
                 h_up += item.downheight;
         }
+        this.maxItemWidth = w;
         this.width = w + 4 * this.TURN_SIZE;
         this.upheight = h_up;
         this.downheight = h_dn;
@@ -228,12 +236,62 @@ Choice.prototype = {
     render: function(ctx, x0,y0) {
         //TODO: Do this properly.
         var y = y0-this.upheight;
+        var R = this.TURN_SIZE;
+        var x1 = x0 + R;
+        var x2 = x0 + 2*R;
+        var x10 = x0 + this.width;
+        var x9 = x10 - R;
+        var x8 = x10 - 2*R;
         for (var i in this.items) {
             var item = this.items[i];
-            var x = x0;
+            var padW = (this.maxItemWidth - item.width)/2;
+            var x3 = x2 + padW;
+            var x7 = x8 - padW;
+            var x = x3;
             y += item.upheight;
+            var itemY = y;
             item.render(ctx, x,y);
             y += item.downheight;
+
+            // Add padding line and inner turn:
+            var path1, path2;
+            path1 = "M "+x3+","+itemY;
+            path2 = "M "+x7+","+itemY;
+            path1 += " L "+x2+","+itemY;
+            path2 += " L "+x8+","+itemY;
+            if (i == this.neutral) {
+                //path1 += " L "+x2+","+itemY;
+                //path2 += " L "+x8+","+itemY;
+            } else {
+                //TODO: Turns.
+                var dY = (i > this.neutral ? -R : R);
+                var LSa = (i > this.neutral ? 1 : 0);
+                var LSb = (i > this.neutral ? 0 : 1);
+                path1 += " A "+R+","+R+" 0 0 "+LSa+" "+x1+","+(itemY+dY);
+                path1 += " L "+x1+","+(y0-dY);
+                path1 += " A "+R+","+R+" 0 0 "+LSb+" "+x0+","+y0;
+
+                path2 += " A "+R+","+R+" 0 0 "+LSb+" "+x9+","+(itemY+dY);
+                path2 += " L "+x9+","+(y0-dY);
+                path2 += " A "+R+","+R+" 0 0 "+LSa+" "+x10+","+y0;
+            }
+            path1 += " L "+x0+","+y0;
+            path2 += " L "+x10+","+y0;
+
+            var turn1 = document.createElementNS(SVG_NS, "path");
+            turn1.setAttribute("fill", "none");
+            turn1.setAttribute("stroke", LINE_COLOR);
+            turn1.setAttribute("stroke-width", LINE_WIDTH);
+            turn1.setAttribute("d", path1);
+            ctx.appendChild(turn1);
+
+            var turn2 = document.createElementNS(SVG_NS, "path");
+            turn2.setAttribute("fill", "none");
+            turn2.setAttribute("stroke", LINE_COLOR);
+            turn2.setAttribute("stroke-width", LINE_WIDTH);
+            turn2.setAttribute("d", path2);
+            ctx.appendChild(turn2);
+
         }
     }
 
@@ -249,13 +307,14 @@ Atom.prototype = {
 
     INNER_PADDING_X: 2,
     INNER_PADDING_Y: 0,
-    OUTER_PADDING: 1,
+    OUTER_PADDING: 3,
 
     simplify: function() {return this;},
 
     calculateSize: function(ctx) {
         var textNode = document.createTextNode(this.value);
         var node = document.createElementNS( SVG_NS, "text" );
+        node.setAttribute("alignment-baseline", "middle");
         node.appendChild(textNode);
         ctx.appendChild(node);
         this.node = node;
@@ -263,15 +322,12 @@ Atom.prototype = {
         var bbox = node.getBBox();
         var padx = 2*(this.INNER_PADDING_X + this.OUTER_PADDING);
         var pady = 2*(this.INNER_PADDING_Y + this.OUTER_PADDING);
-        console.log("Atom bbox: "+bbox.x+","+bbox.y+"+"+bbox.width+"x"+bbox.height);
         this.width = bbox.width + padx;
         this.upheight = (-bbox.y) + pady;
         this.downheight = bbox.height + bbox.y + pady;
     },
 
     render: function(ctx, x,y) {
-        console.log("Atom render: "+this.node);
-
         // Position the text node:
         var padx = this.INNER_PADDING_X + this.OUTER_PADDING;
         var pady = this.INNER_PADDING_Y + this.OUTER_PADDING;
@@ -281,14 +337,15 @@ Atom.prototype = {
         // Add border:
         var border = document.createElementNS( SVG_NS, "rect" );
         border.setAttribute("fill", "none");
-        border.setAttribute("stroke", "green");
-        border.setAttribute("stroke-width", "0.1");
+        border.setAttribute("stroke", BOX_LINE_COLOR);
+        border.setAttribute("stroke-width", BOX_LINE_WIDTH);
         border.setAttribute("x", x + this.OUTER_PADDING);
         border.setAttribute("y", y - this.upheight + this.OUTER_PADDING);
         border.setAttribute("width", this.width - 2*this.OUTER_PADDING);
         border.setAttribute("height", this.upheight + this.downheight - 2*this.OUTER_PADDING);
         ctx.appendChild(border);
 
+        /*
         var dot = document.createElementNS( SVG_NS, "rect" );
         dot.setAttribute("fill", "rgb(255,0,0)");
         dot.setAttribute("x", x-0.5);
@@ -296,6 +353,26 @@ Atom.prototype = {
         dot.setAttribute("width", 1);
         dot.setAttribute("height", 1);
         ctx.appendChild(dot);
+        */
+
+        // Add connecting lines:
+        {
+            var path = "M "+x+","+y+" L "+(x+this.OUTER_PADDING)+","+y;
+            var line = document.createElementNS(SVG_NS, "path");
+            line.setAttribute("stroke", LINE_COLOR);
+            line.setAttribute("stroke-width", LINE_WIDTH);
+            line.setAttribute("d", path);
+            ctx.appendChild(line);
+        }
+        {
+            var x10 = (x+this.width);
+            var path = "M "+x10+","+y+" L "+(x10-this.OUTER_PADDING)+","+y;
+            var line = document.createElementNS(SVG_NS, "path");
+            line.setAttribute("stroke", LINE_COLOR);
+            line.setAttribute("stroke-width", LINE_WIDTH);
+            line.setAttribute("d", path);
+            ctx.appendChild(line);
+        }
     }
 
 };
@@ -312,8 +389,8 @@ Empty.prototype = {
 
     calculateSize: function(ctx) {
         this.width = 0;
-        this.upheight = 0.5;
-        this.downheight = 0.5;
+        this.upheight = 2.5;
+        this.downheight = 2.5;
     },
 
     render: function(ctx, x,y) {}
