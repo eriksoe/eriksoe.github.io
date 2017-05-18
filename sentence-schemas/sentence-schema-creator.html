@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sentence schema creator</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="sentence_schema_creator.js"></script>
+
+    <style>
+      .bg-primary select, .bg-primary option, .bg-primary input, .bg-primary button, .bg-primary textarea {
+        color: black;
+      }
+
+      @media print {
+        header {display:none;}
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+          margin: 0pt;
+        }
+        @page { size: auto; margin: 1.5cm 1cm; }
+        .on-same-page {page-break-inside: avoid;}
+        div.results {margin: 0pt; padding: 0pt;}
+      }
+
+    </style>
+
+  </head>
+<body onload="init_page()">
+<header><div class="bg-primary">
+<h1>Sentence schema creator</h1>
+
+<div id="inputs" class="form-inline">
+  <label for="spec">Sentence structure: </label>
+  <textarea id="spec" oninput="on_spec_changed(false)" onchange="on_spec_changed(true)">Hi (you/there)!</textarea>
+</div>
+</header>
+  <div id="results"></div>
+</div>
+
+</body>
+</html>
