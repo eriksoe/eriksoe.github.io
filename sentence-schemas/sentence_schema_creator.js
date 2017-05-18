@@ -395,8 +395,8 @@ Empty.prototype = {
 
     calculateSize: function(ctx) {
         this.width = 0;
-        this.upheight = 2.5;
-        this.downheight = 2.5;
+        this.upheight = 13.5;
+        this.downheight = 13.5;
     },
 
     render: function(ctx, x,y) {}
