@@ -7,6 +7,7 @@ var BOX_LINE_COLOR = "black";
 var BOX_LINE_WIDTH = 0.1;
 
 function init_page() {
+    set_options_from_URL();
     reparse();
 }
 
@@ -27,6 +28,8 @@ function reparse() {
     tree = tree.simplify();
     console.log("Simplified tree: "+tree);
     show_diagram(tree);
+
+    set_document_URL_parameters({spec:spec});
 }
 
 function show_diagram(tree) {
@@ -104,7 +107,10 @@ function parse(spec) {
             stack.push(newLevel);
         } else if (m[3] !== undefined) {
             // ')'
-            stack.pop();
+            if (stack.length>1) // Stop parsing if causing underflow.
+                stack.pop();
+            else
+                break;
             // var node = stack.pop().c;
             // top.s.add(node);
         } else if (m[4] !== undefined) {
@@ -395,3 +401,45 @@ Empty.prototype = {
 
     render: function(ctx, x,y) {}
 };
+
+//==================================================
+
+function set_document_URL_parameters(kvs) {
+    var oldURL = document.URL;
+    var qpos = oldURL.indexOf("#");
+    var urlBase = (qpos<0) ? oldURL : oldURL.substring(0,qpos);
+    var newURL = urlBase + "#text=" + encodeURIComponent(kvs.spec);
+    if (newURL != oldURL)
+        location.replace(newURL);
+}
+
+function set_options_from_URL() {
+    var url = document.URL;
+    var key_RE = /^[A-Za-z0-9_]+$/;
+
+    var qpos = url.indexOf("#");
+    if (qpos < 0) return;
+
+    var s = url.substring(qpos+1);
+    var kvs = s.split("&");
+    for (var i in kvs) {
+        var kv = kvs[i];
+        var eqpos = kv.indexOf("=");
+        var k,v;
+        if (eqpos < 0) {
+            k=kv; v="true";
+        } else {
+            k=kv.substring(0,eqpos);
+            v = kv.substring(eqpos+1);
+        }
+        console.log("- KV "+k+" / "+v);
+        if (! key_RE.test(k)) {
+            console.log("Bad option name: "+k);
+            continue;
+        }
+
+        if (k=="text"){
+            $("#spec")[0].value = decodeURIComponent(v);
+        }
+    }
+}
