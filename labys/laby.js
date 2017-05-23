@@ -229,10 +229,10 @@ LABY_TYPES = {
         cell_gen: function(config) {
             var min = config_range_min(config);
             var max = config_range_max(config);
-            var leastMax = config.leastMax;
+            var maxLeast = config.maxLeast;
             var a = rand_int(min,max);
             var b = rand_int(min,max);
-            var c = rand_bool() ? a*b : rand_int(1,max*leastMax); //TODO: handle zero and negatives
+            var c = rand_bool() ? a*b : rand_int(1,max*maxLeast); //TODO: handle zero and negatives
             if (! (config_is_small(a, config) || config_is_small(b, config)))
                 return null;
             return {
@@ -288,14 +288,14 @@ LABY_TYPES = {
         cell_gen: function(config) {
             var min = config_range_min(config);
             var max = config_range_max(config);
-            var leastMax = config.maxLeast;
+            var maxLeast = config.maxLeast;
             var a = rand_int(min,max);
-            var b = rand_int(1,leastMax);
+            var b = rand_int(1,maxLeast);
             var expected_eq = rand_bool();
             console.log("AB: "+a+"/"+b);
             if (b<2 && rand_float() < 0.8)
                 return;
-            var text_res = rand_bool() ? a*b : rand_int(min*leastMax, max*leastMax);
+            var text_res = rand_bool() ? a*b : rand_int(min*maxLeast, max*maxLeast);
             var actual_eq = text_res == a*b;
             console.log("EQ: "+expected_eq+"/"+actual_eq);
             if (actual_eq != expected_eq)
