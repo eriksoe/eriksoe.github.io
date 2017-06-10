@@ -596,7 +596,6 @@ LABY_TYPES = {
         tags: ["Ur", "Klokken"],
         deps: ["timeHalfHour", "timeQuartHour"],
         dims: [9,7],
-        //TODO: Add explanation - examples of correct answers.
         cell_gen: function(config) {
             var hour = rand_int(1,12);
             var text_hour = rand_int(1,12);
@@ -630,6 +629,47 @@ LABY_TYPES = {
             add_row(2,0, "Klokken er 2");
             if (config.timeQuartHour) add_row(2,15, "Klokken er kvart over 2");
             if (config.timeHalfHour) add_row(2,30, "Klokken er halv 3");
+            return '<table class="explanation"><tr>'+s+'</tr></table>';
+        }
+    },
+    clock_minutes: {
+        descr: "Klokken - minutter",
+        title: "Hvad er klokken?",
+        tags: ["Ur", "Klokken"],
+        deps: [],
+        dims: [9,6],
+        cell_gen: function(config) {
+            var hour = rand_int(1,12);
+            var text_hour = rand_int(1,12);
+
+            var minutes = 5 * rand_int(-6,5);
+            var text_minutes = 5 * rand_int(-6,5);
+            var text_minutes_str =
+                (text_minutes % 15 == 0) ? ["halv ", "kvart i ", "", "kvart over "][text_minutes/15+2] :
+                (text_minutes<0 ? (-text_minutes)+" minutter i " : text_minutes+" minutter over ");
+
+            var svg = clockface_svg(hour, minutes);
+            return {
+                text: svg+'<br/>Klokken er<br/>'+text_minutes_str+text_hour,
+                value: (text_hour == hour && text_minutes == minutes)
+            }
+        },
+        explanation: function (config) {
+            var s = "";
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
+            var add_row = function(h,m,text) {
+                s += "<td>";
+                s += clockface_svg(h,m);
+                s += '<br/>'+text;
+                s += '</td>';
+            }
+            add_row(2,-10, "Klokken er 10 minutter i 2");
+            add_row(2,-5, "Klokken er 5 minutter i 2");
+            add_row(2,0, "Klokken er 2");
+            add_row(2,5, "Klokken er 5 minutter over 2");
+            add_row(2,10, "Klokken er 10 minutter over 2");
+            add_row(2,15, "Klokken er kvart over 2");
+            add_row(2,30, "Klokken er halv 3");
             return '<table class="explanation"><tr>'+s+'</tr></table>';
         }
     },
