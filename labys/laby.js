@@ -673,6 +673,45 @@ LABY_TYPES = {
             return '<table class="explanation"><tr>'+s+'</tr></table>';
         }
     },
+
+    note_names: {
+        descr: "Nodenavne",
+        title: "Hvad hedder noderne?",
+        tags: ["Noder", "Nodenavne"],
+        deps: ["minNote", "maxNote"],
+        dims: [9,9],
+        cell_gen: function(config) {
+            var notenames = ["c", "d", "e", "f", "g", "a", "h"];
+            var notename = function(h) {h+=4; h=h%7; if (h<0) h+=7; return notenames[h];}
+            var minh = -config.minNote;
+            var maxh = config.maxNote;
+            var h = rand_int(minh,maxh);
+            var text_h = rand_int(minh,maxh);
+
+            var svg = single_note_svg(h-2);
+            return {
+                text: svg+'<br/><big>'+notename(text_h)+'</big>',
+                value: (text_h == h)
+            }
+        },
+        explanation: function (config) {
+            var s = "";
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
+            var add_row = function(h,text) {
+                s += '<td>';
+                s += single_note_svg(h-2);
+                s += '<br/><big>'+text+'</big>';
+                s += '</td>';
+            }
+            add_row(-4, "c");
+            add_row(-2, "e");
+            add_row(0, "g");
+            add_row(1, "a");
+            add_row(2, "h");
+            add_row(3, "c");
+            return '<table class="explanation"><tr>'+s+'</tr></table>';
+        }
+    },
 }
 
 function clockface_svg(hours, minutes) {
@@ -703,6 +742,47 @@ function clockface_svg(hours, minutes) {
 '        <path d="M0,0 L0,-18" stroke="white" stroke-width="1.5"/>'+
 '      </g>'+
 '      <circle cx="0" cy="0" r="3" stroke="none" fill="black"/>'+
+'    </svg>';
+    return svg;
+}
+
+
+function single_note_svg(h) { // middle-based.
+    var dir = (h>=0) ? "high" : "low";
+    var body = '<use xlink:href="#note-'+dir+'" x="0" y="'+(5*h)+'"/>';
+    for (var hh=6; hh<=h; hh+=2)
+        body += '<use xlink:href="#system-ext" x="0" y="'+(5*hh)+'"/>';
+    for (var hh=-6; hh>=h; hh-=2)
+        body += '<use xlink:href="#system-ext" x="0" y="'+(5*hh)+'"/>';
+
+    var svg =
+'    <svg width="90" height="60" viewBox="0 0 40 60" preserveAspectRatio="xMidYMid meet">'+
+'      <defs>'+
+'          <g id="system">'+
+'            <path d="M-12,0 l24,0" stroke="black" stroke-width="1"/>'+
+'            <path d="M-12,10 l24,0" stroke="black" stroke-width="1"/>'+
+'            <path d="M-12,-10 l24,0" stroke="black" stroke-width="1"/>'+
+'            <path d="M-12,20 l24,0" stroke="black" stroke-width="1"/>'+
+'            <path d="M-12,-20 l24,0" stroke="black" stroke-width="1"/>'+
+'          </g>'+
+''+
+'          <g id="system-ext">'+
+'            <path d="M-8,0 l16,0" stroke="black" stroke-width="1"/>'+
+'          </g>'+
+''+
+'          <g id="note-low">'+
+'            <circle cx="0" cy="0" r="5" fill="black" transform="translate(-5 0) skewX(25) translate(5 0)"/>'+
+'            <path d="M4.9,1.0 l0,30" stroke="black" stroke-width="1"/>'+
+'          </g>'+
+'          <g id="note-high">'+
+'            <circle cx="0" cy="0" r="5" fill="black" transform="translate(-5 0) skewX(25) translate(5 0)"/>'+
+'            <path d="M-4.9,-1.0 l0,-30" stroke="black" stroke-width="1"/>'+
+'          </g>'+
+'      </defs>'+
+'      <g transform="translate(20,25) scale(1 -1)">'+
+'        <use xlink:href="#system" x="0" y="0"/>'+
+        body+
+'      </g>'+
 '    </svg>';
     return svg;
 }
@@ -806,6 +886,8 @@ function generate_labys() {
         timeHalfHour: $("#timeHalfHour")[0].checked,
         timeQuartHour: $("#timeQuartHour")[0].checked,
         count: $("#count")[0].value,
+        minNote: 1 * $("#minNote")[0].value,
+        maxNote: 1 * $("#maxNote")[0].value,
     };
     console.log("options.useNone: "+options.useNone);
 
