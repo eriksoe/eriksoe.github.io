@@ -712,6 +712,42 @@ LABY_TYPES = {
             return '<table class="explanation"><tr>'+s+'</tr></table>';
         }
     },
+
+    piano_notes: {
+        descr: "Noder på klaveret",
+        title: "Noder og klaver-tangenter",
+        tags: ["Noder", "Piano"],
+        deps: ["minNote", "maxNote"],
+        dims: [9,8],
+        cell_gen: function(config) {
+            var minh = -config.minNote;
+            var maxh = config.maxNote;
+            var h = rand_int(minh,maxh);
+            var key_h = rand_int(minh,maxh);
+
+            var svg1 = single_note_svg(h-2);
+            var svg2 = single_piano_key(h+4);
+            return {
+                text: svg1+'<br/>'+svg2,
+                value: (key_h == h)
+            }
+        },
+        explanation: function (config) {
+            var s = "";
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
+            var add_row = function(h,text) {
+                s += '<td>';
+                s += single_note_svg(h-2);
+                s += '<br/>';
+                s += single_piano_key(h+4);
+                s += '</td>';
+            }
+            add_row(-4, "c");
+            add_row(0, "g");
+            add_row(3, "c");
+            return '<table class="explanation"><tr>'+s+'</tr></table>';
+        }
+    },
 }
 
 function clockface_svg(hours, minutes) {
@@ -782,6 +818,58 @@ function single_note_svg(h) { // middle-based.
 '      <g transform="translate(20,25) scale(1 -1)">'+
 '        <use xlink:href="#system" x="0" y="0"/>'+
         body+
+'      </g>'+
+'    </svg>';
+    return svg;
+}
+
+function single_piano_key(h) { // C-based.
+    var svg =
+    '<svg width="100" height="50" viewBox="-5 0 110 50" preserveAspectRatio="xMidYMid meet">'+
+'      <defs>'+
+'          <g id="whiteKey">'+
+'            <path d="M0,40 L0,0 L10,0 L10,40" stroke="black" stroke-width="1" fill="none"/>'+
+'          </g>'+
+'          <g id="blackKey">'+
+'            <path d="M-3,40 L-3,15 L3,15 L3,40" fill="#444"/>'+
+'          </g>'+
+'          <g id="halfBlackKey">'+
+'            <path d="M-3,40 L-3,15 L0,15 L0,40" fill="#444"/>'+
+'          </g>'+
+''+
+'          <g id="highlightWhite">'+
+'            <circle cx="5" cy="10" r="3" fill="#444">'+
+'          </g>'+
+''+
+'          <g id="highlightBlack">'+
+'            <circle cx="0" cy="20" r="2" fill="white">'+
+'          </g>'+
+''+
+'          <g id="keys">'+
+'            <use xlink:href="#whiteKey" x="0" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="10" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="20" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="30" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="40" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="50" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="60" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="70" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="80" y="0"/>'+
+'            <use xlink:href="#whiteKey" x="90" y="0"/>'+
+''+
+'            <use xlink:href="#blackKey" x="10" y="0"/>'+
+'            <use xlink:href="#blackKey" x="20" y="0"/>'+
+'            <use xlink:href="#blackKey" x="40" y="0"/>'+
+'            <use xlink:href="#blackKey" x="50" y="0"/>'+
+'            <use xlink:href="#blackKey" x="60" y="0"/>'+
+'            <use xlink:href="#blackKey" x="80" y="0"/>'+
+'            <use xlink:href="#blackKey" x="90" y="0"/>'+
+//'            <use xlink:href="#halfBlackKey" x="80" y="0"/>'+
+'          </g>'+
+'      </defs>'+
+'      <g transform="translate(0,50) scale(1 -1)">'+
+'        <use xlink:href="#keys" x="0" y="0"/>'+
+'        <use xlink:href="#highlightWhite" x="'+(h*10)+'" y="0"/>'+
 '      </g>'+
 '    </svg>';
     return svg;
