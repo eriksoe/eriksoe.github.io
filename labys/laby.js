@@ -726,7 +726,7 @@ LABY_TYPES = {
             var key_h = rand_int(minh,maxh);
 
             var svg1 = single_note_svg(h-2);
-            var svg2 = single_piano_key(h+4);
+            var svg2 = single_piano_key(key_h+4);
             return {
                 text: svg1+'<br/>'+svg2,
                 value: (key_h == h)
