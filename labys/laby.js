@@ -933,11 +933,13 @@ function two_actor_scene_svg(actor1, actor2, item1, item2, speaker/*0 or 1*/, te
         '      <g transform="translate(0 100)">' +
         '        <use xlink:href="images/characters.svg#'+actor1.id+'" x="0" y="0"/>' +
         '        <use xlink:href="images/items.svg#'+item1.id+'" x="0" y="0" transform="translate('+actor2.hand_x+' '+actor2.hand_y+') rotate(15) scale(0.5) translate(-50 -50)"/>' +
+        (speaker==0?'        <use xlink:href="images/characters.svg#'+actor1.id+'-open-mouth" x="0" y="0"/>' : '')+
         '        <use xlink:href="images/characters.svg#'+actor1.id+'-above" x="0" y="0"/>' +
         '      </g>' +
         '      <g transform="translate(300 100) scale(-1 1)">' +
         '        <use xlink:href="images/characters.svg#'+actor2.id+'" x="0" y="0"/>' +
         '        <use xlink:href="images/items.svg#'+item2.id+'" x="0" y="0" transform="translate('+actor2.hand_x+' '+actor2.hand_y+') rotate(15) scale(0.5) translate(-50 -50)"/>' +
+        (speaker==1?'        <use xlink:href="images/characters.svg#'+actor2.id+'-open-mouth" x="0" y="0"/>' : '')+
         '        <use xlink:href="images/characters.svg#'+actor2.id+'-above" x="0" y="0"/>' +
         '      </g>' +
         '      <g transform="'+speech_transform+'">' +
