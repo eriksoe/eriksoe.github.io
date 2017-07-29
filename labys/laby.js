@@ -761,28 +761,26 @@ LABY_TYPES = {
         dims: [6,6],
         cell_gen: function(config) {
             var items = [
+                {id:"NOTHING", name:""},
                 {id:"tog", name:"et tog"},
                 {id:"bold", name:"en bold"},
+                {id:"bil", name:"en bil"},
                 ];
             var characters = [
                  {id:"pindsvin", hand_x:105, hand_y:105},
             ];
             var char1 = rand_from_list(characters);
-            console.log("char1="+char1);
             var char2 = rand_from_list(characters);
-            console.log("char2="+char1);
 
             var item1 = rand_from_list(items);
             var item2 = rand_from_list(items);
             var item_speech = rand_from_list(items);
-            console.log("item1="+item1);
-            console.log("item_speech="+item_speech.id);
+            if (item_speech.id === 'NOTHING') return;
 
             var speaker = rand_int(0,1);
             var say_i = rand_bool();
             var text = (say_i ? 'Jeg' : 'Du') + ' har\n' + item_speech.name;
             var svg = two_actor_scene_svg(char1, char2, item1, item2, speaker, text);
-            console.log("svg="+svg);
 
             var items = [item1.id, item2.id];
             var refered_actor = say_i ? speaker : (speaker^1);
