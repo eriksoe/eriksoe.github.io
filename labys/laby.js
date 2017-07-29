@@ -18,6 +18,11 @@ function rand_letter() {
     return letters.substring(pos, pos+1);
 }
 
+function rand_from_list(list) {
+    var i = rand_int(0, list.length-1);
+    return list[i];
+}
+
 color_codes = ["#ff3333", "#4444ff", "#44ff22", "black", "orange"];
 color_names_sing = ["r&oslash;d", "bl&aring;", "gr&oslash;n", "sort", "orange"];
 color_names_plur = ["r&oslash;de", "bl&aring;", "gr&oslash;nne", "sorte", "orange"];
@@ -748,6 +753,46 @@ LABY_TYPES = {
             return '<table class="explanation"><tr>'+s+'</tr></table>';
         }
     },
+
+    i_and_you: {
+        descr: "'Jeg' og 'du'",
+        title: "'Jeg' og 'du'",
+        tags: ["Stedord", "Jeg/du"],
+        dims: [6,6],
+        cell_gen: function(config) {
+            var items = [
+                {id:"tog", name:"et tog"},
+                {id:"bold", name:"en bold"},
+                ];
+            var characters = [
+                 {id:"pindsvin", hand_x:105, hand_y:105},
+            ];
+            var char1 = rand_from_list(characters);
+            console.log("char1="+char1);
+            var char2 = rand_from_list(characters);
+            console.log("char2="+char1);
+
+            var item1 = rand_from_list(items);
+            var item2 = rand_from_list(items);
+            var item_speech = rand_from_list(items);
+            console.log("item1="+item1);
+            console.log("item_speech="+item_speech.id);
+
+            var speaker = rand_int(0,1);
+            var say_i = rand_bool();
+            var text = (say_i ? 'Jeg' : 'Du') + ' har\n' + item_speech.name;
+            var svg = two_actor_scene_svg(char1, char2, item1, item2, speaker, text);
+            console.log("svg="+svg);
+
+            var items = [item1.id, item2.id];
+            var refered_actor = say_i ? speaker : (speaker^1);
+            var is_correct = items[refered_actor] == item_speech.id;
+            return {
+                text: svg,
+                value: is_correct
+            }
+        }
+    },
 }
 
 function clockface_svg(hours, minutes) {
@@ -872,6 +917,38 @@ function single_piano_key(h) { // C-based.
 '        <use xlink:href="#highlightWhite" x="'+(h*10)+'" y="0"/>'+
 '      </g>'+
 '    </svg>';
+    return svg;
+}
+
+function two_actor_scene_svg(actor1, actor2, item1, item2, speaker/*0 or 1*/, text) {
+    var lines = text.split("\n");
+    var tspans = "";
+    for (var i in lines) {
+        var line = lines[i];
+            tspans += '<tspan x="0.5" dy="'+(i==0 ? '0.4em' : '1.2em')+'">'+line+'</tspan>';
+    }
+    var speech_transform = speaker==0 ? 'translate(75 0) scale(200 100)' : 'translate(25 0) scale(-200 100) translate(-1 0)';
+    var text_x = speaker==0 ? 75 : 25;
+    var svg =
+        '    <svg width="100" height="120" viewBox="0 0 300 350" preserveAspectRatio="xMidYMid meet">' +
+        '      <!-- <path fill="blue" d="M 0,0 L300,0 L300,200 L0,200 L0,0"/> -->' +
+        '      <g transform="translate(0 100)">' +
+        '        <use xlink:href="images/characters.svg#'+actor1.id+'" x="0" y="0"/>' +
+        '        <use xlink:href="images/items.svg#'+item1.id+'" x="0" y="0" transform="translate('+actor2.hand_x+' '+actor2.hand_y+') rotate(15) scale(0.5) translate(-50 -50)"/>' +
+        '        <use xlink:href="images/characters.svg#'+actor1.id+'-above" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="translate(300 100) scale(-1 1)">' +
+        '        <use xlink:href="images/characters.svg#'+actor2.id+'" x="0" y="0"/>' +
+        '        <use xlink:href="images/items.svg#'+item2.id+'" x="0" y="0" transform="translate('+actor2.hand_x+' '+actor2.hand_y+') rotate(15) scale(0.5) translate(-50 -50)"/>' +
+        '        <use xlink:href="images/characters.svg#'+actor2.id+'-above" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="'+speech_transform+'">' +
+        '        <use xlink:href="images/characters.svg#speech-bubble2" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="translate('+text_x+' -37.5) scale(200)">' +
+        '        <text y="0.35" dy="-0.4em" font-family="Verdana" font-size="0.14" text-anchor="middle" fill="black">'+tspans+'</text>' +
+        '      </g>' +
+        '    </svg>';
     return svg;
 }
 
