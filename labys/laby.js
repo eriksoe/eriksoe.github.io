@@ -1156,10 +1156,11 @@ function gen_cell_content(onpath, descriptor, options, trues, falses) {
 }
 
 function generate_laby(w, h) {
-    // Best (longest) of 7:
+    var ATTEMPTS = 20; // 7
+    // Best (longest) of ATTEMPTS:
     var path_length = 0;
     var grid;
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<ATTEMPTS; i++) {
         var path = generate_pattern3(w,h);
         if (path.path_length > path_length) {
             path_length = path.path_length;
