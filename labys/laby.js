@@ -777,6 +777,15 @@ LABY_TYPES = {
             var item_speech = rand_from_list(items);
             if (item_speech.id === 'NOTHING') return;
 
+            // Less of the 'obvious' cases:
+            if (item_speech.id !== item1.id &&
+                item_speech.id !== item2.id &&
+                rand_bool())
+                return;
+            if (item1.id === item2.id &&
+               rand_bool())
+                return;
+
             var speaker = rand_int(0,1);
             var say_i = rand_bool();
             var text = (say_i ? 'Jeg' : 'Du') + ' har\n' + item_speech.name;
