@@ -463,6 +463,18 @@
               />
       </g>
 
+      <g id="speech-bubble-high">
+        <path stroke="black" stroke-width="0.03" fill="none"
+              d="M0.035,0.5 Q0.035,0.035 0.5,0.035 Q1,0.035 1,0.5 Q1,1 0.5,1 Q0.4,1 0.3,0.95 L0.2,1.75 L0.2,0.875 Q0.035,0.75 0.035,0.5"
+              />
+      </g>
+
+      <g id="speech-bubble-low">
+        <path stroke="black" stroke-width="0.03" fill="none"
+              d="M0.035,0.5 Q0.035,0.035 0.5,0.035 Q1,0.035 1,0.5 Q1,1 0.6,0.98 L0.52,1.25 L0.50,0.98 Q0.035,0.98 0.035,0.5"
+              />
+      </g>
+
 </defs>
   <path fill="blue" d="M 0,0 L100,0 L100,200 L0,200 L0,0"/>
   <use xlink:href="#pindsvin" x="0" y="0"/>

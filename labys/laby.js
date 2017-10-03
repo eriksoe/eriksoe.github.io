@@ -225,6 +225,35 @@ LABY_TYPES = {
         }
     },
 
+    plus_3_numbers: {
+        descr: "Plus (3 tal)",
+        title: "Plus-opgaver",
+        tags: ["Matematik", "Regning", "Plus"],
+        deps: ["maxNum", "maxLeast"],
+        dims: [11,16],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var c = rand_int(min,max);
+            var sum = rand_bool() ? a+b+c : rand_int(min,max);
+            if (! config_is_num(sum, config))
+                return null;
+            var small = 0;
+            if (config_is_small(a, config)) small++;
+            if (config_is_small(b, config)) small++;
+            if (config_is_small(c, config)) small++;
+
+            if (small < 2)
+                return null;
+            return {
+                text: a+"&nbsp;+&nbsp;"+b+"&nbsp;+&nbsp;"+c+"<br>=&nbsp;"+sum,
+                value: a+b+c===sum
+            }
+        }
+    },
+
     times: {
         descr: "Gange",
         title: "Gange-opgaver",
@@ -800,6 +829,55 @@ LABY_TYPES = {
             }
         }
     },
+
+    q_and_a: {
+        descr: "Spørgsmål og svar",
+        title: "Spørgsmål og svar",
+        tags: ["Spørgsmål"],
+        dims: [6,5],
+        cell_gen: function(config) {
+            var items = [
+                {id:"NOTHING", name:"NOTHING"},
+                {id:"tog", name:"et tog"},
+                {id:"bold", name:"en bold"},
+                {id:"bil", name:"en bil"},
+                ];
+            var characters = [
+                 {id:"pindsvin", hand_x:105, hand_y:105},
+            ];
+            var char1 = rand_from_list(characters);
+            var char2 = rand_from_list(characters);
+
+            var item1 = rand_from_list(items);
+            var item2 = rand_from_list(items);
+
+            var QAs = [{q:"Hvad hedder\ndu?", a:["Jeg hedder\nPeter.", "Jeg hedder\nRasmus."]},
+                       {q:"Hvor bor du?", a:["Jeg bor på\nBlomstervej.", "Jeg bor på\nKirkegade."]},
+                       {q:"Hvor gammel\ner du?", a:["Jeg er 7 år.", "Jeg er 8 år."]},
+                       {q:"Hvad har\ndu der?", a:["Jeg har\n"+item1.name+".", "Jeg har\n"+item2.name+"."]},
+                       {q:"Hvad kan du\nlide at spise?", a:["Jeg kan godt\nlide æbler.", "Jeg kan godt\nlide spaghetti."]}
+                      ];
+
+            var q_speaker = rand_int(0,1);
+            var q_nr = rand_int(0, QAs.length-1);
+            var a_nr = rand_int(0, QAs.length-1);
+            var q = QAs[q_nr].q;
+            var a = QAs[a_nr].a[1-q_speaker];
+
+            var text1 = q;
+            var text2 = a;
+            if (text2.indexOf("NOTHING") >= 0)
+                return;
+
+            var svg = two_speakers_scene_svg(char1, char2, item1, item2, q_speaker, text1, text2);
+
+            var is_correct = q_nr === a_nr;
+            return {
+                text: svg,
+                value: is_correct
+            }
+        }
+    },
 }
 
 function clockface_svg(hours, minutes) {
@@ -959,6 +1037,55 @@ function two_actor_scene_svg(actor1, actor2, item1, item2, speaker/*0 or 1*/, te
         '      </g>' +
         '    </svg>';
     return svg;
+}
+
+function two_speakers_scene_svg(actor1, actor2, item1, item2, first_speaker/*0 or 1*/, text1, text2) {
+    var tspans1 = text_to_tspans(text1);
+    var tspans2 = text_to_tspans(text2);
+    var speech1_transform = first_speaker==0 ? 'translate(5 0) scale(240 100)' : 'translate(55 0) scale(-240 100) translate(-1 0)';
+    var speech2_transform = first_speaker!=0 ? 'translate(-10 100) scale(240 100)' : 'translate(70 100) scale(-240 100) translate(-1 0)';
+    var text1_x = first_speaker==0 ? 25 : 75;
+    var text2_x = first_speaker!=0 ? 10 : 90;
+    var svg =
+        '    <svg width="110" height="150" viewBox="-10 0 320 450" preserveAspectRatio="xMidYMid meet">' +
+        '      <!-- <path fill="blue" d="M 0,0 L300,0 L300,200 L0,200 L0,0"/> -->' +
+        '      <g transform="translate(0 200)">' +
+        '        <use xlink:href="images/characters.svg#'+actor1.id+'" x="0" y="0"/>' +
+        '        <use xlink:href="images/items.svg#'+item1.id+'" x="0" y="0" transform="translate('+actor2.hand_x+' '+actor2.hand_y+') rotate(15) scale(0.5) translate(-50 -50)"/>' +
+        '        <use xlink:href="images/characters.svg#'+actor1.id+'-open-mouth" x="0" y="0"/>' +
+        '        <use xlink:href="images/characters.svg#'+actor1.id+'-above" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="translate(300 200) scale(-1 1)">' +
+        '        <use xlink:href="images/characters.svg#'+actor2.id+'" x="0" y="0"/>' +
+        '        <use xlink:href="images/items.svg#'+item2.id+'" x="0" y="0" transform="translate('+actor2.hand_x+' '+actor2.hand_y+') rotate(15) scale(0.5) translate(-50 -50)"/>' +
+        '        <use xlink:href="images/characters.svg#'+actor2.id+'-open-mouth" x="0" y="0"/>' +
+        '        <use xlink:href="images/characters.svg#'+actor2.id+'-above" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="'+speech1_transform+'">' +
+        '        <use xlink:href="images/characters.svg#speech-bubble-high" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="translate('+text1_x+' -37.5) scale(200)">' +
+        '        <text y="0.35" dy="-0.4em" font-family="Verdana" font-size="0.14" text-anchor="middle" fill="black">'+tspans1+'</text>' +
+        '      </g>' +
+        '      <g transform="'+speech2_transform+'">' +
+        '        <use xlink:href="images/characters.svg#speech-bubble-low" x="0" y="0"/>' +
+        '      </g>' +
+        '      <g transform="translate('+text2_x+' 60) scale(200)">' +
+        '        <text y="0.35" dy="-0.4em" font-family="Verdana" font-size="0.14" text-anchor="middle" fill="black">'+tspans2+'</text>' +
+        '      </g>' +
+        '    </svg>';
+    return svg;
+}
+
+function text_to_tspans(text) {
+    var lines = text.split("\n");
+    var tspans = "";
+    var dy0 = (1.6-lines.length*0.6)+"em";
+    for (var i in lines) {
+        var line = lines[i];
+            tspans += '<tspan x="0.5" dy="'+(i==0 ? dy0 : '1.2em')+'">'+line+'</tspan>';
+    }
+    return tspans;
 }
 
 //==================== Initialization
