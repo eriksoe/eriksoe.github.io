@@ -10,10 +10,11 @@ var who_qas = [
     {q: "Hvem bygger et fyrtårn?", a: "Mimbo Jimbo"},
     {q: "Hvem har en frugt-butik?", a: "Frede"},
     {q: "Hvem har en dobbelt-zeppeliner?", a: "Baron von Rumpel-Stumpel"},
-    {q: "Q11", a: "A11"},
-    {q: "Q12", a: "A12"},
-    {q: "Q13", a: "A13"},
-    {q: "Q14", a: "A14"},
+    {q: "Hvem spiser spaghetti med kødboller?", a: "Lady og Vagabonden"},
+    {q: "Hvem bor i en paddehat?", a: "Smølf"},
+    {q: "Hvem sover på Totoros mave?", a: "Mei"},
+    {q: "Hvem kan flyve med sine ører?", a: "Dumbo"},
+    {q: "Hvem sår korn?", a: "Den lille røde høne"},
 ];
 
 QUIZ_TYPES = {
