@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Miniløk-opgaver</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="util.js"></script>
+    <script src="quiztypes.js"></script>
+    <script src="miniloek.js"></script>
+
+    <style>
+      .bg-primary select, .bg-primary option, .bg-primary input, .bg-primary button {
+        color: black;
+      }
+
+      table.top-grid {
+        border: thin solid black;
+        margin: 1em 0em;
+      }
+      table.top-grid td {
+        border: thin solid black;
+        padding: 0.5em 0.25em;
+        text-align: center;
+        width: 1%;
+      }
+
+      table.bottom-grid {
+        border: thin solid black;
+        margin: 1em 0em;
+      }
+      table.bottom-grid td {
+        border: thin solid black;
+        padding: 0.5em 0.25em;
+        text-align: center;
+        width: 1%;
+      }
+
+      @media print {
+        header {display:none;}
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+          margin: 0pt;
+        }
+        @page { size: auto; margin: 1.5cm 1cm; }
+        .on-same-page {page-break-inside: avoid;}
+        div.results {margin: 0pt; padding: 0pt;}
+        .on-same-page > h1:first-child {margin-top:0pt; padding-top:0pt;}
+      }
+
+    </style>
+
+  </head>
+<body onload="init_page()">
+<header><div class="bg-primary">
+<h1>Labyrint-opgave-generator</h1>
+
+<div>
+  <div id="inputs" class="form-inline">
+    <div>
+      <label for="type">Type: </label>
+      <select id="type" onChange="on_type_change()">
+<!--
+        <option value="plus">Plus</option>
+        <option value="minus">Minus</option>
+        <option value="same-letter">Ens bogstaver</option>
+        <option value="same-or-diff-letter">Ens/forskellige bogstaver</option>
+  -->
+      </select>
+    </div>
+
+    <div id="optional_inputs">
+    </div>
+    <div>
+      <label for="count">Antal opgaver: </label>
+      <input id="count" type="number" value="1" min="1" size="4"/>
+      <button id="generate" accesskey="g" onclick="generate_quizzes(); return false;"><u>G</u>enerér</button>
+    </div>
+  </form>
+  </div></header>
+  <div id="results"></div>
+</div>
+
+
+</body>
+</html>
