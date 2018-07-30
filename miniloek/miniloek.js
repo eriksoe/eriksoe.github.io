@@ -298,8 +298,10 @@ function show_quiz(quiz, descriptor, options) {
         div.append(amNode);
     }
 
+    var patternNode = draw_pattern(quiz.pattern);
+    patternNode.setAttribute("class", "answer-pattern");
     div.append(top);
-    div.append(draw_pattern(quiz.pattern));
+    div.append(patternNode);
     div.append(bottom);
     div.addClass("on-same-page");
     parent.append(div);
@@ -333,7 +335,7 @@ function populate_table(table, contents) {
 function draw_pattern(pattern) {
     var svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     $(svgNode).attr("width", "6cm");
-    $(svgNode).attr("height", "1.5cm");
+    $(svgNode).attr("height", "2cm");
     svgNode.setAttribute("style", 'padding: 0px; margin: 0px');
     svgNode.setAttribute("viewBox", "0 0 12 4");
     svgNode.setAttribute("preserveAspectRatio", "meet");
@@ -353,11 +355,14 @@ function draw_pattern(pattern) {
             path.setAttribute("stroke", color);//"black");
             path.setAttribute("stroke-width", "0.02");
             path.setAttribute("fill", color);
-            path.setAttribute("transform", "translate(" + (2*x+1) + "," + (2*y+1) + ") scale("+xfactor+","+yfactor+")");
+            path.setAttribute("transform", "translate(" + (2*x+1) + "," + (2*y+1) + ") scale(0.95, 0.95) scale("+xfactor+","+yfactor+")");
             svgNode.appendChild(path);
         }
     }
 
-//    '      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(0 0 0)"/>'+
-    return svgNode;
+    // Wrap:
+    var div = $(document.createElement("div"));
+    div.append(svgNode);
+
+    return div[0];
 }
