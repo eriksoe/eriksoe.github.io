@@ -307,7 +307,9 @@ function show_quiz(quiz, descriptor, options) {
 function populate_top(top, quiz) {
     //populate_table(top, quiz.qs);
     var perm = TILE_SPEC;
-    populate_table(top, apply_permutation(perm, quiz.qs));
+    var qs = apply_permutation(perm, quiz.qs);
+    var contents = qs.map(function(q,index) {return (index+1)+".<br>" + q;});
+    populate_table(top, contents);
 }
 function populate_bottom(bottom, quiz) {
     var perm = quiz.pattern;
