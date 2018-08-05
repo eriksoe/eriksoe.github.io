@@ -17,6 +17,31 @@ var who_qas = [
     {q: "Hvem sår korn?", a: "Den lille røde høne"},
 ];
 
+var who_says_qas = [
+    {q: "Vildt nok", a: "Giraffen"},
+    {q: "", a: ""},
+];
+
+var where_qas = [
+    {q: "Hvor bor Totoro?", a: "I et træ"},
+    {q: "Hvor bor Peter Plys?", a: "I et træ"},
+    {q: "Hvor skal den store pære være?", a: "I toppen af fyrtårnet"},
+    {q: "Hvor bor Ninka Ninus?", a: "I et hul i jorden"},
+    {q: "Hvor bor Farfar og Farmor?", a: "I Ry"},
+    {q: "Hvor bor Karina og Niels?", a: "I Hurup"},
+    {q: "Hvor bor Jacob og Sarah?", a: "I Odder"},
+    {q: "Hvor bor Milo og Frej?", a: "I Hammel"},
+    {q: "Hvor er smørret?", a: "I køleskabet"},
+    {q: "Hvor er havregrynene?", a: "I skabet"},
+    {q: "Hvor er tallerkenerne?", a: "I skabet"},
+    {q: "Hvor er gaflerne?", a: "I skuffen"},
+    {q: "Hvor er skeerne?", a: "I skuffen"},
+    {q: "Hvor er din mund?", a: "Under min næse"},
+    {q: "Hvor bor en fugl?", a: "I en rede"},
+    {q: "Hvor kommer mælken fra?", a: "Fra en ko"},
+    {q: "Hvor kommer æggene fra?", a: "Fra en høne"},
+];
+
 QUIZ_TYPES = {
     hvem: {
         descr: "Hvem...?",
@@ -25,5 +50,13 @@ QUIZ_TYPES = {
         qa_gen: function(config) {
             return rand_from_list(who_qas);
         }
-    }
+    },
+    hvor: {
+        descr: "Hvor...?",
+        title: "Opgaver med “hvor”",
+        tags: ["Dansk", "Spørgsmål", "Hvor"],
+        qa_gen: function(config) {
+            return rand_from_list(where_qas);
+        }
+    },
 }
