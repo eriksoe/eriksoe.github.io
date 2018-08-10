@@ -6,15 +6,37 @@ var who_qas = [
     {q: "Hvem kan godt lide skinke?", a: "Ponyo"},
     {q: "Hvem er sjov og fuld af spjæt?", a: "Bing-Bong"},
     {q: "Hvem kan flyve på en kost?", a: "Kiki"},
-    {q: "Hvem kan flyve en flyvemaskine?", a: "Sus"},
+    //{q: "Hvem kan flyve en flyvemaskine?", a: "Sus"},
+
     {q: "Hvem bygger et fyrtårn?", a: "Mimbo Jimbo"},
     {q: "Hvem har en frugt-butik?", a: "Frede"},
     {q: "Hvem har en dobbelt-zeppeliner?", a: "Baron von Rumpel-Stumpel"},
+    {q: "Hvem læser en bog om Baron von Rumpel-Stumpel?", a: "Post-geparden"},
+
     {q: "Hvem spiser spaghetti med kødboller?", a: "Lady og Vagabonden"},
     {q: "Hvem bor i en paddehat?", a: "Smølf"},
     {q: "Hvem sover på Totoros mave?", a: "Mei"},
     {q: "Hvem kan flyve med sine ører?", a: "Dumbo"},
     {q: "Hvem sår korn?", a: "Den lille røde høne"},
+
+    {q: "Hvem har en grøn hat og kan flyve?", a: "Peter Pan"},
+    {q: "Hvem er lille og lyser og kan flyve?", a: "Klokkeblomst"},
+    {q: "Hvem har et sort skæg?", a: "Kaptajn Klo"},
+
+    {q: "Hvem har et sort skæg?", a: "Hr. Skæg"},
+
+    {q: "Hvem er Theodors storesøster?", a: "Johanne"},
+    {q: "Hvem er Theodors lillebror?", a: "Alfred"},
+    {q: "Hvem har røde briller?", a: "Johanne"},
+
+    {q: "Hvem bor i Ry?", a: "Farfar"},
+    {q: "Hvem bor i Ry?", a: "Farmor"},
+    {q: "Hvem bor i Hammel?", a: "Milo"},
+    {q: "Hvem bor i Hammel?", a: "Frej"},
+    {q: "Hvem bor i Odder?", a: "Jacob"},
+    {q: "Hvem bor i Odder?", a: "Sarah"},
+    {q: "Hvem bor i Skanderborg?", a: "Johanne"},
+    {q: "Hvem bor i Skanderborg?", a: "Theodor"},
 ];
 
 var who_says_qas = [
