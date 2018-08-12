@@ -239,7 +239,10 @@ function generate_quiz(descriptor, options) {
             console.log({qs: qs, as: as});
             return null;
         }
+
         qa = descriptor.qa_gen.apply(options);
+        if (qa==null) continue;
+
         var q = qa.q;
         var a = qa.a;
         var bad = (q in q_set) || (a in a_set);

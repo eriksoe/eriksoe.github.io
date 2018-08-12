@@ -35,8 +35,10 @@ var who_qas = [
     {q: "Hvem bor i Hammel?", a: "Frej"},
     {q: "Hvem bor i Odder?", a: "Jacob"},
     {q: "Hvem bor i Odder?", a: "Sarah"},
+    /*
     {q: "Hvem bor i Skanderborg?", a: "Johanne"},
     {q: "Hvem bor i Skanderborg?", a: "Theodor"},
+    */
 ];
 
 var who_says_qas = [
@@ -79,6 +81,35 @@ QUIZ_TYPES = {
         tags: ["Dansk", "Spørgsmål", "Hvor"],
         qa_gen: function(config) {
             return rand_from_list(where_qas);
+        }
+    },
+
+    plus: {
+        descr: "Plus-opgaver",
+        title: "Plus-opgaver",
+        tags: ["Matematik", "Plus"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var min = 1, max = 50;
+            var a = rand_int(min, max);
+            var b = rand_int(min, max);
+            var r = a + b;
+            if (r>max) return null;
+            return {q: a+" + " + b, a: ""+r};
+        }
+    },
+
+    gange: {
+        descr: "Gange-opgaver",
+        title: "Gange-opgaver",
+        tags: ["Matematik", "Gange"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var min = 0, max = 10;
+            var a = rand_int(min, max);
+            var b = rand_int(min, max);
+            var r = a * b;
+            return {q: a + "&nbsp;&middot;&nbsp;" + b, a: ""+r};
         }
     },
 }
