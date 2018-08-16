@@ -112,4 +112,25 @@ QUIZ_TYPES = {
             return {q: a + "&nbsp;&middot;&nbsp;" + b, a: ""+r};
         }
     },
+
+    equations1: {
+        descr: "Simple ligninger",
+        title: "Løs ligningen",
+        tags: ["Matematik", "Ligninger"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var min = 0, max = 10;
+            var a = rand_int(min, max);
+            var b = rand_int(-max, max);
+            var x = rand_int(min, max);
+            var r = a * x + b;
+            if (a==0) return null;
+            if (a > 6 && x > 6) return null; // Too complicated.
+            if (r<0 || r>100) return null;
+            var v = rand_from_list(["a", "x", "y"]);
+            var term = (b==0) ? "" : (b>0) ? "&nbsp;+&nbsp"+b : "&nbsp;&minus;&nbsp;"+(-b);
+            var eq = a + "&middot; <em>"+v+"</em>" + term + "&nbsp;=&nbsp;" + r;
+            return {q: eq, a: "<em>"+v+"</em>&nbsp;=&nbsp;"+x};
+        }
+    },
 }
