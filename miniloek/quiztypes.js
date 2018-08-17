@@ -113,6 +113,25 @@ QUIZ_TYPES = {
         }
     },
 
+    equations0: {
+        descr: "Ligninger for begyndere",
+        title: "Hvilket tal skal der stå?",
+        tags: ["Matematik", "Ligninger"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var min = 0, max = 20;
+            var b = rand_int(-max, max);
+            var x = rand_int(min, max);
+            var r = x + b;
+            if (r<0 || r>100) return null;
+            var term = (b==0) ? "" : (b>0) ? "&nbsp;+&nbsp"+b : "&nbsp;&minus;&nbsp;"+(-b);
+            var boxStyle1 = "border: thin solid black; padding: 0.25em; margin: 0.5em 0em;";
+            var boxStyle2 = "border: thin solid black; padding: 0.5em; margin: 0.5em 0em;";
+            var eq = '<span style="'+boxStyle1+'">&nbsp;<b>?</b>&nbsp;</span>' + term + "&nbsp;=&nbsp;" + r;
+            return {q: eq, a: '<span style="'+boxStyle2+'">'+x+'</span>'};
+        }
+    },
+
     equations1: {
         descr: "Simple ligninger",
         title: "Løs ligningen",
