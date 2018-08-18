@@ -114,7 +114,7 @@ QUIZ_TYPES = {
     },
 
     equations0: {
-        descr: "Ligninger for begyndere",
+        descr: "Ligninger for begyndere - Plus og minus",
         title: "Hvilket tal skal der stå?",
         tags: ["Matematik", "Ligninger"],
         qa_gen: function(config) {
@@ -128,6 +128,26 @@ QUIZ_TYPES = {
             var boxStyle1 = "border: thin solid black; padding: 0.25em; margin: 0.5em 0em;";
             var boxStyle2 = "border: thin solid black; padding: 0.5em; margin: 0.5em 0em;";
             var eq = '<span style="'+boxStyle1+'">&nbsp;<b>?</b>&nbsp;</span>' + term + "&nbsp;=&nbsp;" + r;
+            return {q: eq, a: '<span style="'+boxStyle2+'">'+x+'</span>'};
+        }
+    },
+
+    equations0b: {
+        descr: "Ligninger for begyndere - gange",
+        title: "Hvilket tal skal der stå?",
+        tags: ["Matematik", "Ligninger"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var min = 0, max = 20;
+            var a = rand_int(1, max);
+            var x = rand_int(min, max);
+            var r = a * x;
+            if (a>10 && x>10) return null;
+            if ((a>10 || x>10) && r>50) return null;
+            if (r<0 || r>100) return null;
+            var boxStyle1 = "border: thin solid black; padding: 0.25em; margin: 0.5em 0em;";
+            var boxStyle2 = "border: thin solid black; padding: 0.5em; margin: 0.5em 0em;";
+            var eq = a + '&nbsp;&times;&nbsp;' + '<span style="'+boxStyle1+'">&nbsp;<b>?</b>&nbsp;</span>' + "&nbsp;=&nbsp;" + r;
             return {q: eq, a: '<span style="'+boxStyle2+'">'+x+'</span>'};
         }
     },
