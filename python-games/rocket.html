@@ -332,9 +332,20 @@ function runit() {
       <p>Du skal skrive styreprogrammet til rakettens kontrol-computer.</p>
       <p>Computeren styrer én ting: motoren.</p>
       <p>Computeren har 3 sensorer: En højdemåler, en fartmåler, og en brændstofmåler.</p>
+
+      <h3 style="margin-bottom: 0.1em">Python-funktioner:</h3>
+      <table>
+        <tr><td><code>motorKraft(x)</code></td><td>Sæt motorkraften til <code>x</code> (et tal mellem 0 og 100).</td></tr>
+        <tr><td><code>hoejde()</code></td><td>Højde-sensoren: højden over overfladen, i meter.</td></tr>
+        <tr><td><code>fart()</code></td><td>Fart-sensoren: hvor stor farten mod overfladen er, i meter per sekund.</td></tr>
+        <tr><td><code>braendstof()</code></td><td>Brændstof-sensoren: hvor meget brændstof der er tilbage, i liter.</td></tr>
+        <tr><td><code>vent(x)</code></td><td>Vent <code>x</code> sekunder.</td></tr>
+      </table>
+
       <p>
+      <h3 style="margin-bottom: 0.1em">Dit kontrol-program:</h3>
         <textarea id="yourcode" cols="40" rows="10" style="font-family: monospace; font-size: 12pt;">motorKraft(100)
-vent(1)
+vent(0.5)
 motorKraft(0)
         </textarea>
         <p>
