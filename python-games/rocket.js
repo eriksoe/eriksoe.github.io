@@ -92,7 +92,8 @@ function updateModel(dt) {
         var vy = -100.0 + 2.0 * (Math.random()-0.5);
         var vx = Math.random()-0.5;
         var vz = Math.random()-0.5;
-        addParticle(0, 29 + posY * PIXELS_PER_METER, 0, 7.0*vx, vy - speedY * PIXELS_PER_METER, 7.0*vz, 3, 1.5,
+        var sz = Math.sqrt(motorFraction);
+        addParticle(0, 29 + posY * PIXELS_PER_METER, 0, 7.0*vx, vy - speedY * PIXELS_PER_METER, 7.0*vz, 3*sz, 1.5,
                     275,275,240,255, 0.8, 0.65, 0.5, 0.4, true);
     }
     
