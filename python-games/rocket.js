@@ -46,12 +46,22 @@ function randn_bm() {
 }
 function gaussian(mean, sigma) {return mean + sigma * randn_bm();}
 
+var stdlib = {
+    "motorKraft": function (x) {motorPower = Math.max(0, Math.min(100, Sk.ffi.remapToJs(x)));},
+    "hoejde": function () {return Sk.ffi.remapToPy(posY);},
+    "fart": function () {return Sk.ffi.remapToPy(speedY);},
+    "braendstof": function () {return Sk.ffi.remapToPy(fuelLeft);},
+
+    // Make time.sleep alias:
+    "vent": pythonWait
+}
+
 var physicsTimer = null;
 function start() {
     resetPhysics();
     if (physicsTimer != null) clearTimeout(physicsTimer);
     physicsTimer = setTimeout(loop, 0);
-    runit();
+    runPython("yourcode", "output", stdlib);
 }
 function loop() {
     updateModel(0.025);
@@ -200,41 +210,4 @@ function updateParticleUI(p) {
 function outf(text) {
     var mypre = document.getElementById("output");
     mypre.innerHTML = mypre.innerHTML + text;
-}
-function builtinRead(x) {
-    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-        throw "File not found: '" + x + "'";
-    return Sk.builtinFiles["files"][x];
-}
-
-function runit() {
-    var prog = document.getElementById("yourcode").value;
-    var mypre = document.getElementById("output");
-    mypre.innerHTML = '';
-    Sk.pre = "output";
-    Sk.configure({output:outf, read:builtinRead});
-
-    Sk.onAfterImport = function(library) {
-        switch(library) {
-        }
-    }
-
-    Sk.builtins["motorKraft"] = function (x) {motorPower = Math.max(0, Math.min(100, Sk.ffi.remapToJs(x)));};
-    Sk.builtins["hoejde"] = function () {return Sk.ffi.remapToPy(posY);};
-    Sk.builtins["fart"] = function () {return Sk.ffi.remapToPy(speedY);};
-    Sk.builtins["braendstof"] = function () {return Sk.ffi.remapToPy(fuelLeft);};
-
-    // Make time.sleep alias:
-    Sk.builtins["vent"] = function(delay) {return Sk.misceval.callsimOrSuspend(Sk.importModule("time").$d.sleep, delay);};
-
-    var myPromise = Sk.misceval.asyncToPromise(function() {
-        return Sk.importMainWithBody("<stdin>", false, prog, true);
-    });
-    myPromise.then(function(mod) {
-        console.log('success');
-    },
-                   function(err) {
-                       alert("err: "+err);
-                       console.log(err.toString());
-                   });
 }
