@@ -59,6 +59,7 @@ var stdlib = {
 var physicsTimer = null;
 function start() {
     resetPhysics();
+    if (physicsTimer != null) stopPython();
     if (physicsTimer != null) clearTimeout(physicsTimer);
     physicsTimer = setTimeout(loop, 0);
     runPython("yourcode", "output", stdlib);
@@ -203,11 +204,4 @@ function updateParticleUI(p) {
     var b = Math.max(0, Math.min(255, p.b));
     var a = Math.max(0, Math.min(255, p.a)) / 255.0;
     elem.setAttribute("style", "stroke:none; fill:rgba("+r+","+g+","+b+","+a+");");
-}
-
-// output functions are configurable.  This one just appends some text
-// to a pre element.
-function outf(text) {
-    var mypre = document.getElementById("output");
-    mypre.innerHTML = mypre.innerHTML + text;
 }
