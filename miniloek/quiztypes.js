@@ -113,6 +113,30 @@ QUIZ_TYPES = {
         }
     },
 
+    number_positions: {
+        descr: "Enere, tiere og hundreder",
+        title: "Enere, tiere og hundreder",
+        tags: ["Matematik", "Positionssystem"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var i = rand_int(0, 9);
+            var x = rand_int(0, 9);
+            var c = rand_int(0, 9);
+            var r = i + 10*x + 100*c;
+
+            var names_sing = ["ener", "tier", "hundrede"];
+            var names_plur = ["enere", "tiere", "hundreder"];
+            var a = [i, x, c];
+            function a_for_k(k) {return "Der er "+a[k]+" " + (a[k]==1 ? names_sing : names_plur)[k];}
+            var k = rand_int(0, 2);
+            var alt_as = {};
+            for (var kk=0; kk<3; kk++) alt_as[a_for_k(kk)] = 1;
+            return {q: '<span style="font-size: 5mm;">' + r + "</span>",
+                    a: a_for_k(k),
+                    alt_as: alt_as};
+        }
+    },
+
     equations0: {
         descr: "Ligninger for begyndere - Plus og minus",
         title: "Hvilket tal skal der stå?",

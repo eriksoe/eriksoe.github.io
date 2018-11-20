@@ -230,7 +230,7 @@ function is_valid_pattern_row(row) {
 function generate_quiz(descriptor, options) {
     var failuresLeft = 1000;
     // 1. Generate Q/A pairs:
-    var q_set = {}, a_set = {};
+    var q_set = {}, a_set = {}, alt_q_set = {}, alt_a_set = {};
     var qs = [], as = [];
 
     while (qs.length < QUIZ_SIZE) {
@@ -245,12 +245,21 @@ function generate_quiz(descriptor, options) {
 
         var q = qa.q;
         var a = qa.a;
-        var bad = (q in q_set) || (a in a_set);
+        var alt_qs = qa.alt_qs || {};
+        var alt_as = qa.alt_as || {};
+        var bad = (q in q_set) || (a in a_set)
+        bad = bad || (q in alt_q_set) || (a in alt_a_set);
+        for (var x in alt_qs) if (x in q_set) bad=true;
+        for (var x in alt_as) if (x in a_set) bad=true;
+        
         if (bad) {
             failuresLeft--;
             continue;
         }
         q_set[q] = a_set[a] = 1;
+
+        for (var x in alt_qs) alt_q_set[x] = 1;
+        for (var x in alt_as) alt_a_set[x] = 1;
         qs.push(q);
         as.push(a);
     }
