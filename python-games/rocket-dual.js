@@ -5,6 +5,7 @@ var MOTOR_EFFECT = 3.0 * GRAVITY;
 var MOTOR_VARIATION = 0.2;
 var FUEL_USE_SPEED = 5.0;
 var MAX_LANDING_SPEED = 5.0; // m/s
+var CENTER_OF_MASS_Y = 80;
 
 var running = false, crashing = false;
 // Game state:
@@ -33,7 +34,7 @@ function init() {
 function resetPhysics() {
     posX = 0; posY = 40;
     speedX = 0.0; speedY = 1.0;
-    angle = 30; angularSpeed = 0.0;
+    angle = 0; angularSpeed = 45.0;
     fuelLeft = 50;
     motorPowerL = 0; motorPowerR = 0;
     rocketSize = 1.0;
@@ -88,6 +89,7 @@ function updateModel(dt) {
         speedY += dt * GRAVITY;
         posX += dt * speedX;
         posY -= dt * speedY;
+        angle += dt * angularSpeed;
     }
     if (crashing) {
         rocketSize = Math.max(0, rocketSize - 3.0*dt);
@@ -171,8 +173,9 @@ function crashed() {
 function updateDisplay() {
     var posXPixels = posX * PIXELS_PER_METER;
     var posYPixels = posY * PIXELS_PER_METER;
-    rocketElem.setAttribute("transform", "translate(" + posXPixels + "," + posYPixels + ") rotate(" + (-angle) + ")");
-    shadowElem.setAttribute("transform", "translate(" + posXPixels + "," + posYPixels + ") rotate(" + (-angle) + ")");
+    var rocketTransform = "translate(" + posXPixels + "," + (posYPixels+CENTER_OF_MASS_Y) + ") rotate(" + (-angle) + ") translate(0, " + (-CENTER_OF_MASS_Y) + ")";
+    rocketElem.setAttribute("transform", rocketTransform);
+    shadowElem.setAttribute("transform", rocketTransform);
     rocketSizeElem.setAttribute("transform", rocketSize==1.0 ? "" : "scale(" + rocketSize + "," + rocketSize + ")");
     shadowElem.setAttribute("visibility", crashing ? "hidden" : "");
     dispH.textContent = posY.toFixed(1);
