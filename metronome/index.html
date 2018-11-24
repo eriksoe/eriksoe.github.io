@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <style>
+      body { background: rgb(75,75,75); }
+      h1 { text-align: center; color: rgb(150,150,150); }
+      
+      #mainSvg {
+      display:block; margin: auto; /* Center */
+      }
+      
+      #dot {
+       fill: rgb(255, 220, 50); stroke: none;
+      }
+    </style>
+    <script type="text/javascript" src="metronome.js"></script>
+  </head>
+  <body onload="initMetronome()">
+    <h1>Metronome</h1>
+    <svg id="mainSvg" width="90%" height="85%" viewBox="-100 -100 200 200" preserveAspectRatio="xMidYMid meet">
+      <g transform="scale(1,-1)">
+        <circle id="dot" cx="0" cy="0" r="10"/>
+      </g>
+    </svg>
+
+  </body>
+</html>
