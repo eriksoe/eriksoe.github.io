@@ -61,6 +61,8 @@ var stdlib = {
     },
     "hoejde": function () {return Sk.ffi.remapToPy(posY);},
     "fart": function () {return Sk.ffi.remapToPy(speedY);},
+    "vinkel": function () {return Sk.ffi.remapToPy(angle);},
+    "vinkelhast": function () {return Sk.ffi.remapToPy(angularSpeed);},
     "braendstof": function () {return Sk.ffi.remapToPy(fuelLeft);},
 
     // Make time.sleep alias:
