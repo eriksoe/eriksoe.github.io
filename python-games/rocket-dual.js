@@ -2,6 +2,7 @@ var SVG_NS = 'http://www.w3.org/2000/svg';
 var GRAVITY = 2.0;
 var PIXELS_PER_METER = 10;
 var MOTOR_EFFECT = 3.0 * GRAVITY;
+var MOTOR_TURN_EFFECT = 10.0;
 var MOTOR_VARIATION = 0.2;
 var FUEL_USE_SPEED = 5.0;
 var MAX_LANDING_SPEED = 5.0; // m/s
@@ -33,8 +34,8 @@ function init() {
 
 function resetPhysics() {
     posX = 0; posY = 40;
-    speedX = 0.0; speedY = 1.0;
-    angle = 0; angularSpeed = 45.0;
+    speedX = 1.0; speedY = 1.0;
+    angle = 0; angularSpeed = 0;
     fuelLeft = 50;
     motorPowerL = 0; motorPowerR = 0;
     rocketSize = 1.0;
@@ -109,10 +110,11 @@ function updateModel(dt) {
         var spentL = (oldFuel-fuelLeft) * fuelSpendingL / totalSpending;
         var spentR = (oldFuel-fuelLeft) * fuelSpendingR / totalSpending;
         motorImpulseL = spentL / FUEL_USE_SPEED * MOTOR_EFFECT;
-        motorImpulseR = spentL / FUEL_USE_SPEED * MOTOR_EFFECT;
+        motorImpulseR = spentR / FUEL_USE_SPEED * MOTOR_EFFECT;
     }
     speedX += sin * (motorImpulseL + motorImpulseR);
     speedY -= cos * (motorImpulseL + motorImpulseR);
+    angularSpeed += (motorImpulseL - motorImpulseR) * MOTOR_TURN_EFFECT;
 
     if (motorImpulseL > 0) {
         var vy = -100.0 + 2.0 * (Math.random()-0.5);
@@ -121,7 +123,11 @@ function updateModel(dt) {
         var sz = Math.sqrt(motorFractionL);
         var partPos = pointOnRocket(-40, 0);
         var partVelo = pointOnRocket(7.0*vx, vy);
-        addParticle(partPos.x, partPos.y + posY * PIXELS_PER_METER, 0, speedX*PIXELS_PER_METER+partVelo.x, -speedY*PIXELS_PER_METER+partVelo.y, 7.0*vz, 3*sz, 1.5,
+        var px = partPos.x + posX * PIXELS_PER_METER;
+        var py = partPos.y + posY * PIXELS_PER_METER;
+        addParticle(px, py, 0,
+                    speedX*PIXELS_PER_METER+partVelo.x, -speedY*PIXELS_PER_METER+partVelo.y, 7.0*vz,
+                    3*sz, 1.5,
                             275,275,240,255, 0.8, 0.65, 0.5, 0.4, true);
     }
     if (motorImpulseR > 0) {
@@ -131,8 +137,12 @@ function updateModel(dt) {
         var sz = Math.sqrt(motorFractionR);
         var partPos = pointOnRocket(40, 0);
         var partVelo = pointOnRocket(7.0*vx, vy);
-        addParticle(partPos.x, partPos.y + posY * PIXELS_PER_METER, 0, speedX*PIXELS_PER_METER+partVelo.x, -speedY*PIXELS_PER_METER+partVelo.y, 7.0*vz, 3*sz, 1.5,
+        addParticle(partPos.x + posX * PIXELS_PER_METER, partPos.y + posY * PIXELS_PER_METER, 0,
+                    speedX*PIXELS_PER_METER+partVelo.x, -speedY*PIXELS_PER_METER+partVelo.y, 7.0*vz,
+                    3*sz, 1.5,
                             275,275,240,255, 0.8, 0.65, 0.5, 0.4, true);
+        // addParticle(partPos.x, partPos.y + posY * PIXELS_PER_METER, 0, speedX*PIXELS_PER_METER+partVelo.x, -speedY*PIXELS_PER_METER+partVelo.y, 7.0*vz, 3*sz, 1.5,
+        //                     275,275,240,255, 0.8, 0.65, 0.5, 0.4, true);
     }
     
     if (posY < 0) {
@@ -151,7 +161,8 @@ function updateModel(dt) {
 function pointOnRocket(x,y) {
     var rad = angle / 180 * Math.PI;
     var s = Math.sin(rad), c = Math.cos(rad);
-    return {x: c*x + s*y, y: c*y - s*x};
+    y -= CENTER_OF_MASS_Y;
+    return {x: c*x + s*y, y: c*y - s*x + CENTER_OF_MASS_Y};
 }
 
 function crashed() {
@@ -180,6 +191,8 @@ function updateDisplay() {
     shadowElem.setAttribute("visibility", crashing ? "hidden" : "");
     dispH.textContent = posY.toFixed(1);
     dispV.textContent = speedY.toFixed(1);
+    dispA.textContent = angle.toFixed(1);
+    dispAM.textContent = angularSpeed.toFixed(1);
     dispF.textContent = fuelLeft.toFixed(1);
     dispPL.textContent = motorPowerL.toFixed(1);
     dispPR.textContent = motorPowerR.toFixed(1);

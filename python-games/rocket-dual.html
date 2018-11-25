@@ -63,22 +63,28 @@
       <g transform="translate(210,40)"> <!-- Value displays -->
           <text style="fill:rgb(255,240,0)">
             <tspan x="0" y="0">Højde:</tspan>
-            <tspan x="0" dy="25">Fart:</tspan>
-            <tspan x="0" dy="25">Brændstof:</tspan>
-            <tspan x="0" dy="25">Motorkraft (V):</tspan>
-            <tspan x="0" dy="25">Motorkraft (H):</tspan>
+            <tspan x="0" dy="20">Fart:</tspan>
+            <tspan x="0" dy="20">Vinkel:</tspan>
+            <tspan x="0" dy="20">Vinkelhast.:</tspan>
+            <tspan x="0" dy="20">Brændstof:</tspan>
+            <tspan x="0" dy="20">Motorkraft (V):</tspan>
+            <tspan x="0" dy="20">Motorkraft (H):</tspan>
 
             <tspan x="150" y="0">m</tspan>
-            <tspan x="150" dy="25">m/s</tspan>
-            <tspan x="150" dy="25">L</tspan>
-            <tspan x="150" dy="25">%</tspan>
-            <tspan x="150" dy="25">%</tspan>
+            <tspan x="150" dy="20">m/s</tspan>
+            <tspan x="150" dy="20">&deg;</tspan>
+            <tspan x="150" dy="20">&deg;/s</tspan>
+            <tspan x="150" dy="20">L</tspan>
+            <tspan x="150" dy="20">%</tspan>
+            <tspan x="150" dy="20">%</tspan>
             <tspan text-anchor="end"><!--
               --><tspan id="dispH" x="140" y="0">?</tspan><!--
-              --><tspan id="dispV" x="140" dy="25">??</tspan><!--
-              --><tspan id="dispF" x="140" dy="25">???</tspan><!--
-              --><tspan id="dispPL" x="140" dy="25" style="fill:rgb(255,190,0)">??</tspan><!--
-              --><tspan id="dispPR" x="140" dy="25" style="fill:rgb(255,190,0)">??</tspan><!--
+              --><tspan id="dispV" x="140" dy="20">??</tspan><!--
+              --><tspan id="dispA" x="140" dy="20">???</tspan><!--
+              --><tspan id="dispAM" x="140" dy="20">???</tspan><!--
+              --><tspan id="dispF" x="140" dy="20">???</tspan><!--
+              --><tspan id="dispPL" x="140" dy="20" style="fill:rgb(255,190,0)">??</tspan><!--
+              --><tspan id="dispPR" x="140" dy="20" style="fill:rgb(255,190,0)">??</tspan><!--
             --></tspan>
           </text>
         </g>
@@ -87,11 +93,10 @@
     </div>
     <div style="overflow: hidden; padding-left: 1em;">
       <h1>Land raketten!</h1>
-      <!--
       <p>Du skal skrive styreprogrammet til rakettens kontrol-computer.</p>
       <p>Computeren styrer højre og venstre motor.</p>
-      <p>Computeren har 5 sensorer, for <i>højde</i>, <i>fart</i>, <i>hældning</i>, <i>gyro</i> (vinkelhastighed) og <i>brændstof</i>.</p>
-      <p>Dit mål er at <b>lande raketten</b> på overfladen. Men vær forsigtig: du må ikke ramme planeten med en fart på over <b>5 m/s</b> &mdash; det kan raketten nemlig ikke holde til. Og raketten skal samtidig landes, så den står lodret &mdash; dvs. med en hældning <b>mellem &minus;5&deg; og +5&deg;</b>.</p>
+      <p>Computeren har 5 sensorer, for <i>højde</i>, <i>fart</i>, <i>vinkel</i>, <i>gyro</i> (vinkelhastighed) og <i>brændstof</i>.</p>
+      <p>Dit mål er at <b>lande raketten</b> på overfladen. Men vær forsigtig: du må ikke ramme planeten med en fart på over <b>5 m/s</b> &mdash; det kan raketten nemlig ikke holde til. Og raketten skal samtidig landes, så den står lodret &mdash; dvs. med en vinkel <b>mellem &minus;5&deg; og +5&deg;</b>.</p>
 
       <h3 style="margin-bottom: 0.1em">Python-funktioner:</h3>
       <table>
@@ -101,12 +106,11 @@
         <tr><th colspan="2" style="text-align: left;">Sensorer</th></tr>
         <tr><td><code>hoejde()</code></td><td>Højden over overfladen, i meter.</td></tr>
         <tr><td><code>fart()</code></td><td>Hvor stor farten mod overfladen er, i meter per sekund.</td></tr>
-        <tr><td><code>haeldning()</code></td><td>Hvor meget raketten hælder mod højre (vinkel), i grader.</td></tr>
-        <tr><td><code>gyro()</code></td><td>Hvor hurtigt raketten hælder mod højre (vinkelhastighed), i grader per sekund.</td></tr>
+        <tr><td><code>vinkel()</code></td><td>Hvor meget raketten hælder mod højre (vinkel), i grader.</td></tr>
+        <tr><td><code>vinkelhast()</code></td><td>Hvor hurtigt raketten drejer mod højre (vinkelhastighed), i grader per sekund.</td></tr>
         <tr><td><code>braendstof()</code></td><td>Hvor meget brændstof der er tilbage, i liter.</td></tr>
         <tr><td><code>vent(x)</code></td><td>Vent <code>x</code> sekunder.</td></tr>
       </table>
--->
       <p>
       <h3 style="margin-bottom: 0.1em">Dit kontrol-program:</h3>
         <textarea id="yourcode" cols="40" rows="10" style="font-family: monospace; font-size: 12pt;">motorV(100)
