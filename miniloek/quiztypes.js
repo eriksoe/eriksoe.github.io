@@ -214,7 +214,7 @@ QUIZ_TYPES = {
             if (totalValue > 100) return null;
 
             var a = "Der er " + totalValue + " kroner.";
-            var centers = placeCircles(600, 600, 130, totalCount);
+            var centers = placeCircles(600, 450, 135, totalCount);
             if (centers == null) return null;
             var placed = 0;
             var tmp = '';
@@ -229,7 +229,7 @@ QUIZ_TYPES = {
             place(n5, "5kr");
             place(n10, "10kr");
             place(n20, "20kr");
-            var q = '<svg height="4cm" width="4cm" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">' + tmp + '</svg>';
+            var q = '<svg width="4cm" height="3cm" viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg">' + tmp + '</svg>';
             return {q: q, a: a};
 
         }
