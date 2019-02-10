@@ -196,4 +196,69 @@ QUIZ_TYPES = {
             return {q: eq, a: "<em>"+v+"</em>&nbsp;=&nbsp;"+x};
         }
     },
+
+    coins1: {
+        descr: "Mønter",
+        title: "Mønter",
+        tags: ["Matematik", "Penge"],
+        qa_gen: function(config) {
+            var n1 = rand_int(0, 10);
+            var n2 = rand_int(0, 10);
+            var n5 = rand_int(0, 10);
+            var n10 = rand_int(0, 5);
+            var n20 = rand_int(0, 5);
+            var totalCount = n1 + n2 + n5 + n10 + n20;
+            var totalValue = n1 + 2*n2 + 5*n5 + 10*n10 + 20*n20;
+
+            if (totalCount > 10) return null;
+            if (totalValue > 100) return null;
+
+            var a = "Der er " + totalValue + " kroner.";
+            var centers = placeCircles(600, 600, 130, totalCount);
+            if (centers == null) return null;
+            var placed = 0;
+            var tmp = '';
+            function place(n, svgDefName) {
+                for (var i=0; i<n; i++) {
+                    var pos=centers[placed++]; 
+                    tmp += '<use href="images/moenter.svg#' + svgDefName + '" x="' + pos.x + '" y="' + pos.y + '"/>';
+                }
+            }
+            place(n1, "1kr");
+            place(n2, "2kr");
+            place(n5, "5kr");
+            place(n10, "10kr");
+            place(n20, "20kr");
+            var q = '<svg height="4cm" width="4cm" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">' + tmp + '</svg>';
+            return {q: q, a: a};
+
+        }
+    }
+}
+
+function placeCircles(w, h, r, count) {
+    var centers = [];
+    var failedAttempts = 0;
+    var placed = 0;
+    while (placed < count && failedAttempts < 20) {
+        var x = rand_int(r, w-r);
+        var y = rand_int(r, h-r);
+        var ok = true;
+        for (var i=0; i<placed; i++) {
+            var dx = x - centers[i].x;
+            var dy = y - centers[i].y;
+            if (dx*dx + dy*dy < r*r) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            centers.push({x:x, y:y});
+            placed++;
+        } else {
+            failedAttempts++;
+        }
+    }
+    console.log("placeCircles result:"); console.log(centers);
+    return centers.length == count ? centers : null;
 }
