@@ -210,29 +210,15 @@ QUIZ_TYPES = {
             var totalCount = n1 + n2 + n5 + n10 + n20;
             var totalValue = n1 + 2*n2 + 5*n5 + 10*n10 + 20*n20;
 
-            if (totalCount > 10) return null;
+            if (totalCount > 8) return null;
             if (totalValue > 100) return null;
 
             var a = "Der er " + totalValue + " kroner.";
             var scale = 175;
-            var centers = placeCircles(4*scale, 2.5*scale, 135, totalCount);
+            var centers = placeCircles(4.0*scale, 2.0*scale, 67.5, totalCount);
             if (centers == null) return null;
-            var placed = 0;
-            var tmp = '';
-            function place(n, svgDefName) {
-                for (var i=0; i<n; i++) {
-                    var pos=centers[placed++]; 
-                    tmp += '<use href="images/moenter.svg#' + svgDefName + '" x="' + pos.x + '" y="' + pos.y + '"/>';
-                }
-            }
-            place(n1, "1kr");
-            place(n2, "2kr");
-            place(n5, "5kr");
-            place(n10, "10kr");
-            place(n20, "20kr");
-            var q = '<svg width="4cm" height="2.5cm" viewBox="0 0 ' + (4*scale) + ' ' + (2.5*scale) + '" xmlns="http://www.w3.org/2000/svg">' + tmp + '</svg>';
+            var q = coinsSvg(centers, scale, n1, n2, n5, n10, n20);
             return {q: q, a: a};
-
         }
     }
 }
@@ -248,7 +234,7 @@ function placeCircles(w, h, r, count) {
         for (var i=0; i<placed; i++) {
             var dx = x - centers[i].x;
             var dy = y - centers[i].y;
-            if (dx*dx + dy*dy < r*r) {
+            if (dx*dx + dy*dy < 4*r*r) {
                 ok = false;
                 break;
             }
@@ -262,4 +248,22 @@ function placeCircles(w, h, r, count) {
     }
     console.log("placeCircles result:"); console.log(centers);
     return centers.length == count ? centers : null;
+}
+
+function coinsSvg(centers, scale, n1, n2, n5, n10, n20) {
+    var placed = 0;
+    var tmp = '';
+    function place(n, svgDefName) {
+        for (var i=0; i<n; i++) {
+            var pos=centers[placed++];
+            tmp += '<use href="images/moenter.svg#' + svgDefName + '" x="' + (pos.x-67.5) + '" y="' + (pos.y-67.5) + '"/>';
+        }
+    }
+    place(n1, "1kr");
+    place(n2, "2kr");
+    place(n5, "5kr");
+    place(n10, "10kr");
+    place(n20, "20kr");
+    var svg = '<svg width="4cm" height="2cm" viewBox="0 0 ' + (4*scale) + ' ' + (2*scale) + '" xmlns="http://www.w3.org/2000/svg">' + tmp + '</svg>';
+    return svg;
 }
