@@ -220,7 +220,37 @@ QUIZ_TYPES = {
             var q = coinsSvg(centers, scale, n1, n2, n5, n10, n20);
             return {q: q, a: a};
         }
-    }
+    },
+
+    coins2: {
+        descr: "Mønter 2",
+        title: "Mønter",
+        tags: ["Matematik", "Penge"],
+        qa_gen: function(config) {
+            var n1 = rand_int(0, 10);
+            var n2 = rand_int(0, 10);
+            var n5 = rand_int(0, 10);
+            var n10 = rand_int(0, 5);
+            var n20 = rand_int(0, 5);
+            var totalCount = n1 + n2 + n5 + n10 + n20;
+            var totalValue = n1 + 2*n2 + 5*n5 + 10*n10 + 20*n20;
+
+            if (totalCount > 8) return null;
+            if (totalValue > 100) return null;
+
+            var a = "Der er " + totalValue + " kroner.";
+            var scale = 175;
+            var centers = placeCircles(4.0*scale, 2.0*scale, 67.5, totalCount);
+            if (centers == null) return null;
+            var q = coinsSvg(centers, scale, n1, n2, n5, n10, n20);
+
+            var alt_as = [a];
+            if (rand_int(0,1) > 0) { // Swap Q and A.
+                var tmp=q; q=a; a=tmp;
+            }
+            return {q: q, a: a, alt_as: alt_as};
+        }
+    },
 }
 
 function placeCircles(w, h, r, count) {
