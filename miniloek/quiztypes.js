@@ -113,6 +113,31 @@ QUIZ_TYPES = {
         }
     },
 
+    number_positions_all: {
+        descr: "Enere og tiere",
+        title: "Enere og tiere",
+        tags: ["Matematik", "Positionssystem"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var i = rand_int(0, 9);
+            var x = rand_int(0, 9);
+            var r = i + 10*x;
+
+            var names_sing = ["ener", "tier"];
+            var names_plur = ["enere", "tiere"];
+            var a = [i, x];
+            var parts = [];
+            for (var k=0; k<2; k++) parts[k] = a[k]+" " + (a[k]==1 ? names_sing : names_plur)[k];
+            var ans = function() {return "Der er " + parts.join(" og ");};
+            var canonAnswer = ans();
+            shuffle(parts);
+            var answer = ans();
+            return {q: '<span style="font-size: 5mm;">' + r + "</span>",
+                    a: answer,
+                    alt_as: [canonAnswer]};
+        }
+    },
+
     number_positions: {
         descr: "Enere, tiere og hundreder",
         title: "Enere, tiere og hundreder",
