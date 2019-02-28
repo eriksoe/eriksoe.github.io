@@ -162,6 +162,48 @@ QUIZ_TYPES = {
         }
     },
 
+    number_positions_count_coins: {
+        descr: "Enere og tiere — tæl mønter",
+        prepare_state: function() {return {position: rand_from_list([1, 10])};},
+        title: function (options) {return "Hvor mange " + (options.state.position==1 ? "enere" : "tiere") + " er der?"},
+        tags: ["Matematik", "Positionssystem"],
+        qa_gen: function(config) {
+            var position = config.state.position;
+            var others = rand_bool();
+            var n1=0, n2=0, n5=0, n10=0, n20=0;
+            if (others) {
+                n1 = rand_int(0, 5);
+                n2 = rand_int(0, 5);
+                n5 = rand_int(0, 5);
+                n10 = rand_int(0, 5);
+                n20 = rand_int(0, 5);
+            }
+            var count = rand_int(0, 9);
+            var index;
+            switch (position) {
+            case 1: n1 = count; index = 0; break;
+            case 10: n10 = count; index = 1; break;
+            }
+            var totalCount = n1 + n2 + n5 + n10 + n20;
+
+            if (totalCount > 15) return null;
+            if (totalCount > 0 && count == 0) return null;
+
+            var names_sing = ["ener", "tier"];
+            var names_plur = ["enere", "tiere"];
+            var answer = "Der er " + count + " " + (count==1 ? names_sing : names_plur)[index];
+
+            var scale = 175;
+            var centers = placeCircles(4.0*scale, 2.0*scale, 67.5, totalCount);
+            if (centers == null) return null;
+            var q = coinsSvg(centers, scale, n1, n2, n5, n10, n20);
+
+            if (totalCount > count) answer += "<br>og nogle andre mønter";
+            return {q: q,
+                    a: answer};
+        }
+    },
+
     equations0: {
         descr: "Ligninger for begyndere - Plus og minus",
         title: "Hvilket tal skal der stå?",

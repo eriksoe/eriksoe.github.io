@@ -228,7 +228,7 @@ function is_valid_pattern_row(row) {
 }
 
 function generate_quiz(descriptor, options) {
-    var failuresLeft = 1000;
+    var failuresLeft = 3000;
     // 1. Generate Q/A pairs:
     var q_set = {}, a_set = {}, alt_q_set = {}, alt_a_set = {};
     var qs = [], as = [];
@@ -240,7 +240,7 @@ function generate_quiz(descriptor, options) {
             return null;
         }
 
-        qa = descriptor.qa_gen.apply(options);
+        qa = descriptor.qa_gen(options);
         if (qa==null) continue;
 
         var q = qa.q;
