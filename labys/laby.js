@@ -599,7 +599,7 @@ LABY_TYPES = {
 	    title: "n-ord og t-ord",
 	    tags: ["Dansk", "Navneord" ],
             deps: ["number"],
-	    dims: [12,20],
+	    dims: [10,18],
             prepare_state: function(config) {
 		var n = Math.max(2, config.number);
 		var wordList = [];
@@ -627,8 +627,8 @@ LABY_TYPES = {
 		    '<td>En kat<br/>Katten<br/>Den kat<br/>Min kat<br/>Din kat</td>' +
 		    '<td>Et bord<br/>Bordet<br/>Det bord<br/>Mit bord<br/>Dit bord</td>' +
 		    '<td>En bord<br/>Borden<br/>Den bord<br/>Min bord<br/>Din bord</td>' +
-		    //'<td style="padding: 2em; text-align: left; font-size: 150%;"><ul>' + wordList.map(function(w) {return '<li>' + form(w, 0, "") + '</li>'}).join("") + '</ul></td>' +
-		    '<td style="padding: 2em; text-align: left; font-size: 150%;"><ul>' + wordList.map(function(w) {return '<li>E<span style="color: red; text-decoration: underline;">' + w[2] + "</span> " + w[0] + '</li>'}).join("") + '</ul></td>' +
+		    //'<td style="padding: 0.25em 2em; text-align: left; font-size: 120%;"><ul>' + wordList.map(function(w) {return '<li>' + form(w, 0, "") + '</li>'}).join("") + '</ul></td>' +
+		    '<td style="padding: 0.25em 2em; text-align: left; font-size: 120%;"><ul>' + wordList.map(function(w) {return '<li>E<span style="color: red; text-decoration: underline;">' + w[2] + "</span> " + w[0] + '</li>'}).join("") + '</ul></td>' +
 		    '</tr>' +
 		    '</table>';
 		// TODO
