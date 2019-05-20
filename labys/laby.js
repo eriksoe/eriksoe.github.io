@@ -536,6 +536,117 @@ LABY_TYPES = {
         }
     },
 
+    n_ord_og_t_ord: (function() {
+	var WORDS = [
+	    // Indef. - Def. - n/t
+	    ["arm", "arme", "n"],
+	    ["ben", "bene", "t"],
+	    ["hoved", "hovede", "t"],
+	    ["fod", "fode", "n"],
+
+	    ["bord", "borde", "t"],
+	    ["stol", "stole", "n"],
+	    ["sofa", "sofae", "n"],
+	    ["seng", "senge", "n"],
+	    ["pude", "pude", "n"],
+	    ["dyne", "dyne", "n"],
+	    ["gulv", "gulve", "t"],
+	    ["loft", "lofte", "t"],
+	    ["væg", "vægge", "n"],
+	    ["vindue", "vindue", "t"],
+	    ["dør", "døre", "n"],
+	    ["mur", "mure", "n"],
+	    ["tag", "tage", "t"],
+	    ["lampe", "lampe", "n"],
+
+	    ["banan", "banane", "n"],
+	    ["æble", "æble", "t"],
+	    ["pære", "pære", "n"],
+
+	    ["kat", "katte", "n"],
+	    ["hund", "hunde", "n"],
+	    ["ko", "koe", "n"],
+	    ["hest", "heste", "n"],
+	    ["får", "fåre", "t"],
+
+	    ["bog", "boge", "n"],
+	    ["blyant", "blyante", "n"],
+
+	    ["bus", "busse", "n"],
+	    ["bil", "bile", "n"],
+	    ["cykel", "cykle", "n"],
+	];
+
+	var FORM_COUNT = 5;
+	function form(w, nr, suffix) {
+	    if (suffix == "") suffix = w[2];
+	    var indefi = w[0], defi = w[1];
+	    switch (nr) {
+	    case 0: return "E" + suffix + " " + indefi;
+	    case 1: return upperFirst(defi) + suffix;
+	    case 2: return "De" + suffix + " " + indefi;
+	    case 3: return "Mi" + suffix + " " + indefi;
+	    case 4: return "Di" + suffix + " " + indefi;
+	    }
+	}
+
+	function upperFirst(s) {
+	    return s.charAt(0).toUpperCase() + s.slice(1);
+	}
+	
+	return {
+	    descr: "N-ord og t-ord",
+	    title: "n-ord og t-ord",
+	    tags: ["Dansk", "Navneord" ],
+            deps: ["number"],
+	    dims: [12,20],
+            prepare_state: function(config) {
+		var n = Math.max(2, config.number);
+		var wordList = [];
+		var wordSet = {};
+		var suffixSet = {};
+		var suffixCount = 0;
+		for (var i=0; i<100 && (wordList.length<n || suffixCount<2); i++) {
+		    var wordInfo = rand_from_list(WORDS);
+		    var word = wordInfo[0];
+		    var suffix = wordInfo[2];
+		    if (word in wordSet) continue;
+		    if (wordList.length==n-1 && suffixCount<2 && suffix in suffixSet) continue; // Find a word with an unused suffix instead.
+		    wordSet[word] = wordInfo;
+		    wordList.push(wordInfo);
+		    if (!(suffix in suffixSet)) suffixCount++;
+		    suffixSet[suffix] = 1;
+		}
+		return wordList;
+            },
+	    above_matter: function(config) {
+		var wordList = config.state;
+		return '<table class="explanation" width="80%">' +
+		    '<tr><th>Rigtigt:</th><th>Rigtigt:</th><th>Forkert:</th><th>Ord-liste:</th></tr>' +
+		    '<tr>' +
+		    '<td>En kat<br/>Katten<br/>Den kat<br/>Min kat<br/>Din kat</td>' +
+		    '<td>Et bord<br/>Bordet<br/>Det bord<br/>Mit bord<br/>Dit bord</td>' +
+		    '<td>En bord<br/>Borden<br/>Den bord<br/>Min bord<br/>Din bord</td>' +
+		    //'<td style="padding: 2em; text-align: left; font-size: 150%;"><ul>' + wordList.map(function(w) {return '<li>' + form(w, 0, "") + '</li>'}).join("") + '</ul></td>' +
+		    '<td style="padding: 2em; text-align: left; font-size: 150%;"><ul>' + wordList.map(function(w) {return '<li>E<span style="color: red; text-decoration: underline;">' + w[2] + "</span> " + w[0] + '</li>'}).join("") + '</ul></td>' +
+		    '</tr>' +
+		    '</table>';
+		// TODO
+	    },
+            cell_gen: function(config) {
+		var wordList = config.state;
+		var wordInfo = rand_from_list(wordList);
+		var formNr = rand_int(0, FORM_COUNT-1);
+		var suffix = rand_bool() ? "n" : "t";
+		var text = form(wordInfo, formNr, suffix);
+		return {
+		    text: text,
+		    value: suffix == wordInfo[2]
+		}
+	    },
+	}
+    }()),
+
     measure: {
         descr: "Måle afstande",
         title: "Måle afstande",
@@ -1221,7 +1332,7 @@ function show_laby(laby, descriptor, options) {
     //var row_template = document.createElement("tr");
     //var cell_template = document.createElement("td");
 
-    options.state = (descriptor.prepare_state !== undefined) ? descriptor.prepare_state() : null;
+    options.state = (descriptor.prepare_state !== undefined) ? descriptor.prepare_state(options) : null;
 
     var trues = []; var falses = [];
     var w = laby.length, h=laby[0].length;
