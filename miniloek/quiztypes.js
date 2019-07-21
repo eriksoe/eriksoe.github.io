@@ -318,6 +318,29 @@ QUIZ_TYPES = {
             return {q: q, a: a, alt_as: alt_as};
         }
     },
+
+    fractions1: {
+        descr: "Brøker - lagkager vs notation",
+        title: "Brøker",
+        tags: ["Matematik", "Brøker"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var max = 10;
+            var b = rand_int(2, max);
+            var a = rand_int(1, b-1);
+	    var fraction = "<div style=\"inline-block\"><table><tr><td style=\"border-bottom: 2px solid black;\">&nbsp;" + a + "&nbsp;</td></tr><tr><td>&nbsp;" + b + "&nbsp;</td></tr></table></div>";
+	    fraction = "<div style=\"margin: 0.1cm; font-size: 0.5cm;\"><span style=\"border-bottom: 0.1em solid black; padding: 0em 0.5em;\">" + a + "</span><br><span style=\"padding: 0em;\">" + b + "</span></div>";
+	    var pie = fractionPie(a,b);
+	    var q,a;
+	    if (rand_bool()) {
+		q = fraction; a = pie;
+	    } else {
+		q = pie; a = fraction;
+	    }
+	    var promille = 1000*a/b; //TODO: prefix with form dependent character.
+            return {q: q, a: a, alt_qs: [promille], alt_as: [promille]};
+        }
+    },
 }
 
 function placeCircles(w, h, r, count) {
@@ -364,3 +387,20 @@ function coinsSvg(centers, scale, n1, n2, n5, n10, n20) {
     var svg = '<svg width="4cm" height="2cm" viewBox="0 0 ' + (4*scale) + ' ' + (2*scale) + '" xmlns="http://www.w3.org/2000/svg">' + tmp + '</svg>';
     return svg;
 }
+
+function fractionPie(a, b) {
+    var tmp = '<circle cx="0" cy="0" r="1" style="fill: none; stroke: black;"/>';
+    var v = 2*Math.PI * a/b;
+    var dx = Math.sin(v), dy = -Math.cos(v);
+    var largeArg = 2*a>b ? 1 : 0;
+    tmp += '<path d="M 0 0 L 0 -1 A 1 1 0 '+largeArg+' 1 '+dx+' '+dy+' z" style="stroke: black; fill: rgb(200,200,200);"/>';
+    for (var i=1; i<b; i++) {
+	if (i==a) continue;
+	var v = 2*Math.PI * i/b;
+	var dx = Math.sin(v), dy = -Math.cos(v);
+	tmp += '<path d="M 0 0 L '+dx+' '+dy+'" style="stroke: black; stroke-width: 0.01; fill: none;"/>';
+    }
+    var svg = '<svg width="3cm" height="3cm" viewBox="-1.5 -1.5 3 3" xmlns="http://www.w3.org/2000/svg"><g style="stroke-width: 0.05;">' + tmp + '</svg>';
+    return svg;
+}
+
