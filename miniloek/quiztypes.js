@@ -400,7 +400,7 @@ function fractionPie(a, b) {
 	var dx = Math.sin(v), dy = -Math.cos(v);
 	tmp += '<path d="M 0 0 L '+dx+' '+dy+'" style="stroke: black; stroke-width: 0.01; fill: none;"/>';
     }
-    var svg = '<svg width="3cm" height="3cm" viewBox="-1.5 -1.5 3 3" xmlns="http://www.w3.org/2000/svg"><g style="stroke-width: 0.05;">' + tmp + '</svg>';
+    var svg = '<svg width="1.5cm" height="1.5cm" viewBox="-1.1 -1.1 2.2 2.2" xmlns="http://www.w3.org/2000/svg"><g style="stroke-width: 0.05;">' + tmp + '</svg>';
     return svg;
 }
 
