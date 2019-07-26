@@ -276,6 +276,29 @@ LABY_TYPES = {
         }
     },
 
+    division: {
+        descr: "Division",
+        title: "Divisions-opgaver",
+        tags: ["Matematik", "Regning", "Division"],
+        deps: ["maxNum", "maxLeast"],
+        dims: [10,12],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var maxLeast = config.maxLeast;
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var c = rand_bool() ? a*b : rand_int(1,max*maxLeast);
+            if (! (config_is_small(a, config) || config_is_small(b, config)))
+                return null;
+	    var text = '<span style="display:inline-block; text-align: center; vertical-align: middle;"><span style="border-bottom: 0.1em solid black; padding: 0em 0.25em;">'+c+'</span><br><span>'+a+'</span></span> = '+b;
+            return {
+                text: text,
+                value: a*b===c
+            }
+        }
+    },
+
     greater_or_less: {
         descr: "Større/mindre (tal)",
         title: "Større og mindre",
