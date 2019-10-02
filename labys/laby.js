@@ -859,7 +859,7 @@ LABY_TYPES = {
             var svg = single_note_svg(h-2);
             return {
                 text: svg+'<br/><big>'+notename(text_h)+'</big>',
-                value: (text_h == h)
+                value: (notename(text_h) == notename(h))
             }
         },
         explanation: function (config) {
