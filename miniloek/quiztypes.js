@@ -341,6 +341,48 @@ QUIZ_TYPES = {
             return {q: q, a: a, alt_qs: [promille], alt_as: [promille]};
         }
     },
+    atoms_and_molecyles: {
+        descr: "Atomer og molekyler",
+        title: "Atomer og molekyler”",
+        tags: ["Kemi"],
+        qa_gen: function(config) {
+	    var ATOMS = {
+		1: {symbol: "H", name: "Hydrogen", name2: "Brint"},
+		2: {symbol: "He", name: "Helium"},
+		3: {symbol: "Li", name: "Lithium"},
+		4: {symbol: "Be", name: "Beryllium"},
+		5: {symbol: "B", name: "Bor"},
+		6: {symbol: "C", name: "Carbon", name2: "Kulstof"},
+		7: {symbol: "N", name: "Nitrogen", name2: "Kvælstof"},
+		8: {symbol: "O", name: "Oxygen", name2: "Ilt"},
+		9: {symbol: "F", name: "Flour"},
+		10: {symbol: "Ne", name: "Neon"},
+	    };
+	    if (rand_bool()) {
+		var a = rand_int(0,2);
+		var b = rand_int(0,2);
+		if (a==b) return;
+		var nr = rand_int(1, 8);
+		var atom = ATOMS[nr];
+		var stuff = ["Atomnummer "+nr, '<span style="font-family: sans-serif, helvetica, arial">'+atom["symbol"]+'</span>',
+			     ("name2" in atom && rand_bool())? atom["name2"] : atom["name"]];
+		return {q: stuff[a], a: stuff[b], alt_as: ["atom-"+nr]}
+	    } else {
+		var MOLECYLES = [
+		    {formula: "H<sub>2</sub>", name: "Brint-molekyle"},
+		    {formula: "O<sub>2</sub>", name: "Ilt-molekyle"},
+		    {formula: "N<sub>2</sub>", name: "Kvælstof-molekyle"},
+		    {formula: "H<sub>2</sub>O", name: "Vand"},
+		    {formula: "CO<sub>2</sub>", name: "Kuldioxid"},
+		];
+		var m = rand_from_list(MOLECYLES);
+		var a = rand_int(0, 1);
+		var b = 1-a;
+		var stuff = [m["formula"], m["name"]];
+		return {q: stuff[a], a: stuff[b], alt_as: ["molecyle-"+m["formula"]]};
+	    }
+        }
+    },
 }
 
 function placeCircles(w, h, r, count) {
