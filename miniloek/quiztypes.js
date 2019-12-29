@@ -331,14 +331,14 @@ QUIZ_TYPES = {
 	    var fraction = "<div style=\"inline-block\"><table><tr><td style=\"border-bottom: 2px solid black;\">&nbsp;" + a + "&nbsp;</td></tr><tr><td>&nbsp;" + b + "&nbsp;</td></tr></table></div>";
 	    fraction = "<div style=\"margin: 0.1cm; font-size: 0.5cm;\"><span style=\"border-bottom: 0.1em solid black; padding: 0em 0.5em;\">" + a + "</span><br><span style=\"padding: 0em;\">" + b + "</span></div>";
 	    var pie = fractionPie(a,b);
-	    var q,a;
+	    var question, answer;
 	    if (rand_bool()) {
-		q = fraction; a = pie;
+		question = fraction; answer = pie;
 	    } else {
-		q = pie; a = fraction;
+		question = pie; answer = fraction;
 	    }
 	    var promille = 1000*a/b; //TODO: prefix with form dependent character.
-            return {q: q, a: a, alt_qs: [promille], alt_as: [promille]};
+            return {q: question, a: answer, alt_qs: [promille], alt_as: [promille]};
         }
     },
     atoms_and_molecyles: {
