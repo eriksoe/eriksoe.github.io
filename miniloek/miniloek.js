@@ -252,7 +252,7 @@ function generate_quiz(descriptor, options) {
         for (var x in alt_as) if (a_set.has(alt_as[x])) bad=true;
         
         if (bad) {
-	    console.log("Rejected: q="+q+" a="+a, [alt_qs, alt_as, q_set, a_set]);
+	    //console.log("Rejected: q="+q+" a="+a, [alt_qs, alt_as, q_set, a_set]);
             failuresLeft--;
             continue;
         }

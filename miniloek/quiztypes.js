@@ -328,8 +328,7 @@ QUIZ_TYPES = {
             var max = 10;
             var b = rand_int(2, max);
             var a = rand_int(1, b-1);
-	    var fraction = "<div style=\"inline-block\"><table><tr><td style=\"border-bottom: 2px solid black;\">&nbsp;" + a + "&nbsp;</td></tr><tr><td>&nbsp;" + b + "&nbsp;</td></tr></table></div>";
-	    fraction = "<div style=\"margin: 0.1cm; font-size: 0.5cm;\"><span style=\"border-bottom: 0.1em solid black; padding: 0em 0.5em;\">" + a + "</span><br><span style=\"padding: 0em;\">" + b + "</span></div>";
+	    var fraction = "<div style=\"margin: 0.1cm; font-size: 0.5cm;\"><span style=\"border-bottom: 0.1em solid black; padding: 0em 0.5em;\">" + a + "</span><br><span style=\"padding: 0em;\">" + b + "</span></div>";
 	    var pie = fractionPie(a,b);
 	    var question, answer;
 	    if (rand_bool()) {
@@ -338,6 +337,33 @@ QUIZ_TYPES = {
 		question = pie; answer = fraction;
 	    }
 	    var promille = 1000*a/b; //TODO: prefix with form dependent character.
+            return {q: question, a: answer, alt_qs: [promille], alt_as: [promille]};
+        }
+    },
+    fractions2: {
+        descr: "Brøker - ækvivalens",
+        title: "Brøker - samme størrelse",
+        tags: ["Matematik", "Brøker"],
+        qa_gen: function(config) {
+            // Fixed range for now.
+            var max = 12;
+            var b = rand_int(2, max);
+            var a = rand_int(1, b);
+            var d = rand_int(2, max);
+            var c = Math.round(a*d/b); // Aim: a/b=c/d or ad=bc
+	    if (a*d != b*c) return null; // Out of bounds, or inexact.
+	    if (b==d && Math.random() < 0.99) return null; // Reject same denominator -- most of the time.
+
+	    function notation_or_pie(x,y, usePie) {
+		if (usePie) {
+		    return fractionPie(x,y);
+		} else {
+		    return "<div style=\"margin: 0.1cm; font-size: 0.5cm;\"><span style=\"border-bottom: 0.1em solid black; padding: 0em 0.5em;\">" + x + "</span><br><span style=\"padding: 0em;\">" + y + "</span></div>";
+		}
+	    }
+	    var question = notation_or_pie(a,b, Math.random() < 0.75);
+	    var answer   = notation_or_pie(c,d, Math.random() < 0.75);
+	    var promille = 1000*a/b;
             return {q: question, a: answer, alt_qs: [promille], alt_as: [promille]};
         }
     },
