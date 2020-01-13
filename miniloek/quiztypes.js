@@ -367,7 +367,64 @@ QUIZ_TYPES = {
             return {q: question, a: answer, alt_qs: [promille], alt_as: [promille]};
         }
     },
-    atoms_and_molecyles: {
+
+    regneregler: {
+        descr: "Regneregler - sæt parenteserne",
+        title: "Hvor skal parenteserne stå?",
+        tags: ["Matematik", "Regneregler"],
+        qa_gen: function(config) {
+	    var n = 5;
+	    var OPERATORS = [["+",1], ["-",1], ["·",2], [":",2]];
+	    var symbols = ["a", "b", "c", "d", "e"];
+
+	    function makeTree(leaves, nodeFun) {
+		if (leaves.length == 1) return leaves[0];
+		if (leaves.leaves < 1) throw "Bad!";
+		var x = rand_int(1,leaves.length-1);
+		var op = nodeFun();
+		var leaves1 = leaves.slice(0,x);
+		var leaves2 = leaves.slice(x);
+		return {"left": makeTree(leaves1, nodeFun),
+			"op": op,
+			"right": makeTree(leaves2, nodeFun)}
+	    }
+	    var tree = makeTree(symbols, function() {return rand_from_list(OPERATORS)});
+
+	    function treeToString(tree, precLevel, parensOnEqual, forceParens) {
+		if (typeof(tree) == "string") return tree; // A leaf.
+		var left = tree["left"];
+		var opInfo = tree["op"];
+		var right = tree["right"];
+		var opStr = opInfo[0];
+		var opLevel = opInfo[1];
+
+		var leftStr = treeToString(left, opLevel, false, forceParens);
+		var rightStr = treeToString(right, opLevel, true, forceParens);
+		var nodeStr = leftStr + opStr + rightStr;
+
+		var useParens =
+		    (forceParens && precLevel>0) // Force: all parens except outermost
+		    || precLevel > opLevel // Hierarchy rule
+		    || ((precLevel == opLevel) && parensOnEqual); // Left-to-right rule
+
+		if (useParens) {
+		    return "(" + nodeStr + ")";
+		} else {
+		    return nodeStr;
+		}
+	    }
+	    //console.log("Tree", tree)
+	    var id = rand_int(0,1000);
+	    var treeStr = treeToString(tree, 0, false, false);
+	    var allParensStr = treeToString(tree, 0, false, true);
+	    return {"q": "Q"+id+": "+ treeStr,
+		    "a": "A"+id+": "+ allParensStr};
+
+	    return null;
+	}
+    },
+
+atoms_and_molecyles: {
         descr: "Atomer og molekyler",
         title: "Atomer og molekyler”",
         tags: ["Kemi"],
