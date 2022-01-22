@@ -9,12 +9,49 @@
       header {
         border: thin solid white;
       }
+      footer {
+        position: fixed; bottom: 0;
+        width: 100%;
+        //justify-content: center;
+      }
+      @media only screen and (min-width: 768px) {
+        // Desktop
+        footer {
+          position: static;
+        }
+      }
       h1 { text-align: center;}
       .gameboard .l {
         width: 4em; height: 4em;
         padding: 0.5em;
         border: thin solid white;
       }
+      .keyboard {
+        width: min(700px,100vw); align: center;
+        font-size: 3vw;
+      }
+      .keyboard .row {
+        display: flex;
+        height: 16vw;
+        width: 95vw;
+      }
+      .keyboard .row .letter {
+        display: flex; width: 100%;
+        margin: 3px; border-width: 0.5vw;
+        flex: 4;
+        font-size: 7vw;
+        justify-content: center; align-items: center;
+        border-radius: 1.5vw;
+        background: rgb(200, 200, 200);
+        color: rgb(50, 50, 50);
+      }
+      .keyboard .row-space {
+        display: flex;
+        margin: 3px;
+      }
+      .keyboard span.quart { flex: 1; }
+      .keyboard span.half { flex: 2; }
+      .keyboard span.threequart { flex: 3; }
     </style>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <script src="wordar.js" type="text/javascript"></script>
@@ -28,5 +65,49 @@
       <tr><td class="l"><span>&nbsp;Tæst</td></tr>
     </table>
   </div>
+
+  <footer>
+    <div class="keyboard">
+      <div class="row">
+      <button class="letter">Q</button>
+      <button class="letter">W</button>
+      <button class="letter">E</button>
+      <button class="letter">R</button>
+      <button class="letter">T</button>
+      <button class="letter">Y</button>
+      <button class="letter">U</button>
+      <button class="letter">I</button>
+      <button class="letter">O</button>
+      <button class="letter">P</button>
+      <span class="row-space threequart"></span>
+      </div>
+      <div class="row">
+      <span class="row-space quart"></span>
+      <button class="letter">A</button>
+      <button class="letter">S</button>
+      <button class="letter">D</button>
+      <button class="letter">F</button>
+      <button class="letter">G</button>
+      <button class="letter">H</button>
+      <button class="letter">J</button>
+      <button class="letter">K</button>
+      <button class="letter">L</button>
+      <button class="letter">.</button>
+      <span class="row-space half"></span>
+      </div>
+      <div class="row">
+      <span class="row-space threequart"></span>
+      <button class="letter">Z</button>
+      <button class="letter">X</button>
+      <button class="letter">C</button>
+      <button class="letter">V</button>
+      <button class="letter">B</button>
+      <button class="letter">N</button>
+      <button class="letter">M</button>
+      <button class="letter">.</button>
+      <button class="letter">.</button>
+      <button class="letter">.</button>
+      </div>
+  </footer>
   </body>
 </html>

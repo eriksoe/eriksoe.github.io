@@ -23,4 +23,12 @@ function wordListFetched(resp) {
 
 function ready() {
   console.log("All ready.");
+  startGame();
+}
+
+var theWord = null;
+function startGame() {
+  var r = Math.floor(wordlist.length * Math.random());
+  theWord = wordlist[r];
+  console.log("Selected word: "+theWord); //TEMP
 }
