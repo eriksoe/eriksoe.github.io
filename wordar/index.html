@@ -58,6 +58,35 @@
       .keyboard span.half { width: calc(var(--btn-width)/2); }
       .keyboard span.threequart { width: calc(var(--btn-width)*3/4); }
       .keyboard span.one { width: var(--btn-width); }
+
+      .input-frame {
+        --letter-width: min(10vw, 5cm);
+        --border-sz: max(1px, calc(var(--letter-width) * 0.05));
+        --padding-sz: max(1px, calc(var(--letter-width) * 0.1));
+        --rowpadding-sz: max(2px, calc(var(--letter-width) * 0.1));
+        display: block;
+      }
+      .input-row {
+        display: flex;
+        margin: auto;
+        margin-bottom: var(--rowpadding-sz);
+      }
+      .input-word {
+        border: thin solid rgb(150,150,150);
+        margin: auto;
+      }
+      .input-letter {
+        display: inline-block;
+        width: var(--letter-width);
+        height: var(--letter-width);
+        border: var(--border-sz) solid rgb(200,200,200);
+        padding: var(--padding-sz);
+        font-size: calc(var(--letter-width) * 0.8);
+        text-align: center;
+
+        color: white;
+        background: rgb(100,100,150);
+      }
     </style>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -71,6 +100,28 @@
     <table class="gameboard">
       <tr><td class="l"><span>&nbsp;Tæst</td></tr>
     </table>
+  </div>
+
+  <div id="templates" style="display:none">
+    <div id="template-inputbox" class="inputbox">
+    </div>
+  </div>
+
+  <div class="input-frame">
+    <div class="input-row"><div class="input-word">
+      <span class="input-letter">Q</span>
+      <span class="input-letter">U</span>
+      <span class="input-letter">E</span>
+      <span class="input-letter">R</span>
+      <span class="input-letter">Y</span>
+    </div></div>
+    <div class="input-row"><div class="input-word">
+      <span class="input-letter">R</span>
+      <span class="input-letter">A</span>
+      <span class="input-letter">D</span>
+      <span class="input-letter">A</span>
+      <span class="input-letter">R</span>
+    </div></div>
   </div>
 
   <footer>
