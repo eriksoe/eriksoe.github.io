@@ -37,7 +37,7 @@
         height: 16vw;
         width: 95vw;
       }
-      .keyboard .row .letter {
+      .keyboard .key {
         display: flex;
         margin: 3px; border-width: 0.5vw;
         width: var(--btn-width);
@@ -47,7 +47,7 @@
         background: rgb(200, 200, 200);
         color: rgb(50, 50, 50);
       }
-      .keyboard .row .letter:active {
+      .keyboard .key:active {
         background: rgb(230, 230, 230);
       }
       .keyboard .row-space {
@@ -76,43 +76,43 @@
   <footer>
     <div class="keyboard">
       <div class="row">
-      <button class="letter" data-key="q">Q</button>
-      <button class="letter" data-key="w">W</button>
-      <button class="letter" data-key="e">E</button>
-      <button class="letter" data-key="r">R</button>
-      <button class="letter" data-key="t">T</button>
-      <button class="letter" data-key="y">Y</button>
-      <button class="letter" data-key="u">U</button>
-      <button class="letter" data-key="i">I</button>
-      <button class="letter" data-key="o">O</button>
-      <button class="letter" data-key="p">P</button>
+      <button class="letter key" data-key="q">Q</button>
+      <button class="letter key" data-key="w">W</button>
+      <button class="letter key" data-key="e">E</button>
+      <button class="letter key" data-key="r">R</button>
+      <button class="letter key" data-key="t">T</button>
+      <button class="letter key" data-key="y">Y</button>
+      <button class="letter key" data-key="u">U</button>
+      <button class="letter key" data-key="i">I</button>
+      <button class="letter key" data-key="o">O</button>
+      <button class="letter key" data-key="p">P</button>
       <span class="row-space threequart"></span>
       </div>
       <div class="row">
       <span class="row-space quart"></span>
-      <button class="letter" data-key="a">A</button>
-      <button class="letter" data-key="s">S</button>
-      <button class="letter" data-key="d">D</button>
-      <button class="letter" data-key="f">F</button>
-      <button class="letter" data-key="g">G</button>
-      <button class="letter" data-key="h">H</button>
-      <button class="letter" data-key="j">J</button>
-      <button class="letter" data-key="k">K</button>
-      <button class="letter" data-key="l">L</button>
-      <button class="letter" data-action="backspace" style="width: calc(var(--btn-width)*1.5); font-size: 7vw;">&#x232b;</button>
+      <button class="letter key" data-key="a">A</button>
+      <button class="letter key" data-key="s">S</button>
+      <button class="letter key" data-key="d">D</button>
+      <button class="letter key" data-key="f">F</button>
+      <button class="letter key" data-key="g">G</button>
+      <button class="letter key" data-key="h">H</button>
+      <button class="letter key" data-key="j">J</button>
+      <button class="letter key" data-key="k">K</button>
+      <button class="letter key" data-key="l">L</button>
+      <button class="action key" data-action="backspace" style="width: calc(var(--btn-width)*1.5); font-size: 7vw;">&#x232b;</button>
       <!-- <span class="row-space half"></span> -->
       </div>
       <div class="row">
       <span class="row-space threequart"></span>
-      <button class="letter" data-key="z">Z</button>
-      <button class="letter" data-key="x">X</button>
-      <button class="letter" data-key="c">C</button>
-      <button class="letter" data-key="v">V</button>
-      <button class="letter" data-key="b">B</button>
-      <button class="letter" data-key="n">N</button>
-      <button class="letter" data-key="m">M</button>
+      <button class="letter key" data-key="z">Z</button>
+      <button class="letter key" data-key="x">X</button>
+      <button class="letter key" data-key="c">C</button>
+      <button class="letter key" data-key="v">V</button>
+      <button class="letter key" data-key="b">B</button>
+      <button class="letter key" data-key="n">N</button>
+      <button class="letter key" data-key="m">M</button>
       <span class="row-space one"></span>
-      <button class="letter" data-action="enter" style="width: calc(var(--btn-width)*2); font-size: 7vw;">&#x21b5;</button>
+      <button class="action key" data-action="enter" style="width: calc(var(--btn-width)*2); font-size: 7vw;">&#x21b5;</button>
       </div>
   </footer>
   </body>

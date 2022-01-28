@@ -5,15 +5,27 @@ function init() {
   fetch('wordlist-en')
   .then(response => wordListFetched(response))
   // Bind stuff:
-  $(".keyboard .letter").on("click", letterKeyPressed);
+  $(".keyboard .key").on("click", letterKeyPressed);
+  $(".keyboard .action").on("click", actionKeyPressed);
 }
 
 function letterKeyPressed(evt) {
-  var target = evt.target;
-  var key = target.getAttribute("data-key");
+  var key = evt.target.getAttribute("data-key");
   if (key === null) return;
   console.log("Letter key:", key);
   //TODO: handle input
+}
+
+function actionKeyPressed(evt) {
+  var action = evt.target.getAttribute("data-action");
+  if (action === null) return;
+  if (action == "backspace") {
+      console.log("BACKSPACE"); // TODO: Handle
+  } else if (action == "enter") {
+      console.log("ENTER"); // TODO: Handle
+  } else {
+      console.log("Unhandled action:", action);
+  }
 }
 
 function wordListFetched(resp) {
