@@ -4,6 +4,16 @@ var wordlist = null;
 function init() {
   fetch('wordlist-en')
   .then(response => wordListFetched(response))
+  // Bind stuff:
+  $(".keyboard .letter").on("click", letterKeyPressed);
+}
+
+function letterKeyPressed(evt) {
+  var target = evt.target;
+  var key = target.getAttribute("data-key");
+  if (key === null) return;
+  console.log("Letter key:", key);
+  //TODO: handle input
 }
 
 function wordListFetched(resp) {
