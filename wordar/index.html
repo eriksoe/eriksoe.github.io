@@ -5,14 +5,17 @@
       body {
         background: rgb(0, 0, 200);
         color: rgb(255,255,255);
+        touch-action: manipulation; // Disable "double-tap to zoom" on e.g. mobile devices.
       }
       header {
         border: thin solid white;
+        touch-action: manipulation;
       }
       footer {
         position: fixed; bottom: 0;
         width: 100%;
         //justify-content: center;
+        touch-action: manipulation;
       }
       @media only screen and (min-width: 768px) {
         // Desktop
