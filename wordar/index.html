@@ -32,6 +32,7 @@
       }
       .keyboard .row {
         display: flex;
+        margin: auto;
         height: 16vw;
         width: 95vw;
       }
@@ -52,6 +53,7 @@
       .keyboard span.quart { flex: 1; }
       .keyboard span.half { flex: 2; }
       .keyboard span.threequart { flex: 3; }
+      .keyboard span.one { flex: 4; }
     </style>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <script src="wordar.js" type="text/javascript"></script>
@@ -83,30 +85,29 @@
       </div>
       <div class="row">
       <span class="row-space quart"></span>
-      <button class="letter">A</button>
-      <button class="letter">S</button>
-      <button class="letter">D</button>
-      <button class="letter">F</button>
-      <button class="letter">G</button>
-      <button class="letter">H</button>
-      <button class="letter">J</button>
-      <button class="letter">K</button>
-      <button class="letter">L</button>
-      <button class="letter">.</button>
-      <span class="row-space half"></span>
+      <button class="letter" data-key="a">A</button>
+      <button class="letter" data-key="s">S</button>
+      <button class="letter" data-key="d">D</button>
+      <button class="letter" data-key="f">F</button>
+      <button class="letter" data-key="g">G</button>
+      <button class="letter" data-key="h">H</button>
+      <button class="letter" data-key="j">J</button>
+      <button class="letter" data-key="k">K</button>
+      <button class="letter" data-key="l">L</button>
+      <button class="letter" data-action="backspace" style="flex: 6; font-size: 7vw;">&#x232b;</button>
+      <!-- <span class="row-space half"></span> -->
       </div>
       <div class="row">
       <span class="row-space threequart"></span>
-      <button class="letter">Z</button>
-      <button class="letter">X</button>
-      <button class="letter">C</button>
-      <button class="letter">V</button>
-      <button class="letter">B</button>
-      <button class="letter">N</button>
-      <button class="letter">M</button>
-      <button class="letter">.</button>
-      <button class="letter">.</button>
-      <button class="letter">.</button>
+      <button class="letter" data-key="z">Z</button>
+      <button class="letter" data-key="x">X</button>
+      <button class="letter" data-key="c">C</button>
+      <button class="letter" data-key="v">V</button>
+      <button class="letter" data-key="b">B</button>
+      <button class="letter" data-key="n">N</button>
+      <button class="letter" data-key="m">M</button>
+      <span class="row-space one"></span>
+      <button class="letter" data-action="enter" style="flex: 8; font-size: 7vw;">&#x21b5;</button>
       </div>
   </footer>
   </body>
