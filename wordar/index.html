@@ -37,23 +37,26 @@
         width: 95vw;
       }
       .keyboard .row .letter {
-        display: flex; width: 100%;
+        display: flex;
         margin: 3px; border-width: 0.5vw;
-        flex: 4;
+        width: 9vw;
         font-size: 7vw;
         justify-content: center; align-items: center;
         border-radius: 1.5vw;
         background: rgb(200, 200, 200);
         color: rgb(50, 50, 50);
       }
+      .keyboard .row .letter:active {
+        background: rgb(230, 230, 230);
+      }
       .keyboard .row-space {
         display: flex;
         margin: 3px;
       }
-      .keyboard span.quart { flex: 1; }
-      .keyboard span.half { flex: 2; }
-      .keyboard span.threequart { flex: 3; }
-      .keyboard span.one { flex: 4; }
+      .keyboard span.quart { width: 2.25vw; }
+      .keyboard span.half { width: 4.5wv; }
+      .keyboard span.threequart { width: 6.75vw; }
+      .keyboard span.one { width: 9vw; }
     </style>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <script src="wordar.js" type="text/javascript"></script>
@@ -94,7 +97,7 @@
       <button class="letter" data-key="j">J</button>
       <button class="letter" data-key="k">K</button>
       <button class="letter" data-key="l">L</button>
-      <button class="letter" data-action="backspace" style="flex: 6; font-size: 7vw;">&#x232b;</button>
+      <button class="letter" data-action="backspace" style="width: 13.5vw; font-size: 7vw;">&#x232b;</button>
       <!-- <span class="row-space half"></span> -->
       </div>
       <div class="row">
@@ -107,7 +110,7 @@
       <button class="letter" data-key="n">N</button>
       <button class="letter" data-key="m">M</button>
       <span class="row-space one"></span>
-      <button class="letter" data-action="enter" style="flex: 8; font-size: 7vw;">&#x21b5;</button>
+      <button class="letter" data-action="enter" style="width: 18vw; font-size: 7vw;">&#x21b5;</button>
       </div>
   </footer>
   </body>
