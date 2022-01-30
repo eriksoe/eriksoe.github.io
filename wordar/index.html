@@ -7,14 +7,18 @@
         color: rgb(255,255,255);
         touch-action: manipulation; // Disable "double-tap to zoom" on e.g. mobile devices.
       }
+      .wrapper {
+        min-height: 100%;
+        display: flex; flex-direction: column;
+      }
       header {
         border: thin solid white;
         touch-action: manipulation;
       }
+      .middle {
+        flex: 1;
+      }
       footer {
-        position: fixed; bottom: 0;
-        width: 100%;
-        //justify-content: center;
         touch-action: manipulation;
       }
       @media only screen and (min-width: 768px) {
@@ -67,6 +71,7 @@
         --border-sz: max(1px, calc(var(--letter-width) * 0.05));
         --padding-sz: max(1px, calc(var(--letter-width) * 0.1));
         --rowpadding-sz: max(2px, calc(var(--letter-width) * 0.1));
+        margin-top: 1vh;
         display: block;
       }
       .input-row {
@@ -96,10 +101,12 @@
     <script src="wordar.js" type="text/javascript"></script>
   </head>
   <body onLoad="init()">
+  <div class="wrapper">
   <header>
     <h1>Wordar</h1>
   </header>
 
+  <div class="middle">
   <div class="input-frame">
     <div class="input-row"><div class="input-word">
       <span class="input-letter">Q</span>
@@ -115,6 +122,7 @@
       <span class="input-letter">A</span>
       <span class="input-letter">R</span>
     </div></div>
+  </div>
   </div>
 
   <footer>
@@ -159,5 +167,6 @@
       <button class="action key" data-action="enter" style="width: calc(var(--btn-width)*2); font-size: 7vw;">&#x21b5;</button>
       </div>
   </footer>
+  </div>
   </body>
 </html>
