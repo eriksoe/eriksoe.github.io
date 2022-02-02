@@ -1,5 +1,7 @@
 
-var wordlist = null;
+var wordlist;
+var mapCells;
+var N = 5;
 
 function init() {
   fetch('wordlist-en')
@@ -7,6 +9,28 @@ function init() {
   // Bind stuff:
   $(".keyboard .key").on("click", letterKeyPressed);
   $(".keyboard .action").on("click", actionKeyPressed);
+
+  // Prepare map:
+  mapCells = [];
+  var mapRoot = $(".map")[0];
+  console.log("mapRoot:", mapRoot);
+  for (var y=0; y<26; y++) {
+     var letter = String.fromCharCode(65 + y);
+     var row = document.createElement("tr");
+     $(row).addClass("map-row");
+     var rowMem = [];
+     mapCells.push(rowMem);
+     for (var x=0; x<N; x++) {
+         var cell = document.createElement("td");
+         $(cell).addClass("map-cell");
+         var textNode = document.createTextNode(letter);
+         cell.appendChild(textNode);
+         row.appendChild(cell);
+         rowMem.push(cell);
+     }
+     mapRoot.appendChild(row);
+
+  }
 }
 
 function letterKeyPressed(evt) {
