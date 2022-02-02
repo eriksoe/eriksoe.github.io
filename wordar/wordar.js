@@ -1,7 +1,5 @@
 
 var wordlist;
-var mapCells;
-var N = 5;
 
 function init() {
   fetch('wordlist-en')
@@ -14,13 +12,13 @@ function init() {
   mapCells = [];
   var mapRoot = $(".map")[0];
   console.log("mapRoot:", mapRoot);
-  for (var y=0; y<26; y++) {
+  for (var y=0; y<N_LETTERS; y++) {
      var letter = String.fromCharCode(65 + y);
      var row = document.createElement("tr");
      $(row).addClass("map-row");
      var rowMem = [];
      mapCells.push(rowMem);
-     for (var x=0; x<N; x++) {
+     for (var x=0; x<WORDLENGTH; x++) {
          var cell = document.createElement("td");
          $(cell).addClass("map-cell");
          var textNode = document.createTextNode(letter);
@@ -58,7 +56,7 @@ function wordListFetched(resp) {
   } else {
     resp.text().then(txt => {
       var lines = txt.split("\n");
-      //for (i in lines) if (lines[i].length != 5) console.log("Non-5-letters:", i, lines[i], lines[i].length);
+      //for (i in lines) if (lines[i].length != WORDLENGTH) console.log("Non-5-letters:", i, lines[i], lines[i].length);
       wordlist = lines.filter(x => x.length > 0);
       console.log("Words loaded: "+wordlist.length);
       ready();
@@ -72,9 +70,8 @@ function ready() {
   startGame();
 }
 
-var theWord = null;
 function startGame() {
   var r = Math.floor(wordlist.length * Math.random());
-  theWord = wordlist[r];
+  initModel(wordlist[r]);
   console.log("Selected word: "+theWord); //TEMP
 }
