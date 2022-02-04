@@ -1,6 +1,8 @@
 var N_LETTERS = 26;
 var WORDLENGTH = 5;
+var VISIBILITY = 4;
 var N_GUESSES = 6;
+var INFINITY = 1000000;
 
 // Links to DOM nodes.
 var letterCells; // [guessNr][letterNr]
@@ -11,14 +13,19 @@ var guesses; // [guessNr] -> String
 var guessNr; // 0-based
 
 // Derived:
+var correctLetters; // [letterNr] -> Int
 var guessMap; // [letter][letterNr] -> Boolean
+var guessDistMap; // [guessNr][letterNr] -> Int
 
 function initModel(_theWord) {
-    theWord = _theWord;
+    theWord = _theWord.toUpperCase();
     guessNr = 0;
     guesses = [];
 
+    correctLetters = stringToCodes(theWord);
+
     guessMap = make2DArray(N_LETTERS, WORDLENGTH, false);
+    guessDistMap = [];
 
     //TEMP:
     makeGuess();
@@ -26,13 +33,47 @@ function initModel(_theWord) {
 
 function makeGuess() {
     //TEMP:
-    var theGuess = "ABCDE";
+    var theGuess = "TRAIN";
     guesses[guessNr] = theGuess;
-    for (x=0; x<WORDLENGTH; x++) guessMap[letterCode(theGuess,x)][x] = true;
+    var guessCodes = stringToCodes(theGuess);
+    for (x=0; x<WORDLENGTH; x++) guessMap[guessCodes[x]][x] = true;
+    var guessDist = calcDistances(guessCodes, correctLetters);
+    guessDistMap.push(guessDist);
     guessNr++;
     update();
 }
 
+function calcDistances(guess, answer) {
+    var res = new Array(5);
+    for (var i=0; i<WORDLENGTH; i++) {
+        res[i] = calcLetterDistance(i, guess[i], answer);
+    }
+    return res;
+}
+
+function calcLetterDistance(x1, y1, answer) {
+    var minDist = INFINITY;
+    for (var x2=0; x2<WORDLENGTH; x2++) {
+        var y2 = answer[x2];
+        var d = rawDistance(x1, y1, x2, y2);
+        minDist = Math.min(minDist, d);
+    }
+    if (minDist == INFINITY || minDist > VISIBILITY) minDist = -1;
+    return minDist;
+}
+
+function rawDistance(x1, y1, x2, y2) {
+    var yDist = Math.abs(y1 - y2);
+    yDist = Math.min(yDist, N_LETTERS - yDist);
+    var xDist = Math.abs(x1 - x2);
+    return xDist + yDist;
+}
+
+function stringToCodes(s) {
+    var res = new Array(WORDLENGTH);
+    for (var i=0; i<WORDLENGTH; i++) res[i] = letterCode(s, i);
+    return res;
+}
 function letterCode(s,i) {return s.charCodeAt(i) - 65;}
 
 function update() {
@@ -50,10 +91,27 @@ function updateMap() {
 function updateMapCell(x, y) {
     var cell = mapCells[y][x];
     var style;
-    if (guessMap[y][x]) {
+    if (y == correctLetters[x]) {
+        style = "debug";
+    } else if (guessMap[y][x]) {
         style = "guess";
     } else {
-        style = "none";
+        var ruledOut = false;
+        var frontier = false;
+        for (var i=0; i<guessNr; i++) {
+            var guessCodes = stringToCodes(guesses[i]);
+            for (var x2=0; x2<WORDLENGTH; x2++) {
+                var d = rawDistance(x, y, x2, guessCodes[x2]);
+                if (d > VISIBILITY) d = INFINITY;
+                var d2 = guessDistMap[i][x2];
+                if (d2 == -1) d2 = VISIBILITY+1;
+                if (d>=0 && d2>=0) {
+                    if (d < d2) { ruledOut = true; }
+                    else if (d == d2) { frontier = true; }
+                }
+            }
+        }
+        style = ruledOut ? "ruled-out" : frontier ? "frontier" : "none";
     }
     $(cell).removeClass().addClass(style);
 }

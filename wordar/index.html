@@ -112,14 +112,25 @@
         width: var(--cell-size);
         height: var(--cell-size);
         border: none;
-        background: rgb(50,100,50); // Dark green
+        background: rgb(50,100,50); /* Dark green */
         color: white;
       }
       .map-row td.none {
-        background: rgb(50,100,50); // Dark green
+        background: rgb(50,100,50); /* Dark green */
       }
       .map-row td.guess {
-        background: rgb(200,150,50); // Orange?
+        background: rgb(200,150,50); /* Orange */
+        color: black;
+      }
+      .map-row td.ruled-out {
+        background: rgb(50,50,50,50); // Dark grey */
+      }
+      .map-row td.frontier {
+        background: rgb(100,255,100); /* Light-green */
+        color: black;
+      }
+      .map-row td.debug {
+        background: rgb(255,0,255); /* Magenta */
       }
     </style>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
