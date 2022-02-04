@@ -91,10 +91,12 @@ function updateMap() {
 function updateMapCell(x, y) {
     var cell = mapCells[y][x];
     var style;
-    if (y == correctLetters[x]) {
-        style = "debug";
-    } else if (guessMap[y][x]) {
-        style = "guess";
+    if (guessMap[y][x]) {
+        var correct = false;
+        for (var i=0; i<guessNr; i++) {
+            if (guessDistMap[i][x] == 0) correct = true;
+        }
+        style = correct ? "correct" : "guess";
     } else {
         var ruledOut = false;
         var frontier = false;
