@@ -319,6 +319,36 @@ LABY_TYPES = {
         }
     },
 
+    greater_or_less_symbol: {
+        descr: "Større/mindre/lig med (heltal)",
+        title: "&lt; eller &gt; eller =",
+        tags: ["Tal", "Større/mindre"],
+        deps: ["maxNum"],
+        explanation: function (config) {
+            var s = '<p>Der er to tal. Står der det rigtige symbol mellem dem?</p>\n';
+            s += '<table class="explanation"><tr>';
+            s += '<td style="padding: 0.5em;"><b>Rigtigt:</b></td>';
+            s += '<td style="padding: 1.0em;">2 &gt; 1<br/>To er større end en</td>';
+            s += '<td style="padding: 1.0em;">2 = 2<br/>To er lig med to</td>';
+            s += '<td style="padding: 1.0em;">2 &lt; 3<br/>To er mindre end tre</td>';
+            s += "</tr></table>";
+            return s;
+        },
+        dims: [10,14],
+        cell_gen: function(config) {
+            var min = config_range_min(config);
+            var max = config_range_max(config);
+            var a = rand_int(min,max);
+            var b = rand_int(min,max);
+            var txt_op = rand_from_list(['=', '<', '>']);
+            var actual_op = (a==b) ? '=' : (a<b) ? '<' : '>';
+            return {
+                text: a + "&nbsp;" + txt_op + "&nbsp;" + b,
+                value: txt_op == actual_op
+            }
+        }
+    },
+
     multiplication_table: {
         descr: "Tabeller",
         title: function(config) {return config.number+"-tabellen";},
@@ -511,6 +541,75 @@ LABY_TYPES = {
             return {
                 text: s+d[actual_txt]+" er "+ref_color.plur,
                 value: actual_txt === actual
+            }
+        }
+    },
+
+    always_sometimes_never: {
+        descr: "Altid/nogle gange/aldrig",
+        title: "Altid, nogle gange og aldrig",
+        tags: ["Begreber", "Altid, nogle gange, aldrig"],
+        prepare_state: function(config) {
+            var n_times = 6;
+            var letters = ["A","B","C","D","E","F","G","H","I","J"];
+            var counts = [0, 0, 0, 1, 2, 4, 5, 6, 6, 6];
+            letters = shuffle(letters);
+            counts = shuffle(counts);
+            var a = [];
+            for (var i=0; i<letters.length; i++) {
+                var tmp = [] // Build [0..n_times-1]
+                for (var j=0; j<n_times; j++) {
+                    tmp.push(j);
+                }
+                shuffle(tmp);
+                a.push(tmp);
+            }
+            return {letters:letters, counts:counts, n_times:n_times, a:a};
+        },
+        above_matter: function (config) {
+            var n_times = config.state.n_times;
+            var letters = config.state.letters;
+            var counts = config.state.counts;
+            var a = config.state.a;
+
+            var s = '<table style="border: thin solid black;" width="100%"><tr>';
+            for (var j=0; j<n_times; j++) {
+                s += '<td style="border: thin solid black; text-align: center;">';
+                s += clockface_svg(j+1, 0, 50);
+                s += "<br/>";
+                for (var i=0; i<letters.length; i++) {
+                    var xpos = rand_int(0, 20);
+                    for (var k=0; k<xpos; k++) s += "&nbsp;";
+                    if (a[i][j] < counts[i])
+                        s += letters[i];
+                    s += "<br/>";
+                }
+                s += "</td>";
+            }
+            s += "</tr></table>";
+            return s;
+        },
+        dims: [7,6],
+        cell_gen: function(config) {
+            var n_times = config.state.n_times;
+            var letters = config.state.letters;
+            var counts = config.state.counts;
+
+            var letter_nr = rand_int(0, letters.length-1);
+            var letter = letters[letter_nr];
+            var count = counts[letter_nr];
+            var case_txt_nr = rand_int(0,2);
+            var texts = ["Der er aldrig et \""+letter+"\".",
+                         ["Der er nogle gange et \""+letter+"\".",
+                          "Nogle gange er der et \""+letter+"\"."],
+                         "Der er altid et \""+letter+"\"."];
+            var case_txt = texts[case_txt_nr];
+            if (typeof(case_txt)!="string")
+                case_txt = rand_from_list(case_txt);
+            var case_actual = (count == 0 ? 0 : count==n_times ? 2 : 1);
+            return {
+                text: case_txt,
+                value: case_actual == case_txt_nr
             }
         }
     },
@@ -1014,10 +1113,11 @@ LABY_TYPES = {
     },
 }
 
-function clockface_svg(hours, minutes) {
+function clockface_svg(hours, minutes, size) {
+    if (!size) size=100;
     var v_h = 30 * (hours + minutes/60.0);
     var v_m = 6 * minutes;
-    var svg = '<svg width="100" height="100" viewbox="-50 -50 100 100">'+
+    var svg = '<svg width="'+size+'" height="'+size+'" viewbox="-50 -50 100 100">'+
 '      <circle cx="0" cy="0" r="40" stroke="black" stroke-width="2" fill="none"/>'+
 ''+
 '      <path d="M0,40 L0,35" stroke="black" stroke-width="2" transform="rotate(0 0 0)"/>'+
