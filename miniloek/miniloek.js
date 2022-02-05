@@ -228,9 +228,9 @@ function is_valid_pattern_row(row) {
 }
 
 function generate_quiz(descriptor, options) {
-    var failuresLeft = 1000;
+    var failuresLeft = 3000;
     // 1. Generate Q/A pairs:
-    var q_set = {}, a_set = {};
+    var q_set = new Set(), a_set = new Set();
     var qs = [], as = [];
 
     while (qs.length < QUIZ_SIZE) {
@@ -240,17 +240,29 @@ function generate_quiz(descriptor, options) {
             return null;
         }
 
-        qa = descriptor.qa_gen.apply(options);
+        qa = descriptor.qa_gen(options);
         if (qa==null) continue;
 
         var q = qa.q;
         var a = qa.a;
-        var bad = (q in q_set) || (a in a_set);
+        var alt_qs = qa.alt_qs || {};
+        var alt_as = qa.alt_as || {};
+        var bad = (q_set.has(q)) || (a_set.has(a))
+        for (var x in alt_qs) if (q_set.has(alt_qs[x])) bad=true;
+        for (var x in alt_as) if (a_set.has(alt_as[x])) bad=true;
+        
         if (bad) {
+	    //console.log("Rejected: q="+q+" a="+a, [alt_qs, alt_as, q_set, a_set]);
             failuresLeft--;
             continue;
         }
-        q_set[q] = a_set[a] = 1;
+        q_set.add(q);
+	a_set.add(a);
+        for (var x in alt_qs) q_set.add(alt_qs[x]);
+	for (var x in alt_as) a_set.add(alt_as[x]);
+
+        for (var x in alt_qs) q_set[x] = 1;
+        for (var x in alt_as) a_set[x] = 1;
         qs.push(q);
         as.push(a);
     }

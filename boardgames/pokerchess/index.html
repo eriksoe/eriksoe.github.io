@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title>Poker Chess</title>
+    <style>
+      dl {padding-left: 2em;}
+      dt {font-weight: bold; padding-top: 0.5em;}
+      .scoring-table {margin: 1em;}
+      .scoring-table th {border-bottom: thin solid black;}
+      .scoring-table td.radj {text-align: right;}
+    </style>
+  </head>
+<body>
+<h1>Poker Chess</h1>
+
+<h2>Game elements</h2>
+<ul>
+  <li>A chess set
+  <li>A deck of playing cards (55 cards)
+</ul>
+
+<h2>Setup</h2>
+<p>The chess pieces are set up as for a normal game of chess, except that
+  the board is turned by 90&deg; so that the white player has h1 in his left corner. (The queens are placed on file 4.)
+</p>
+<p>The deck is shuffled. Each player is dealt five cards, and the rest are placed in a pile, face-down.
+</p>
+
+<h2>Gameplay</h2>
+<p>The players take turns, starting with the white player.
+  In each turn, a player can do one of two things:
+  <dl>
+    <dt>Make a move:</dt>
+    <dd>The player chooses a card and plays it, face-up, into a common discard pile, and makes a chess move which corresponds to the card.
+      Finally, the player draws a new card (replenishing to a 5-card hand), if available.
+      <br/>
+      The meaning of the cards are as follows:
+      <ul>
+	<li>Black card: A pawn move.
+	  <ul>
+	    <li>Value 1-8: A move to the corresponding file.
+	    <li>Value 9: A move to an odd-numbered file.
+	    <li>Value 10: A move to an even-numbered file.
+	    <li>Value J, Q or K: A taking move.
+	  </ul>
+	</li>
+	<li>Red card: A move with an non-pawn piece.
+	  <ul>
+	    <li>Value 1-8: A move to the corresponding file.
+	    <li>Value 9: A move with a rook.
+	    <li>Value 10: A move with a knight.
+	    <li>Value J: A move with a bishop.
+	    <li>Value Q: A move with a queen.
+	    <li>Value K: A move with a king.
+	  </ul>
+	</li>
+	<li>Joker: A move with any threatened piece.
+	</li>
+      </ul>
+    </dd>
+    <dt>Discard cards:</dt>
+    <dd>The player shows two cards, discards both, and draws two new cards for replacement (if available).
+      Both of the displayed cards must be unplayable (correspond to no valid move for the player in the current position), otherwise discarding is not an option.
+    </dd>
+  </dl>
+</p>
+
+<h3>Valid moves</h3>
+<p>The rules for which moves are valid are the same as in chess, except that
+  it does not play any role whether a king is in check. This means that a player may make a move which puts his king in check or leaves him in check.
+  Furthermore, a king may be taken (in which case the game ends; see "Game end").
+</p>
+
+<p>Castling is counted as a king move: As far as the cards are concerned, it is a move with the king, to the square where the king ends up. It can be played with a joker if the king is initially threatened. The status of the rook does not matter.
+  <br/>Castling through a threatened square is allowed.
+</p>
+
+<h3>Game end</h3>
+<p>The game ends when either king is taken, or when the current player has no valid moves after the deck has run out (either because they have no cards left, or because they have a single unplayable card left).
+
+<h2>Scoring</h2>
+<p>A player obtains points according to the pieces taken by the player.
+  The points for each piece are the usual pawn values:
+  <table class="scoring-table">
+    <tr><th>Piece</th><th>Points</th></th>
+    <tr><td>King</td><td class="radj">100</td></tr>
+    <tr><td>Queeen</td><td class="radj">9</td></tr>
+    <tr><td>Rook</td><td class="radj">5</td></tr>
+    <tr><td>Bishop</td><td class="radj">3</td></tr>
+    <tr><td>Knight</td><td class="radj">3</td></tr>
+    <tr><td>Pawn</td><td class="radj">1</td></tr>
+</table>
+The player with the most points wins.
+</p>
+
+
+</body>
+</html>

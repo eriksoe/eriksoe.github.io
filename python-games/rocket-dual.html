@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <title>Land raketten</title>
+    <!--
+    <script src="skulpt.min.js" type="text/javascript"></script>
+    <script src="skulpt-stdlib.js" type="text/javascript"></script>
+    -->
+    <script src="321e8852-skulpt.min.js" type="text/javascript"></script>
+    <script src="321e8852-skulpt-stdlib.js" type="text/javascript"></script>
+
+    <script src="python-game-common.js" type="text/javascript"></script>
+    <script src="rocket-dual.js" type="text/javascript"></script>
+
+  </head>
+  <body onload="init()">
+    <div style="display: table">
+    <div style="float: left;">
+    <svg
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns="http://www.w3.org/2000/svg"
+      width="400"
+      height="600"
+      version="1.1">
+
+      <g transform="translate(140 500) scale(1,-1)"> <!-- Center -->
+        <!-- Background -->
+      <path style="fill:rgb(20,20,20); stroke:none" d="M-500,-500 L500,-500 L500,500 L-500,500 z"/>
+      <path style="fill:rgb(150,150,128); stroke:none" d="M-500,-200 L500,-200 L500,30 L-500,30 z"/>
+
+        <g id="rocketPos" transform=""><g id="rocketSize" transform="">
+      <g transform="scale(1,-1) translate(0 -180)"> <!-- Normalize -->
+      <path style="stroke:white; fill:rgb(150,150,255); stroke-width:1"
+            d="M 0,0 C 20,20 40,50 40,100
+               L40,150 L55,180 L25,180
+               Q 0,120 -25,180 L-55,180 L-40,150
+               L-40,100 C-40,50 -20,20 0,0 z"/>
+
+      <circle style="stroke:rgb(100,100,150); fill:rgb(50,50,150); stroke-width:3;"
+              cx="1" cy="101" r="19"/>
+      <circle style="stroke:rgb(230,230,230); fill:rgb(50,50,150); stroke-width:3;"
+              cx="0" cy="100" r="18"/>
+      </g>
+      </g>
+      </g>
+        
+        <g transform="skewX(-55) scale(1,-0.3)"> <!-- Center -->
+          <g id="shadowPos" transform="">
+            <g transform="scale(1,-1) translate(0 -180)"> <!-- Normalize -->
+              <path style="stroke:none; fill:rgb(90,90,90); fill-opacity: 0.7"
+                    d="M 0,0 C 20,20 40,50 40,100
+                       L40,150 L55,180 L25,180
+                       Q 0,120 -25,180 L-55,180 L-40,150
+                       
+                       L-40,100 C-40,50 -20,20 0,0 z"/>
+
+            </g>
+          </g>
+        </g>
+
+        <g id="motorEffects">
+    </g>
+        </g>
+      <g transform="translate(210,40)"> <!-- Value displays -->
+          <text style="fill:rgb(255,240,0)">
+            <tspan x="0" y="0">Højde:</tspan>
+            <tspan x="0" dy="20">Fart:</tspan>
+            <tspan x="0" dy="20">Vinkel:</tspan>
+            <tspan x="0" dy="20">Vinkelhast.:</tspan>
+            <tspan x="0" dy="20">Brændstof:</tspan>
+            <tspan x="0" dy="20">Motorkraft (V):</tspan>
+            <tspan x="0" dy="20">Motorkraft (H):</tspan>
+
+            <tspan x="150" y="0">m</tspan>
+            <tspan x="150" dy="20">m/s</tspan>
+            <tspan x="150" dy="20">&deg;</tspan>
+            <tspan x="150" dy="20">&deg;/s</tspan>
+            <tspan x="150" dy="20">L</tspan>
+            <tspan x="150" dy="20">%</tspan>
+            <tspan x="150" dy="20">%</tspan>
+            <tspan text-anchor="end"><!--
+              --><tspan id="dispH" x="140" y="0">?</tspan><!--
+              --><tspan id="dispV" x="140" dy="20">??</tspan><!--
+              --><tspan id="dispA" x="140" dy="20">???</tspan><!--
+              --><tspan id="dispAM" x="140" dy="20">???</tspan><!--
+              --><tspan id="dispF" x="140" dy="20">???</tspan><!--
+              --><tspan id="dispPL" x="140" dy="20" style="fill:rgb(255,190,0)">??</tspan><!--
+              --><tspan id="dispPR" x="140" dy="20" style="fill:rgb(255,190,0)">??</tspan><!--
+            --></tspan>
+          </text>
+        </g>
+
+    </svg>
+    </div>
+    <div style="overflow: hidden; padding-left: 1em;">
+      <h1>Land raketten!</h1>
+      <p>Du skal skrive styreprogrammet til rakettens kontrol-computer.</p>
+      <p>Computeren styrer højre og venstre motor.</p>
+      <p>Computeren har 5 sensorer, for <i>højde</i>, <i>fart</i>, <i>vinkel</i>, <i>gyro</i> (vinkelhastighed) og <i>brændstof</i>.</p>
+      <p>Dit mål er at <b>lande raketten</b> på overfladen. Men vær forsigtig: du må ikke ramme planeten med en fart på over <b>5 m/s</b> &mdash; det kan raketten nemlig ikke holde til. Og raketten skal samtidig landes, så den står lodret &mdash; dvs. med en vinkel <b>mellem &minus;5&deg; og +5&deg;</b>.</p>
+
+      <h3 style="margin-bottom: 0.1em">Python-funktioner:</h3>
+      <table>
+        <tr><th colspan="2" style="text-align: left;">Motorer</th></tr>
+        <tr><td><code>motorV(x)</code></td><td>Sæt motorkraften til <code>x</code> (et tal mellem 0 og 100) på venstre motor.</td></tr>
+        <tr><td><code>motorH(x)</code></td><td>Sæt motorkraften til <code>x</code> på højre motor.</td></tr>
+        <tr><th colspan="2" style="text-align: left;">Sensorer</th></tr>
+        <tr><td><code>hoejde()</code></td><td>Højden over overfladen, i meter.</td></tr>
+        <tr><td><code>fart()</code></td><td>Hvor stor farten mod overfladen er, i meter per sekund.</td></tr>
+        <tr><td><code>vinkel()</code></td><td>Hvor meget raketten hælder mod højre (vinkel), i grader.</td></tr>
+        <tr><td><code>vinkelhast()</code></td><td>Hvor hurtigt raketten drejer mod højre (vinkelhastighed), i grader per sekund.</td></tr>
+        <tr><td><code>braendstof()</code></td><td>Hvor meget brændstof der er tilbage, i liter.</td></tr>
+        <tr><td><code>vent(x)</code></td><td>Vent <code>x</code> sekunder.</td></tr>
+      </table>
+      <p>
+      <h3 style="margin-bottom: 0.1em">Dit kontrol-program:</h3>
+        <textarea id="yourcode" cols="40" rows="10" style="font-family: monospace; font-size: 12pt;">motorV(100)
+motorH(50)
+vent(0.5)
+motorV(0)
+motorH(0)
+
+while hoejde() > 0:
+  print(u"Min højde er %f" % hoejde())
+  print(u"Min fart er %f" % fart())
+  vent(0.1)
+        </textarea>
+        <p>
+          <button onClick="start()">Start</button>
+        </p>
+        <pre id="output" style="width: 80%; height: 15em; border: inset; overflow: scroll"></pre>
+      </p>
+    </div>
+    </div>
+  </body>
+
+</html>
