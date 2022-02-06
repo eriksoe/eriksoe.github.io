@@ -5,7 +5,8 @@ var N_GUESSES = 6;
 var INFINITY = 1000000;
 
 // Links to DOM nodes.
-var letterCells; // [guessNr][letterNr]
+var guessCells; // [guessNr][letterNr]
+var guessTextCells; // [guessNr][letterNr]
 var mapCells; // [letter][letterNr]
 
 var theWord = null;

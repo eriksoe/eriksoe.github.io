@@ -4,6 +4,10 @@ var wordlist;
 function init() {
   fetch('wordlist-en')
   .then(response => wordListFetched(response))
+  hookUpDOM();
+}
+
+function hookUpDOM() {
   // Bind stuff:
   $(".keyboard .key").on("click", letterKeyPressed);
   $(".keyboard .action").on("click", actionKeyPressed);
@@ -11,7 +15,6 @@ function init() {
   // Prepare map:
   mapCells = [];
   var mapRoot = $(".map")[0];
-  console.log("mapRoot:", mapRoot);
   for (var y=0; y<N_LETTERS; y++) {
      var letter = String.fromCharCode(65 + y);
      var row = document.createElement("tr");
@@ -27,7 +30,29 @@ function init() {
          rowMem.push(cell);
      }
      mapRoot.appendChild(row);
+  }
 
+  // Prepare guesses:
+  guessCells = [];
+  guessTextCells = [];
+  var guessRoot = $(".input-frame")[0];
+  for (var y=0; y<N_GUESSES; y++) {
+     var row = document.createElement("div");
+     $(row).addClass("input-row");
+     var rowMem = [];
+     var rowTextMem = [];
+     guessCells.push(rowMem);
+     guessTextCells.push(rowTextMem);
+     for (var x=0; x<WORDLENGTH; x++) {
+         var cell = document.createElement("span");
+         $(cell).addClass("input-letter");
+         var textNode = document.createTextNode("");
+         cell.appendChild(textNode);
+         row.appendChild(cell);
+         rowMem.push(cell);
+         rowTextMem.push(textNode);
+     }
+     guessRoot.appendChild(row);
   }
 }
 
