@@ -1,0 +1,148 @@
+body {
+    background: rgb(0, 0, 200);
+    color: rgb(255,255,255);
+    touch-action: manipulation; /* Disable "double-tap to zoom" on e.g. mobile devices. */
+}
+.wrapper {
+    min-height: 100%;
+    display: flex; flex-direction: column;
+}
+header {
+    border: thin solid white;
+    touch-action: manipulation;
+}
+.middle {
+    flex: 1;
+}
+footer {
+    touch-action: manipulation;
+}
+h1 { text-align: center;}
+.gameboard .l {
+    width: 4em; height: 4em;
+    padding: 0.5em;
+    border: thin solid white;
+}
+.keyboard {
+    width: min(700px,100vw); align: center;
+    font-size: 3vw;
+    --btn-width: calc(95vw / 11); /*9.09vw;*/
+}
+.keyboard .row {
+    display: flex;
+    margin: auto;
+    height: 12vw;
+    width: 95vw;
+}
+.keyboard .key {
+    display: flex;
+    margin: 3px; border-width: 0.5vw;
+    width: var(--btn-width);
+    font-size: 7vw;
+    justify-content: center; align-items: center;
+    border-radius: 1.5vw;
+    background: rgb(200, 200, 200);
+    color: rgb(50, 50, 50);
+}
+.keyboard .key:active {
+    background: rgb(230, 230, 230);
+}
+.keyboard .row-space {
+    display: flex;
+    margin: 3px;
+}
+.keyboard span.quart { width: calc(var(--btn-width)/4); }
+.keyboard span.half { width: calc(var(--btn-width)/2); }
+.keyboard span.threequart { width: calc(var(--btn-width)*3/4); }
+.keyboard span.one { width: var(--btn-width); }
+
+.input-frame {
+    --letter-width: min(10vw, 5cm);
+    --border-sz: max(1px, calc(var(--letter-width) * 0.05));
+    --padding-sz: max(1px, calc(var(--letter-width) * 0.1));
+    --rowpadding-sz: max(2px, calc(var(--letter-width) * 0.1));
+    margin-top: 1vh;
+    display: block;
+}
+.input-row {
+    display: flex;
+    margin: auto;
+    margin-bottom: var(--rowpadding-sz);
+}
+.input-word {
+    border: thin solid rgb(150,150,150);
+    margin: auto;
+}
+.input-letter {
+    display: inline-block;
+    width: var(--letter-width);
+    height: var(--letter-width);
+    border: var(--border-sz) solid rgb(200,200,200);
+    padding: var(--padding-sz);
+    font-size: calc(var(--letter-width) * 0.8);
+    text-align: center;
+
+    color: white;
+    background: rgb(100,100,150);
+}
+
+.map {
+    --cell-size: calc(50vh / 26);
+    margin-top: 1vh;
+    margin-bottom: auto;
+    margin-left: auto;
+    background: rgb(20,20,20);
+    font-size: calc(var(--cell-size) * 0.8);
+    text-align: center;
+}
+.map-row {
+    height: var(--cell-size);
+}
+.map-row td {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: none;
+    background: rgb(50,100,50); /* Dark green */
+    color: white;
+}
+.map-row td.none {
+    background: rgb(50,100,50); /* Dark green */
+}
+.map-row td.guess {
+    background: rgb(255,175,75); /* Orange */
+    color: black;
+}
+.map-row td.correct {
+    background: white;
+    color: black;
+}
+.map-row td.ruled-out {
+    background: rgb(50,50,50,50); /* Dark grey */
+    color: rgb(150,150,150);
+}
+.map-row td.frontier {
+    background: rgb(100,255,100); /* Light-green */
+    color: black;
+}
+.map-row td.debug {
+    background: rgb(255,0,255); /* Magenta */
+}
+
+
+/* Desktop */
+/*
+@media only screen and (min-width: 768px) {
+    footer {
+        position: static;
+    }
+    .keyboard {
+        --btn-width: calc(95vw / 11);
+    }
+    .keyboard .row {
+        height: 8vw;
+    }
+    .keyboard .key {
+        font-size: 5vw;
+    }
+}
+*/
