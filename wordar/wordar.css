@@ -62,16 +62,13 @@ h1 { text-align: center;}
     --padding-sz: max(1px, calc(var(--letter-width) * 0.1));
     --rowpadding-sz: max(2px, calc(var(--letter-width) * 0.1));
     margin-top: 1vh;
-    display: block;
+    display: block-inline;
 }
 .input-row {
-    display: flex;
+    display: block;
+    text-align: center;
     margin: auto;
     margin-bottom: var(--rowpadding-sz);
-}
-.input-word {
-    border: thin solid rgb(150,150,150);
-    margin: auto;
 }
 .input-letter {
     display: inline-block;
