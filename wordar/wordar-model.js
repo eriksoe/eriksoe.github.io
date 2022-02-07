@@ -29,12 +29,10 @@ function initModel(_theWord) {
     guessDistMap = [];
 
     //TEMP:
-    makeGuess();
+    makeGuess("TRAIN");
 }
 
-function makeGuess() {
-    //TEMP:
-    var theGuess = "TRAIN";
+function makeGuess(theGuess) {
     guesses[guessNr] = theGuess;
     var guessCodes = stringToCodes(theGuess);
     for (x=0; x<WORDLENGTH; x++) guessMap[guessCodes[x]][x] = true;
@@ -78,8 +76,25 @@ function stringToCodes(s) {
 function letterCode(s,i) {return s.charCodeAt(i) - 65;}
 
 function update() {
-    //updateGuesses();
+    updateGuessView();
     updateMap();
+}
+
+function updateGuessView() {
+    for (var y=0; y<N_GUESSES; y++) {
+        if (y < guessNr) {
+            for (var x=0; x<WORDLENGTH; x++) {
+                guessTextCells[y][x].textContent = guesses[y].substring(x, x+1);
+                $(guessCells[y][x]).removeClass("faded");
+            }
+        } else if (y == guessNr) {
+            guessTextCells[y][x].textContent = "_";
+            $(guessCells[y][x]).removeClass("faded");
+        } else {
+            guessTextCells[y][x].textContent = "";
+            $(guessCells[y][x]).addClass("faded");
+        }
+    }
 }
 
 function updateMap() {
