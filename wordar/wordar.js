@@ -46,6 +46,7 @@ function hookUpDOM() {
      for (var x=0; x<WORDLENGTH; x++) {
          var cell = document.createElement("span");
          $(cell).addClass("input-letter");
+         if (y>0) $(cell).addClass("faded");
          var textNode = document.createTextNode("");
          cell.appendChild(textNode);
          row.appendChild(cell);

@@ -83,6 +83,12 @@ h1 { text-align: center;}
     background: rgb(100,100,150);
 }
 
+.input-letter.faded {
+    border: var(--border-sz) solid rgba(200,200,200, 0.25);
+    color: rgba(255, 255, 255, 0.25);
+    background: rgba(100,100,150, 0.25);
+}
+
 .map {
     --cell-size: calc(50vh / 26);
     margin-top: 1vh;
