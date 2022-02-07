@@ -12,6 +12,7 @@ var mapCells; // [letter][letterNr]
 var theWord = null;
 var guesses; // [guessNr] -> String
 var guessNr; // 0-based
+var guessBuilder; // [letterNr] -> letter - The next guess.
 
 // Derived:
 var correctLetters; // [letterNr] -> Int
@@ -22,6 +23,7 @@ function initModel(_theWord) {
     theWord = _theWord.toUpperCase();
     guessNr = 0;
     guesses = [];
+    guessBuilder = [];
 
     correctLetters = stringToCodes(theWord);
 
@@ -29,6 +31,7 @@ function initModel(_theWord) {
     guessDistMap = [];
 
     //TEMP:
+    guessBuilder = [1, 0];
     makeGuess("TRAIN");
 }
 
@@ -82,17 +85,20 @@ function update() {
 
 function updateGuessView() {
     for (var y=0; y<N_GUESSES; y++) {
-        if (y < guessNr) {
-            for (var x=0; x<WORDLENGTH; x++) {
-                guessTextCells[y][x].textContent = guesses[y].substring(x, x+1);
-                $(guessCells[y][x]).removeClass("faded");
+        for (var x=0; x<WORDLENGTH; x++) {
+            var fade = (y > guessNr);
+            var txt;
+            if (y < guessNr) {
+                txt = guesses[y].substring(x, x+1);
+            } else if (y == guessNr) {
+                txt = (x < guessBuilder.length) ? String.fromCharCode(65 + guessBuilder[x])
+                    : (x == guessBuilder.length) ? "_" : "\u00a0"; // NBSP
+            } else {
+                txt = "";
             }
-        } else if (y == guessNr) {
-            guessTextCells[y][x].textContent = "_";
-            $(guessCells[y][x]).removeClass("faded");
-        } else {
-            guessTextCells[y][x].textContent = "";
-            $(guessCells[y][x]).addClass("faded");
+            guessTextCells[y][x].textContent = txt;
+            var cellNode = $(guessCells[y][x]);
+            if (fade) cellNode.addClass("faded"); else cellNode.removeClass("faded");
         }
     }
 }
