@@ -60,17 +60,16 @@ function hookUpDOM() {
 function letterKeyPressed(evt) {
   var key = evt.target.getAttribute("data-key");
   if (key === null) return;
-  console.log("Letter key:", key);
-  //TODO: handle input
+  addLetterToGuess(key);
 }
 
 function actionKeyPressed(evt) {
   var action = evt.target.getAttribute("data-action");
   if (action === null) return;
   if (action == "backspace") {
-      console.log("BACKSPACE"); // TODO: Handle
+      backspaceGuess();
   } else if (action == "enter") {
-      console.log("ENTER"); // TODO: Handle
+      enterGuess();
   } else {
       console.log("Unhandled action:", action);
   }

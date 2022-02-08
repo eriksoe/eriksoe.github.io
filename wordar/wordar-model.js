@@ -12,7 +12,7 @@ var mapCells; // [letter][letterNr]
 var theWord = null;
 var guesses; // [guessNr] -> String
 var guessNr; // 0-based
-var guessBuilder; // [letterNr] -> letter - The next guess.
+var guessBuilder; // String
 
 // Derived:
 var correctLetters; // [letterNr] -> Int
@@ -23,7 +23,7 @@ function initModel(_theWord) {
     theWord = _theWord.toUpperCase();
     guessNr = 0;
     guesses = [];
-    guessBuilder = [];
+    guessBuilder = "";
 
     correctLetters = stringToCodes(theWord);
 
@@ -31,11 +31,38 @@ function initModel(_theWord) {
     guessDistMap = [];
 
     //TEMP:
-    guessBuilder = [1, 0];
+    guessBuilder = "BA";
     makeGuess("TRAIN");
 }
 
+function addLetterToGuess(key) {
+    key = key.toUpperCase();
+    var code = letterCode(key, 0);
+    if (guessBuilder.length < WORDLENGTH && code >= 0 && code < N_LETTERS) {
+        guessBuilder += key;
+        updateGuessView();
+    }
+}
+
+function backspaceGuess() {
+    var len = guessBuilder.length;
+    if (len > 0) {
+        guessBuilder = guessBuilder.substring(0, len-1);
+        updateGuessView();
+    }
+}
+
+function enterGuess() {
+    if (guessBuilder.length == WORDLENGTH) {
+        var theGuess = guessBuilder;
+        // TODO: Verify against dictionary.
+        guessBuilder = "";
+        makeGuess(theGuess);
+    }
+}
+
 function makeGuess(theGuess) {
+    console.log("Making guess:", theGuess);
     guesses[guessNr] = theGuess;
     var guessCodes = stringToCodes(theGuess);
     for (x=0; x<WORDLENGTH; x++) guessMap[guessCodes[x]][x] = true;
@@ -91,7 +118,7 @@ function updateGuessView() {
             if (y < guessNr) {
                 txt = guesses[y].substring(x, x+1);
             } else if (y == guessNr) {
-                txt = (x < guessBuilder.length) ? String.fromCharCode(65 + guessBuilder[x])
+                txt = (x < guessBuilder.length) ? guessBuilder.substring(x, x+1)
                     : (x == guessBuilder.length) ? "_" : "\u00a0"; // NBSP
             } else {
                 txt = "";
