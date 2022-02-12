@@ -113,19 +113,23 @@ function update() {
 function updateGuessView() {
     for (var y=0; y<N_GUESSES; y++) {
         for (var x=0; x<WORDLENGTH; x++) {
-            var fade = (y > guessNr);
             var txt;
+            var cellNode = $(guessCells[y][x]);
+            cellNode.removeClass();
+            cellNode.addClass("input-letter");
             if (y < guessNr) {
                 txt = guesses[y].substring(x, x+1);
+                cellNode.addClass("graded");
+                var d = guessDistMap[y][x];
+                cellNode.addClass("r"+d);
             } else if (y == guessNr) {
                 txt = (x < guessBuilder.length) ? guessBuilder.substring(x, x+1)
                     : (x == guessBuilder.length) ? "_" : "\u00a0"; // NBSP
             } else {
                 txt = "";
+                cellNode.addClass("faded");
             }
             guessTextCells[y][x].textContent = txt;
-            var cellNode = $(guessCells[y][x]);
-            if (fade) cellNode.addClass("faded"); else cellNode.removeClass("faded");
         }
     }
 }

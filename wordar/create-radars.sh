@@ -29,3 +29,4 @@ makeRadarImage 30  "$reticule" "$lightup1" radar1.png
 makeRadarImage 70  "$reticule" "$lightup1" radar2.png
 makeRadarImage 102 "$reticule" "$lightup1" radar3.png
 makeRadarImage 120 "$reticule" "$lightup1" radar4.png
+makeRadarImage 200 "$reticule" "$lightup1" radar-none.png

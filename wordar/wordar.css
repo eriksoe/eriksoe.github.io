@@ -80,6 +80,7 @@ h1 { text-align: center;}
     text-align: center;
 
     color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     background: rgb(100,100,150);
 }
 
@@ -87,6 +88,29 @@ h1 { text-align: center;}
     border: var(--border-sz) solid rgba(200,200,200, 0.25);
     color: rgba(255, 255, 255, 0.25);
     background: rgba(100,100,150, 0.25);
+}
+
+.input-letter.graded {
+    border: var(--border-sz) solid rgba(100,100,100);
+    background-size: 100% 100%;
+}
+.input-letter.r-1 {
+    background-image: url(gfx/radar-none.png);
+}
+.input-letter.r0 {
+    background-image: url(gfx/radar0.png);
+}
+.input-letter.r1 {
+    background-image: url(gfx/radar1.png);
+}
+.input-letter.r2 {
+    background-image: url(gfx/radar2.png);
+}
+.input-letter.r3 {
+    background-image: url(gfx/radar3.png);
+}
+.input-letter.r4 {
+    background-image: url(gfx/radar4.png);
 }
 
 .map {
@@ -120,7 +144,7 @@ h1 { text-align: center;}
     color: black;
 }
 .map-row td.ruled-out {
-    background: rgb(50,50,50,50); /* Dark grey */
+    background: rgb(50,50,50); /* Dark grey */
     color: rgb(150,150,150);
 }
 .map-row td.frontier {
