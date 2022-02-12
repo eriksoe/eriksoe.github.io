@@ -30,9 +30,7 @@ function initModel(_theWord) {
     guessMap = make2DArray(N_LETTERS, WORDLENGTH, false);
     guessDistMap = [];
 
-    //TEMP:
-    guessBuilder = "BA";
-    makeGuess("TRAIN");
+    update();
 }
 
 function addLetterToGuess(key) {
