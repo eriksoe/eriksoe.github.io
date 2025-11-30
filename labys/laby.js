@@ -177,11 +177,73 @@ function add_point_set_to_SVG(svgNode, points) {
     svgNode.appendChild(groupNode);
 }
 
+CHEMICAL_ELEMENTS = [
+    {nr: 1, symbol: "H", group: 1},
+    {nr: 2, symbol: "He", group: 8},
+
+    {nr: 3, symbol: "Li", group: 1},
+    {nr: 4, symbol: "Be", group: 2},
+    {nr: 5, symbol: "B", group: 3},
+    {nr: 6, symbol: "C", group: 4},
+    {nr: 7, symbol: "N", group: 5},
+    {nr: 8, symbol: "O", group: 6},
+    {nr: 9, symbol: "F", group: 7},
+    {nr: 10, symbol: "Ne", group: 8},
+
+    {nr: 11, symbol: "Na", group: 1},
+    {nr: 12, symbol: "Mg", group: 2},
+    {nr: 13, symbol: "Al", group: 3},
+    {nr: 14, symbol: "Si", group: 4},
+    {nr: 15, symbol: "P", group: 5},
+    {nr: 16, symbol: "S", group: 6},
+    {nr: 17, symbol: "Cl", group: 7},
+    {nr: 18, symbol: "Ar", group: 8},
+    
+    {nr: 19, symbol: "K", group: 1},
+    {nr: 20, symbol: "Ca", group: 2},
+
+    {nr: 24, symbol: "Cr", group: -4},
+    {nr: 25, symbol: "Mn", group: -5},
+    {nr: 26, symbol: "Fe", group: -6},
+    {nr: 27, symbol: "Co", group: -7},
+    {nr: 28, symbol: "Ni", group: -8},
+    {nr: 29, symbol: "Cu", group: -9},
+    {nr: 30, symbol: "Zn", group: -10},
+
+    {nr: 33, symbol: "As", group: 5},
+    {nr: 34, symbol: "Se", group: 6},
+    {nr: 35, symbol: "Br", group: 7},
+    {nr: 36, symbol: "Kr", group: 8},
+
+    {nr: 47, symbol: "Ag", group: -9},
+    {nr: 53, symbol: "I", group: 7},
+
+    {nr: 56, symbol: "Ba", group: 2},
+    {nr: 79, symbol: "Au", group: -9},
+    {nr: 80, symbol: "Hg", group: -10},
+]
 
 
 //========== Input configuration: ====================
 
 LABY_TYPES = {
+    elements_groups: {
+        descr: "Grundstoffers grupper",
+        title: "Hvor hører grundstofferne hjemme?",
+        tags: ["Kemi", "Grundstoffer"],
+        deps: [],
+        dims: [8,10],
+        cell_gen: function(config) {
+            var a = rand_from_list(CHEMICAL_ELEMENTS);
+	    var aGroup = Math.max(0, a.group);
+	    var bGroup = rand_int(0, 8);
+	    var bGroupName = (bGroup>0) ? "hovedgruppe&nbsp;"+bGroup : "en undergruppe";
+            return {
+                text: "<tt>" + a.symbol + "</tt> er i "+bGroupName,
+                value: aGroup == bGroup
+            }
+        }
+    },
     plus: {
         descr: "Plus",
         title: "Plus-opgaver",
