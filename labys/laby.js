@@ -178,49 +178,49 @@ function add_point_set_to_SVG(svgNode, points) {
 }
 
 CHEMICAL_ELEMENTS = [
-    {nr: 1, symbol: "H", group: 1},
-    {nr: 2, symbol: "He", group: 8},
+    {nr: 1,  symbol: "H",  type: "I", group: 1},
+    {nr: 2,  symbol: "He", type: "Æ", group: 8},
 
-    {nr: 3, symbol: "Li", group: 1},
-    {nr: 4, symbol: "Be", group: 2},
-    {nr: 5, symbol: "B", group: 3},
-    {nr: 6, symbol: "C", group: 4},
-    {nr: 7, symbol: "N", group: 5},
-    {nr: 8, symbol: "O", group: 6},
-    {nr: 9, symbol: "F", group: 7},
-    {nr: 10, symbol: "Ne", group: 8},
+    {nr: 3,  symbol: "Li", type: "M", group: 1},
+    {nr: 4,  symbol: "Be", type: "M", group: 2},
+    {nr: 5,  symbol: "B",  type: "I", group: 3},
+    {nr: 6,  symbol: "C",  type: "I", group: 4},
+    {nr: 7,  symbol: "N",  type: "I", group: 5},
+    {nr: 8,  symbol: "O",  type: "I", group: 6},
+    {nr: 9,  symbol: "F",  type: "I", group: 7},
+    {nr: 10, symbol: "Ne", type: "Æ", group: 8},
 
-    {nr: 11, symbol: "Na", group: 1},
-    {nr: 12, symbol: "Mg", group: 2},
-    {nr: 13, symbol: "Al", group: 3},
-    {nr: 14, symbol: "Si", group: 4},
-    {nr: 15, symbol: "P", group: 5},
-    {nr: 16, symbol: "S", group: 6},
-    {nr: 17, symbol: "Cl", group: 7},
-    {nr: 18, symbol: "Ar", group: 8},
-    
-    {nr: 19, symbol: "K", group: 1},
-    {nr: 20, symbol: "Ca", group: 2},
+    {nr: 11, symbol: "Na", type: "M", group: 1},
+    {nr: 12, symbol: "Mg", type: "M", group: 2},
+    {nr: 13, symbol: "Al", type: "M", group: 3},
+    {nr: 14, symbol: "Si", type: "I", group: 4},
+    {nr: 15, symbol: "P",  type: "I", group: 5},
+    {nr: 16, symbol: "S",  type: "I", group: 6},
+    {nr: 17, symbol: "Cl", type: "I", group: 7},
+    {nr: 18, symbol: "Ar", type: "Æ", group: 8},
 
-    {nr: 24, symbol: "Cr", group: -4},
-    {nr: 25, symbol: "Mn", group: -5},
-    {nr: 26, symbol: "Fe", group: -6},
-    {nr: 27, symbol: "Co", group: -7},
-    {nr: 28, symbol: "Ni", group: -8},
-    {nr: 29, symbol: "Cu", group: -9},
-    {nr: 30, symbol: "Zn", group: -10},
+    {nr: 19, symbol: "K",  type: "M", group: 1},
+    {nr: 20, symbol: "Ca", type: "M", group: 2},
 
-    {nr: 33, symbol: "As", group: 5},
-    {nr: 34, symbol: "Se", group: 6},
-    {nr: 35, symbol: "Br", group: 7},
-    {nr: 36, symbol: "Kr", group: 8},
+    {nr: 24, symbol: "Cr", type: "M", group: -4},
+    {nr: 25, symbol: "Mn", type: "M", group: -5},
+    {nr: 26, symbol: "Fe", type: "M", group: -6},
+    {nr: 27, symbol: "Co", type: "M", group: -7},
+    {nr: 28, symbol: "Ni", type: "M", group: -8},
+    {nr: 29, symbol: "Cu", type: "M", group: -9},
+    {nr: 30, symbol: "Zn", type: "M", group: -10},
 
-    {nr: 47, symbol: "Ag", group: -9},
-    {nr: 53, symbol: "I", group: 7},
+    {nr: 33, symbol: "As", type: "I", group: 5},
+    {nr: 34, symbol: "Se", type: "I", group: 6},
+    {nr: 35, symbol: "Br", type: "I", group: 7},
+    {nr: 36, symbol: "Kr", type: "Æ", group: 8},
 
-    {nr: 56, symbol: "Ba", group: 2},
-    {nr: 79, symbol: "Au", group: -9},
-    {nr: 80, symbol: "Hg", group: -10},
+    {nr: 47, symbol: "Ag", type: "M", group: -9},
+    {nr: 53, symbol: "I",  type: "I", group: 7},
+
+    {nr: 56, symbol: "Ba", type: "M", group: 2},
+    {nr: 79, symbol: "Au", type: "M", group: -9},
+    {nr: 80, symbol: "Hg", type: "M", group: -10},
 ]
 
 
@@ -241,6 +241,27 @@ LABY_TYPES = {
             return {
                 text: "<tt>" + a.symbol + "</tt> er i "+bGroupName,
                 value: aGroup == bGroup
+            }
+        }
+    },
+    elements_types: {
+        descr: "Grundstoffers typer",
+        title: "Grundstof-typer",
+        tags: ["Kemi", "Grundstoffer"],
+        deps: [],
+        dims: [8,10],
+        cell_gen: function(config) {
+            var a = rand_from_list(CHEMICAL_ELEMENTS);
+	    var aType = a.type;
+	    var bType = rand_from_list(["M", "M", "M", "I", "I", "I", "Æ"]);
+	    var bTypeName =
+		(bType=='M') ? "et<br>metal" :
+		(bType=='I') ? "et<br>ikke&#x2011;metal" :
+		(bType=='Æ') ? "en<br>ædelgas" :
+		"??";
+            return {
+                text: "<tt>" + a.symbol + "</tt> er "+bTypeName,
+                value: aType == bType
             }
         }
     },
